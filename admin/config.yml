@@ -1,0 +1,49 @@
+backend:
+  name: github
+  repo: jundi78/my-site
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+locale: "ar"
+
+collections:
+  - name: "posts"
+    label: "التدوينات"
+    label_singular: "تدوينة"
+    folder: "posts"
+    create: true
+    slug: "{{slug}}"
+    extension: "html"
+    format: "frontmatter"
+    preview_path: "posts/{{slug}}.html"
+
+    fields:
+      - label: "العنوان"
+        name: "title"
+        widget: "string"
+        hint: "عنوان التدوينة كما سيظهر للقارئ"
+
+      - label: "التاريخ"
+        name: "date"
+        widget: "datetime"
+        format: "DD MMMM YYYY"
+        date_format: "DD/MM/YYYY"
+        time_format: false
+
+      - label: "وصف قصير"
+        name: "description"
+        widget: "string"
+        hint: "جملة أو جملتان تظهران في قائمة التدوينات"
+
+      - label: "المحتوى"
+        name: "body"
+        widget: "markdown"
+        hint: "محتوى التدوينة الكامل"
+
+      - label: "نشر؟"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        label_singular: "مسودة (لن تظهر للزوار)"
