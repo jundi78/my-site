@@ -1,0 +1,216 @@
+/* style.css — clean editorial (white / black / serif) with Arabic RTL */
+
+:root{
+  --bg:#ffffff;
+  --text:#111111;
+  --muted:#555555;
+  --line:#d7d7d7;
+  --soft:#f4f4f4;
+  --link:#111111;
+  --max: 820px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fonts: use free Arabic fonts (closest “editorial” look).
+   If you don't want external fonts, delete the <link> tags in HTML.
+*/
+body{
+  font-family: "Amiri", "Noto Naskh Arabic", "Times New Roman", serif;
+  line-height: 1.9;
+  font-size: 18px;
+}
+
+a{ color:var(--link); text-decoration:none; }
+a:hover{ text-decoration: underline; }
+
+.container{
+  width: min(var(--max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* Top masthead */
+.site-header{
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.masthead{
+  padding: 18px 0 10px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 14px;
+}
+
+.brand{
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.tagline{
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.navbar{
+  border-top: 1px solid var(--line);
+  padding: 10px 0;
+}
+
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 14px;
+  align-items:center;
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-size: 14px;
+}
+
+.nav a{ color: var(--text); }
+.nav a.muted{ color: var(--muted); }
+
+/* Main layout */
+.main{
+  padding: 22px 0 40px;
+}
+
+.hero{
+  padding: 18px 0 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.kicker{
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: .3px;
+  margin: 0 0 10px;
+}
+
+h1{
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.25;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+
+.lead{
+  color: var(--muted);
+  font-size: 19px;
+  margin: 0 0 12px;
+  max-width: 70ch;
+}
+
+/* Sections */
+.section{
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.section h2{
+  font-size: 22px;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.small{
+  font-size: 15px;
+  color: var(--muted);
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+}
+
+.meta{
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Post list */
+.post-list{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.post-card{
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.post-card:first-child{ border-top: none; padding-top: 0; }
+
+.post-card h3{
+  margin: 6px 0 8px;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.post-card p{
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.post-link{
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* Article page */
+.article{
+  padding: 22px 0 40px;
+}
+
+.article-header{
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.article h1{
+  font-size: clamp(32px, 3.6vw, 46px);
+  margin-bottom: 8px;
+}
+
+.article .byline{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  align-items:center;
+  margin-top: 6px;
+}
+
+hr.sep{
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 18px 0;
+}
+
+/* Footer */
+.site-footer{
+  padding: 18px 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 600px){
+  .brand{ font-size: 28px; }
+  .tagline{ display:none; }
+  body{ font-size: 17px; }
+}
