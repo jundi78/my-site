@@ -24,12 +24,12 @@ collections:
         name: "title"
         widget: "string"
         hint: "عنوان التدوينة كما سيظهر للقارئ"
-
+        
       - label: "التاريخ"
         name: "date"
         widget: "datetime"
-        format: "DD MMMM YYYY"
-        date_format: "DD/MM/YYYY"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
         time_format: false
 
       - label: "وصف قصير"
