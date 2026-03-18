@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>مدوّنتي الشخصية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="masthead">
+          <a class="brand" href="/">مدوّنتي</a>
+          <div class="tagline">
+            مكان صغير للكتابة — أفكار، يوميات، وملاحظات.
+          </div>
+        </div>
+        <div class="navbar">
+          <nav class="nav">
+            <a href="/#entries">التدوينات</a>
+            <a href="/#about">عن المدوّنة</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      
+<div class="container">
+  <section class="hero">
+    <p class="kicker">مدوّنة / مذكّرات شخصية</p>
+    <h1>أكتب هنا لأفهم نفسي أكثر… ولأحفظ ما لا ينبغي أن يضيع.</h1>
+    <p class="lead">
+      هذه مساحة بسيطة للنشر بهدوء: أفكار يومية، تأملات، ملاحظات من الكتب.
+    </p>
+  </section>
+
+  <section id="entries" class="section">
+    <h2>أحدث التدوينات</h2>
+    <div class="post-list">
+      <article class="post-card">
+        <div class="meta">١٨ مارس ٢٠٢٦</div>
+        <h3><a href="/posts/التدوينة-الأولى/">التدوينة الأولى</a></h3>
+        <p>قصيدة البواكي لإسلام عبد المعطي</p>
+        <a class="post-link" href="/posts/التدوينة-الأولى/">اقرأ ←</a>
+      </article>
+      <article class="post-card">
+        <div class="meta">١٨ مارس ٢٠٢٦</div>
+        <h3><a href="/posts/first-entry/"></a></h3>
+        <p></p>
+        <a class="post-link" href="/posts/first-entry/">اقرأ ←</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <h2>عن المدوّنة</h2>
+    <p>
+      أكتب هنا لأجل نفسي أولًا: لتثبيت الأفكار قبل أن تتبدّد، ولتجميع ما تعلّمته وما عشته.
+    </p>
+  </section>
+</div>
+
+    </main>
+
+    <div class="container">
+      <footer class="site-footer">
+        <div>© <span id="year"></span> — مدوّنتي</div>
+      </footer>
+    </div>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
