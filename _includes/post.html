@@ -1,0 +1,13 @@
+---
+layout: base.html
+---
+
+<div class="container">
+  <article class="article">
+    <header class="article-header">
+      <p class="kicker">{{ date | date: "%d %B %Y" }}</p>
+      <h1>{{ title }}</h1>
+    </header>
+    {{ content }}
+  </article>
+</div>
