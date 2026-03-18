@@ -2,7 +2,8 @@ backend:
   name: github
   repo: jundi78/my-site
   branch: main
-
+  base_url: https://sveltia-cms-auth.jundi78.workers.dev
+  
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
