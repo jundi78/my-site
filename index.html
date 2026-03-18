@@ -1,0 +1,35 @@
+---
+layout: base.html
+title: مدوّنتي الشخصية
+---
+
+<div class="container">
+  <section class="hero">
+    <p class="kicker">مدوّنة / مذكّرات شخصية</p>
+    <h1>أكتب هنا لأفهم نفسي أكثر… ولأحفظ ما لا ينبغي أن يضيع.</h1>
+    <p class="lead">
+      هذه مساحة بسيطة للنشر بهدوء: أفكار يومية، تأملات، ملاحظات من الكتب.
+    </p>
+  </section>
+
+  <section id="entries" class="section">
+    <h2>أحدث التدوينات</h2>
+    <div class="post-list">
+      {%- for post in collections.posts | reverse %}
+      <article class="post-card">
+        <div class="meta">{{ post.date | date: "%d %B %Y" }}</div>
+        <h3><a href="{{ post.url }}">{{ post.data.title }}</a></h3>
+        <p>{{ post.data.description }}</p>
+        <a class="post-link" href="{{ post.url }}">اقرأ ←</a>
+      </article>
+      {%- endfor %}
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <h2>عن المدوّنة</h2>
+    <p>
+      أكتب هنا لأجل نفسي أولًا: لتثبيت الأفكار قبل أن تتبدّد، ولتجميع ما تعلّمته وما عشته.
+    </p>
+  </section>
+</div>
