@@ -15,7 +15,7 @@ collections:
     folder: "posts"
     create: true
     slug: "{{slug}}"
-    extension: "html"
+    extension: "md"
     format: "frontmatter"
     preview_path: "posts/{{slug}}.html"
 
