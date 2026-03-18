@@ -3,6 +3,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("style.css");
   eleventyConfig.addPassthroughCopy("admin");
   eleventyConfig.addPassthroughCopy("images");
+  eleventyConfig.addPassthroughCopy("CNAME");
 
   // Allow any date format
   eleventyConfig.setFrontMatterParsingOptions({
