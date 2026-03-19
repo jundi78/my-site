@@ -1,0 +1,21 @@
+{
+  "site_name": "مدوّنتي",
+  "site_tagline": "مكان صغير للكتابة — أفكار، يوميات، وملاحظات.",
+  "hero_headline": "أكتب هنا لأفهم نفسي أكثر… ولأحفظ ما لا ينبغي أن يضيع.",
+  "hero_subtext": "أفكار يومية، تأملات، وملاحظات من الكتب.",
+  "about_text": "أكتب هنا لأجل نفسي أولًا: لتثبيت الأفكار قبل أن تتبدّد، ولتجميع ما تعلّمته وما عشته.",
+  "footer_text": "مدوّنتي",
+  "categories": ["دين", "سياسة", "علوم", "تاريخ", "متفرقات"],
+  "color_bg": "#ffffff",
+  "color_text": "#111111",
+  "color_muted": "#555555",
+  "color_hint": "#999999",
+  "color_line": "#e2e2e2",
+  "color_soft": "#f6f6f4",
+  "color_accent": "#111111",
+  "font_body": "Amiri",
+  "font_ui": "IBM Plex Sans Arabic",
+  "font_size_base": "18",
+  "max_width": "860",
+  "spacing_section": "40"
+}
