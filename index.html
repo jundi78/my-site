@@ -1,18 +1,16 @@
 ---
 layout: base.html
-title: المدونة الشخصية لمحمد الجندي
+title: مدوّنتي
 ---
 
 <div class="container">
 
-  <!-- Hero -->
   <section class="hero">
     <p class="kicker">مدوّنة شخصية</p>
-    <h1 class="hero-headline">أكتب هنا لأفهم نفسي أكثر… ولأحفظ ما لا ينبغي أن يضيع.</h1>
-    <p class="lead">أفكار يومية، تأملات، وملاحظات من الكتب.</p>
+    <h1 class="hero-headline">{{ theme.hero_headline }}</h1>
+    <p class="lead">{{ theme.hero_subtext }}</p>
   </section>
 
-  <!-- Post list -->
   <section id="entries">
     <p class="section-label">أحدث التدوينات</p>
 
@@ -27,7 +25,6 @@ title: المدونة الشخصية لمحمد الجندي
         data-title="{{ post.data.title }}"
         data-desc="{{ post.data.description | default: '' }}">
 
-        <!-- Thumbnail (right in RTL) -->
         <div class="post-thumb">
           {%- if post.data.thumbnail -%}
             <img src="{{ post.data.thumbnail }}" alt="{{ post.data.title }}" loading="lazy" />
@@ -41,7 +38,6 @@ title: المدونة الشخصية لمحمد الجندي
           {%- endif -%}
         </div>
 
-        <!-- Body -->
         <div class="post-body">
           <div class="post-meta">
             <span class="post-date">{{ post.date | date: "%d %B %Y" }}</span>
@@ -62,10 +58,9 @@ title: المدونة الشخصية لمحمد الجندي
     <p class="no-results" id="no-results">لا توجد تدوينات تطابق بحثك.</p>
   </section>
 
-  <!-- About -->
   <section id="about" class="about-section">
     <p class="section-label">عن المدوّنة</p>
-    <p>أكتب هنا لأجل نفسي أولًا: لتثبيت الأفكار قبل أن تتبدّد، ولتجميع ما تعلّمته وما عشته.</p>
+    <p>{{ theme.about_text }}</p>
   </section>
 
 </div>
