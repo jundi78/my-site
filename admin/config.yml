@@ -3,7 +3,7 @@ backend:
   repo: jundi78/my-site
   branch: main
   base_url: https://sveltia-cms-auth.jundi78.workers.dev
-  
+
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
@@ -25,13 +25,34 @@ collections:
         name: "title"
         widget: "string"
         hint: "عنوان التدوينة كما سيظهر للقارئ"
-        
+
       - label: "التاريخ"
         name: "date"
         widget: "datetime"
         format: "YYYY-MM-DD"
         date_format: "YYYY-MM-DD"
         time_format: false
+
+      - label: "التصنيف"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "دين", value: "دين" }
+          - { label: "سياسة", value: "سياسة" }
+          - { label: "علوم", value: "علوم" }
+          - { label: "تاريخ", value: "تاريخ" }
+          - { label: "متفرقات", value: "متفرقات" }
+        required: false
+        hint: "اختر تصنيفًا للتدوينة"
+
+      - label: "صورة مصغّرة"
+        name: "thumbnail"
+        widget: "image"
+        required: false
+        hint: "صورة تظهر في قائمة التدوينات وأعلى المقال. إن تركتها فارغة ستظهر صورة افتراضية."
+        media_library:
+          config:
+            multiple: false
 
       - label: "وصف قصير"
         name: "description"
@@ -43,7 +64,7 @@ collections:
         widget: "markdown"
         hint: "محتوى التدوينة الكامل"
 
-      - label: "نشر؟"
+      - label: "مسودة"
         name: "draft"
         widget: "boolean"
         default: false

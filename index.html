@@ -3,83 +3,232 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>مدوّنتي الشخصية</title>
+    <title>مدوّنتي</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
+
     <header class="site-header">
       <div class="container">
-        <div class="masthead">
+
+        <!-- Row 1: brand + search + date -->
+        <div class="topbar-main">
           <a class="brand" href="/">مدوّنتي</a>
-          <div class="tagline">
-            مكان صغير للكتابة — أفكار، يوميات، وملاحظات.
+          <div class="topbar-controls">
+            <select class="date-select" id="filter-month" aria-label="تصفّح بالشهر">
+              <option value="">الشهر</option>
+            </select>
+            <select class="date-select" id="filter-year" aria-label="تصفّح بالسنة">
+              <option value="">السنة</option>
+            </select>
+            <input class="search-input" id="search-input" type="search" placeholder="ابحث في التدوينات…" aria-label="بحث" />
           </div>
         </div>
-        <div class="navbar">
-          <nav class="nav">
-            <a href="/#entries">التدوينات</a>
-            <a href="/#about">عن المدوّنة</a>
-          </nav>
+
+        <!-- Row 2: categories -->
+        <div class="catbar">
+          <span class="catbar-label">التصنيفات</span>
+          <button class="cat-btn active" data-cat="">الكل</button>
+          <button class="cat-btn" data-cat="دين">دين</button>
+          <button class="cat-btn" data-cat="سياسة">سياسة</button>
+          <button class="cat-btn" data-cat="علوم">علوم</button>
+          <button class="cat-btn" data-cat="تاريخ">تاريخ</button>
+          <button class="cat-btn" data-cat="متفرقات">متفرقات</button>
         </div>
+
       </div>
     </header>
 
     <main>
       
 <div class="container">
+
+  <!-- Hero -->
   <section class="hero">
-    <p class="kicker">مدوّنة / مذكّرات شخصية</p>
-    <h1>أكتب هنا لأفهم نفسي أكثر… ولأحفظ ما لا ينبغي أن يضيع.</h1>
-    <p class="lead">
-      هذه مساحة بسيطة للنشر بهدوء: أفكار يومية، تأملات، ملاحظات من الكتب.
-    </p>
+    <p class="kicker">مدوّنة شخصية</p>
+    <h1 class="hero-headline">أكتب هنا لأفهم نفسي أكثر… ولأحفظ ما لا ينبغي أن يضيع.</h1>
+    <p class="lead">أفكار يومية، تأملات، وملاحظات من الكتب.</p>
   </section>
 
-  <section id="entries" class="section">
-    <h2>أحدث التدوينات</h2>
-    <div class="post-list">
-      <article class="post-card">
-        <div class="meta">١٨ مارس ٢٠٢٦</div>
-        <h3><a href="/posts/التدوينة-الأولى/">التدوينة الأولى</a></h3>
-        <p>التدوينة الأولى: لماذا بدأت هذه المدوّنة؟</p>
-        <a class="post-link" href="/posts/التدوينة-الأولى/">اقرأ ←</a>
-      </article>
-      <article class="post-card">
-        <div class="meta">١٨ مارس ٢٠٢٦</div>
-        <h3><a href="/posts/الزير/">الزير</a></h3>
-        <p>قصة قصيرة</p>
-        <a class="post-link" href="/posts/الزير/">اقرأ ←</a>
-      </article>
-      <article class="post-card">
-        <div class="meta">١٨ مارس ٢٠٢٦</div>
-        <h3><a href="/posts/الكاشفة/">الكاشفة</a></h3>
-        <p>الطوفان الذي كشف كل عوراتنا</p>
-        <a class="post-link" href="/posts/الكاشفة/">اقرأ ←</a>
-      </article>
-    </div>
+  <!-- Post list -->
+  <section id="entries">
+    <p class="section-label">أحدث التدوينات</p>
+
+    <div class="post-list"><article class="post-card"
+        data-cat=""
+        data-month="١٨ مارس ٢٠٢٦"
+        data-year="١٨ مارس ٢٠٢٦"
+        data-title="التدوينة الأولى"
+        data-desc="التدوينة الأولى: لماذا بدأت هذه المدوّنة؟">
+
+        <!-- Thumbnail (right in RTL) -->
+        <div class="post-thumb"><div class="post-thumb-default" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div></div>
+
+        <!-- Body -->
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="post-date">١٨ مارس ٢٠٢٦</span></div>
+          <h3><a href="/posts/التدوينة-الأولى/">التدوينة الأولى</a></h3><p>التدوينة الأولى: لماذا بدأت هذه المدوّنة؟</p></div>
+
+      </article><article class="post-card"
+        data-cat=""
+        data-month="١٨ مارس ٢٠٢٦"
+        data-year="١٨ مارس ٢٠٢٦"
+        data-title="الزير"
+        data-desc="قصة قصيرة">
+
+        <!-- Thumbnail (right in RTL) -->
+        <div class="post-thumb"><div class="post-thumb-default" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div></div>
+
+        <!-- Body -->
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="post-date">١٨ مارس ٢٠٢٦</span></div>
+          <h3><a href="/posts/الزير/">الزير</a></h3><p>قصة قصيرة</p></div>
+
+      </article><article class="post-card"
+        data-cat=""
+        data-month="١٨ مارس ٢٠٢٦"
+        data-year="١٨ مارس ٢٠٢٦"
+        data-title="الكاشفة"
+        data-desc="الطوفان الذي كشف كل عوراتنا">
+
+        <!-- Thumbnail (right in RTL) -->
+        <div class="post-thumb"><div class="post-thumb-default" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div></div>
+
+        <!-- Body -->
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="post-date">١٨ مارس ٢٠٢٦</span></div>
+          <h3><a href="/posts/الكاشفة/">الكاشفة</a></h3><p>الطوفان الذي كشف كل عوراتنا</p></div>
+
+      </article></div>
+
+    <p class="no-results" id="no-results">لا توجد تدوينات تطابق بحثك.</p>
   </section>
 
-  <section id="about" class="section">
-    <h2>عن المدوّنة</h2>
-    <p>
-      أكتب هنا لأجل نفسي أولًا: لتثبيت الأفكار قبل أن تتبدّد، ولتجميع ما تعلّمته وما عشته.
-    </p>
+  <!-- About -->
+  <section id="about" class="about-section">
+    <p class="section-label">عن المدوّنة</p>
+    <p>أكتب هنا لأجل نفسي أولًا: لتثبيت الأفكار قبل أن تتبدّد، ولتجميع ما تعلّمته وما عشته.</p>
   </section>
+
 </div>
 
     </main>
 
     <div class="container">
       <footer class="site-footer">
-        <div>© <span id="year"></span> — مدوّنتي</div>
+        © <span id="year"></span> — مدوّنتي
       </footer>
     </div>
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      // ── Filter engine ──────────────────────────────────────────
+      // Runs on homepage only (cards exist). Safe to run on all pages.
+      (function () {
+        const cards = Array.from(document.querySelectorAll(".post-card[data-cat]"));
+        if (!cards.length) return;
+
+        const searchInput  = document.getElementById("search-input");
+        const monthSelect  = document.getElementById("filter-month");
+        const yearSelect   = document.getElementById("filter-year");
+        const catBtns      = Array.from(document.querySelectorAll(".cat-btn"));
+        const noResults    = document.getElementById("no-results");
+
+        let activeCat  = "";
+        let activeMonth = "";
+        let activeYear  = "";
+        let searchTerm  = "";
+
+        // Populate month/year dropdowns from card data
+        const months = new Set();
+        const years  = new Set();
+        cards.forEach(c => {
+          if (c.dataset.month) months.add(c.dataset.month);
+          if (c.dataset.year)  years.add(c.dataset.year);
+        });
+
+        // Arabic month names
+        const arMonths = {
+          "01":"يناير","02":"فبراير","03":"مارس","04":"أبريل",
+          "05":"مايو","06":"يونيو","07":"يوليو","08":"أغسطس",
+          "09":"سبتمبر","10":"أكتوبر","11":"نوفمبر","12":"ديسمبر"
+        };
+
+        Array.from(months).sort().forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m;
+          opt.textContent = arMonths[m] || m;
+          monthSelect.appendChild(opt);
+        });
+
+        Array.from(years).sort().reverse().forEach(y => {
+          const opt = document.createElement("option");
+          opt.value = y;
+          opt.textContent = y;
+          yearSelect.appendChild(opt);
+        });
+
+        function applyFilters() {
+          let visible = 0;
+          cards.forEach(card => {
+            const matchCat    = !activeCat  || card.dataset.cat   === activeCat;
+            const matchMonth  = !activeMonth || card.dataset.month === activeMonth;
+            const matchYear   = !activeYear  || card.dataset.year  === activeYear;
+            const matchSearch = !searchTerm  || card.dataset.title.includes(searchTerm)
+                                              || card.dataset.desc.includes(searchTerm);
+            const show = matchCat && matchMonth && matchYear && matchSearch;
+            card.classList.toggle("hidden", !show);
+            if (show) visible++;
+          });
+          if (noResults) noResults.style.display = visible === 0 ? "block" : "none";
+        }
+
+        catBtns.forEach(btn => {
+          btn.addEventListener("click", () => {
+            catBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            activeCat = btn.dataset.cat;
+            applyFilters();
+          });
+        });
+
+        monthSelect.addEventListener("change", () => {
+          activeMonth = monthSelect.value;
+          applyFilters();
+        });
+
+        yearSelect.addEventListener("change", () => {
+          activeYear = yearSelect.value;
+          applyFilters();
+        });
+
+        searchInput.addEventListener("input", () => {
+          searchTerm = searchInput.value.trim();
+          applyFilters();
+        });
+      })();
     </script>
   </body>
 </html>
