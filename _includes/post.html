@@ -6,16 +6,16 @@ layout: base.html
   <article class="article">
     <header class="article-header">
       <p class="kicker">
-        {{ date | date: "%d %B %Y" }}
-        {%- if category %} — <span class="post-cat-tag">{{ category }}</span>{%- endif -%}
+        {{ date | date }}
+        {%- if category %} — <span class="post-cat-tag">{{ category }}</span>{%- endif %}
       </p>
       <h1>{{ title }}</h1>
     </header>
 
-    {%- if thumbnail -%}
+    {%- if thumbnail %}
       <img class="article-thumb" src="{{ thumbnail }}" alt="{{ title }}" />
-    {%- endif -%}
+    {%- endif %}
 
-    {{ content }}
+    {{ content | safe }}
   </article>
 </div>
