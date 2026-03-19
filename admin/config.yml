@@ -185,14 +185,9 @@ collections:
 
       - label: "التصنيف"
         name: "category"
-        widget: "select"
-        options:
-          - { label: "دين", value: "دين" }
-          - { label: "سياسة", value: "سياسة" }
-          - { label: "علوم", value: "علوم" }
-          - { label: "تاريخ", value: "تاريخ" }
-          - { label: "متفرقات", value: "متفرقات" }
+        widget: "string"
         required: false
+        hint: "اكتب التصنيف كما هو مكتوب في إعدادات الموقع (مثال: دين، سياسة)"
 
       - label: "صورة مصغّرة"
         name: "thumbnail"
