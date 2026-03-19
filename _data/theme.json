@@ -26,7 +26,7 @@
     "font_size_base": 22
   },
   "layout_group": {
-    "max_width": 600,
+    "max_width": 800,
     "spacing_section": 20
   },
   "color_bg": "#ffffff",
@@ -39,6 +39,6 @@
   "font_body": "Amiri",
   "font_ui": "IBM Plex Sans Arabic",
   "font_size_base": "18",
-  "spacing_section": "40",
-  "max_width": "860"
+  "max_width": "860",
+  "spacing_section": "40"
 }
