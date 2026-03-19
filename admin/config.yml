@@ -20,7 +20,6 @@ collections:
         file: "_data/theme.json"
         fields:
 
-          # — Texts —
           - label: "اسم المدوّنة"
             name: "site_name"
             widget: "string"
@@ -50,17 +49,15 @@ collections:
             widget: "string"
             hint: "يظهر في أسفل الصفحة بعد علامة ©"
 
-          # — Categories —
           - label: "التصنيفات"
             name: "categories"
             widget: "list"
-            hint: "أضف أو احذف التصنيفات — ستظهر تلقائيًا في شريط التصفية"
+            hint: "أضف أو احذف التصنيفات — ستظهر تلقائيًا في شريط التصفية وفي قائمة التدوينات"
             field:
               label: "تصنيف"
               name: "category"
               widget: "string"
 
-          # — Colors —
           - label: "ألوان"
             name: "colors_group"
             widget: "object"
@@ -70,7 +67,6 @@ collections:
                 name: "color_bg"
                 widget: "color"
                 enableAlpha: false
-                hint: "لون خلفية الصفحة"
 
               - label: "لون النص الرئيسي"
                 name: "color_text"
@@ -96,15 +92,12 @@ collections:
                 name: "color_soft"
                 widget: "color"
                 enableAlpha: false
-                hint: "خلفية حقول البحث والتصنيفات"
 
               - label: "لون التمييز (الأزرار النشطة)"
                 name: "color_accent"
                 widget: "color"
                 enableAlpha: false
-                hint: "لون زر التصنيف النشط"
 
-          # — Fonts —
           - label: "الخطوط"
             name: "fonts_group"
             widget: "object"
@@ -137,7 +130,6 @@ collections:
                 step: 1
                 default: 18
 
-          # — Layout —
           - label: "التخطيط"
             name: "layout_group"
             widget: "object"
@@ -150,7 +142,6 @@ collections:
                 max: 1200
                 step: 20
                 default: 860
-                hint: "عرض منطقة المحتوى الرئيسية"
 
               - label: "المسافة بين الأقسام (px)"
                 name: "spacing_section"
@@ -166,10 +157,10 @@ collections:
     label_singular: "تدوينة"
     folder: "posts"
     create: true
-    slug: "{{slug}}"
+    slug: ""
     extension: "md"
     format: "frontmatter"
-    preview_path: "posts/{{slug}}.html"
+    preview_path: "posts/.html"
 
     fields:
       - label: "العنوان"
@@ -185,9 +176,15 @@ collections:
 
       - label: "التصنيف"
         name: "category"
-        widget: "string"
+        widget: "select"
         required: false
-        hint: "اكتب التصنيف كما هو مكتوب في إعدادات الموقع (مثال: دين، سياسة)"
+        options:
+          - { label: "سياسة", value: "سياسة" }
+          - { label: "الأمة المكتئبة", value: "الأمة المكتئبة" }
+          - { label: "دين", value: "دين" }
+          - { label: "علوم", value: "علوم" }
+          - { label: "تاريخ", value: "تاريخ" }
+          - { label: "متفرقات", value: "متفرقات" }
 
       - label: "صورة مصغّرة"
         name: "thumbnail"
