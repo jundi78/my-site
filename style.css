@@ -1,4 +1,4 @@
-/* style.css — minimal editorial, Arabic RTL */
+/* style.css — all design tokens come from CSS variables injected by base.html */
 
 :root {
   --bg: #ffffff;
@@ -7,8 +7,12 @@
   --hint: #999999;
   --line: #e2e2e2;
   --soft: #f6f6f4;
-  --link: #111111;
-  --max: 860px;
+  --accent: #111111;
+  --font-body: "Amiri", serif;
+  --font-ui: "IBM Plex Sans Arabic", sans-serif;
+  --font-size-base: 18px;
+  --max-width: 860px;
+  --spacing-section: 40px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -20,17 +24,17 @@ body {
   color: var(--text);
   direction: rtl;
   text-align: right;
-  font-family: "Amiri", "Noto Naskh Arabic", "Times New Roman", serif;
-  font-size: 18px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
   line-height: 1.9;
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--link); text-decoration: none; }
+a { color: var(--text); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .container {
-  width: min(var(--max), calc(100% - 32px));
+  width: min(var(--max-width), calc(100% - 32px));
   margin: 0 auto;
 }
 
@@ -54,10 +58,12 @@ a:hover { text-decoration: underline; }
 }
 
 .brand {
+  font-family: var(--font-body);
   font-size: 26px;
   font-weight: 700;
   letter-spacing: .2px;
   white-space: nowrap;
+  color: var(--text);
 }
 
 .topbar-controls {
@@ -67,9 +73,8 @@ a:hover { text-decoration: underline; }
   flex-wrap: wrap;
 }
 
-/* Search */
 .search-input {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   padding: 6px 12px;
   border: 1px solid var(--line);
@@ -82,11 +87,10 @@ a:hover { text-decoration: underline; }
   transition: border-color .15s;
 }
 .search-input::placeholder { color: var(--hint); }
-.search-input:focus { border-color: #aaa; }
+.search-input:focus { border-color: var(--muted); }
 
-/* Date selects */
 .date-select {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   padding: 6px 10px;
   border: 1px solid var(--line);
@@ -97,9 +101,8 @@ a:hover { text-decoration: underline; }
   cursor: pointer;
   outline: none;
 }
-.date-select:focus { border-color: #aaa; }
+.date-select:focus { border-color: var(--muted); }
 
-/* Category bar */
 .catbar {
   display: flex;
   align-items: center;
@@ -109,7 +112,7 @@ a:hover { text-decoration: underline; }
 }
 
 .catbar-label {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   color: var(--hint);
   letter-spacing: .06em;
@@ -118,7 +121,7 @@ a:hover { text-decoration: underline; }
 }
 
 .cat-btn {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 13px;
   padding: 4px 12px;
   border: 1px solid var(--line);
@@ -130,21 +133,21 @@ a:hover { text-decoration: underline; }
 }
 .cat-btn:hover { background: var(--soft); color: var(--text); }
 .cat-btn.active {
-  background: var(--text);
+  background: var(--accent);
   color: var(--bg);
-  border-color: var(--text);
+  border-color: var(--accent);
 }
 
 /* ─── HERO ────────────────────────────────────────────── */
 
 .hero {
-  padding: 40px 0 32px;
+  padding: var(--spacing-section) 0 calc(var(--spacing-section) * 0.8);
   border-bottom: 1px solid var(--line);
   margin-bottom: 28px;
 }
 
 .kicker {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   color: var(--hint);
   letter-spacing: .08em;
@@ -153,16 +156,19 @@ a:hover { text-decoration: underline; }
 }
 
 h1.hero-headline {
-  font-size: clamp(28px, 3.5vw, 42px);
+  font-family: var(--font-body);
+  font-size: clamp(26px, 3.5vw, 40px);
   line-height: 1.4;
   margin: 0 0 12px;
   font-weight: 700;
   max-width: 600px;
+  color: var(--text);
 }
 
 .lead {
+  font-family: var(--font-ui);
   color: var(--muted);
-  font-size: 17px;
+  font-size: 16px;
   margin: 0;
   max-width: 60ch;
 }
@@ -170,7 +176,7 @@ h1.hero-headline {
 /* ─── SECTION LABEL ───────────────────────────────────── */
 
 .section-label {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   color: var(--hint);
   letter-spacing: .08em;
@@ -190,8 +196,8 @@ h1.hero-headline {
   border-top: 1px solid var(--line);
 }
 .post-card:last-child { border-bottom: 1px solid var(--line); }
+.post-card.hidden { display: none; }
 
-/* Thumbnail — right side (RTL: order 1) */
 .post-thumb {
   flex-shrink: 0;
   width: 64px;
@@ -201,33 +207,15 @@ h1.hero-headline {
   border: 1px solid var(--line);
   order: 1;
 }
-.post-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+.post-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .post-thumb-default {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   background: var(--soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
-.post-thumb-default svg {
-  width: 24px;
-  height: 24px;
-  opacity: .2;
-  color: var(--text);
-}
+.post-thumb-default svg { width: 24px; height: 24px; opacity: .2; color: var(--text); }
 
-/* Post body — left side (order 2) */
-.post-body {
-  flex: 1;
-  min-width: 0;
-  order: 2;
-}
+.post-body { flex: 1; min-width: 0; order: 2; }
 
 .post-meta {
   display: flex;
@@ -238,13 +226,13 @@ h1.hero-headline {
 }
 
 .post-date {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   color: var(--hint);
 }
 
 .post-cat-tag {
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 11px;
   padding: 2px 8px;
   border-radius: 20px;
@@ -254,12 +242,13 @@ h1.hero-headline {
 }
 
 .post-body h3 {
+  font-family: var(--font-body);
   font-size: 19px;
   font-weight: 700;
   line-height: 1.35;
   margin: 0 0 4px;
+  color: var(--text);
 }
-
 .post-body h3 a { color: var(--text); }
 .post-body h3 a:hover { text-decoration: underline; }
 
@@ -267,31 +256,26 @@ h1.hero-headline {
   margin: 0;
   font-size: 14px;
   color: var(--muted);
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   line-height: 1.6;
 }
 
-/* hidden class for filtering */
-.post-card.hidden { display: none; }
-
-/* ─── NO RESULTS ──────────────────────────────────────── */
 .no-results {
   display: none;
   padding: 24px 0;
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   font-size: 14px;
   color: var(--hint);
   text-align: center;
 }
 
-/* ─── ABOUT SECTION ───────────────────────────────────── */
+/* ─── ABOUT ───────────────────────────────────────────── */
 
 .about-section {
-  padding: 32px 0 16px;
+  padding: var(--spacing-section) 0 16px;
   border-top: 1px solid var(--line);
-  margin-top: 32px;
+  margin-top: var(--spacing-section);
 }
-
 .about-section p {
   color: var(--muted);
   font-size: 16px;
@@ -306,14 +290,14 @@ h1.hero-headline {
   padding: 20px 0;
   color: var(--hint);
   font-size: 13px;
-  font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Arial, sans-serif;
+  font-family: var(--font-ui);
   border-top: 1px solid var(--line);
-  margin-top: 32px;
+  margin-top: var(--spacing-section);
 }
 
 /* ─── ARTICLE PAGE ────────────────────────────────────── */
 
-.article { padding: 32px 0 48px; }
+.article { padding: var(--spacing-section) 0 calc(var(--spacing-section) * 1.5); }
 
 .article-header {
   border-bottom: 1px solid var(--line);
@@ -322,18 +306,12 @@ h1.hero-headline {
 }
 
 .article h1 {
-  font-size: clamp(28px, 3.2vw, 42px);
+  font-family: var(--font-body);
+  font-size: clamp(26px, 3.2vw, 40px);
   margin: 0 0 8px;
   font-weight: 700;
   line-height: 1.35;
-}
-
-.article .byline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin-top: 6px;
+  color: var(--text);
 }
 
 .article-thumb {
@@ -345,11 +323,7 @@ h1.hero-headline {
   display: block;
 }
 
-hr.sep {
-  border: none;
-  border-top: 1px solid var(--line);
-  margin: 20px 0;
-}
+hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
 /* ─── RESPONSIVE ──────────────────────────────────────── */
 
@@ -358,5 +332,5 @@ hr.sep {
   .topbar-controls { gap: 6px; }
   .search-input { width: 140px; }
   body { font-size: 17px; }
-  h1.hero-headline { font-size: 26px; }
+  h1.hero-headline { font-size: 24px; }
 }
