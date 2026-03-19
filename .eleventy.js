@@ -1,7 +1,7 @@
 module.exports = function (eleventyConfig) {
   // Copy static files as-is
   eleventyConfig.addPassthroughCopy("style.css");
-  eleventyConfig.addPassthroughCopy("admin");
+  eleventyConfig.addPassthroughCopy("admin/index.html");
   eleventyConfig.addPassthroughCopy("images");
   eleventyConfig.addPassthroughCopy("CNAME");
 
@@ -22,11 +22,17 @@ module.exports = function (eleventyConfig) {
     });
   });
 
+  // Allow .njk files to output any extension (needed for config.yml.njk)
+  eleventyConfig.addTemplateFormats("njk");
+
   return {
     dir: {
       input: ".",
       output: "_site",
       includes: "_includes",
     },
+    templateFormats: ["html", "md", "njk"],
+    htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk",
   };
 };
