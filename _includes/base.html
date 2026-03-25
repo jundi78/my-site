@@ -47,7 +47,7 @@
           <span class="catbar-label">التصنيفات</span>
           <button class="cat-btn active" data-cat="">الكل</button>
           {%- for cat in theme.categories %}
-            <button class="cat-btn" data-cat="{{ cat }}">{{ cat }}</button>
+            <button class="cat-btn" data-cat="{{ cat | trim }}">{{ cat | trim }}</button>
           {%- endfor %}
         </div>
 
@@ -107,7 +107,7 @@
         function applyFilters() {
           let visible = 0;
           cards.forEach(card => {
-            const matchCat    = !activeCat   || card.dataset.cat   === activeCat;
+            const matchCat    = !activeCat   || card.dataset.cat.trim()   === activeCat.trim();
             const matchMonth  = !activeMonth || card.dataset.month === activeMonth;
             const matchYear   = !activeYear  || card.dataset.year  === activeYear;
             const matchSearch = !searchTerm  || card.dataset.title.includes(searchTerm)
@@ -123,7 +123,7 @@
           btn.addEventListener("click", () => {
             catBtns.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
-            activeCat = btn.dataset.cat;
+            activeCat = btn.dataset.cat.trim();
             applyFilters();
           });
         });
