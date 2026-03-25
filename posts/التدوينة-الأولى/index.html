@@ -125,7 +125,7 @@
         function applyFilters() {
           let visible = 0;
           cards.forEach(card => {
-            const matchCat    = !activeCat   || card.dataset.cat   === activeCat;
+            const matchCat    = !activeCat   || card.dataset.cat.trim()   === activeCat.trim();
             const matchMonth  = !activeMonth || card.dataset.month === activeMonth;
             const matchYear   = !activeYear  || card.dataset.year  === activeYear;
             const matchSearch = !searchTerm  || card.dataset.title.includes(searchTerm)
@@ -141,7 +141,7 @@
           btn.addEventListener("click", () => {
             catBtns.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
-            activeCat = btn.dataset.cat;
+            activeCat = btn.dataset.cat.trim();
             applyFilters();
           });
         });
