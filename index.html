@@ -14,8 +14,8 @@ title: محمد الجندي
       {%- for post in collections.posts | reverse %}
       <article class="post-card"
         data-cat="{{ post.data.category | trim if post.data.category else '' }}"
-        data-month="{{ post.date | date('MM') }}"
-        data-year="{{ post.date | date('yyyy') }}"
+        data-month="{{ post.date | dateMonth }}"
+        data-year="{{ post.date | dateYear }}"
         data-title="{{ post.data.title }}"
         data-desc="{{ post.data.description if post.data.description else '' }}">
         <div class="post-thumb">
