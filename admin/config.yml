@@ -157,10 +157,10 @@ collections:
     label_singular: "تدوينة"
     folder: "posts"
     create: true
-    slug: ""
+    slug: "{{slug}}"
     extension: "md"
     format: "frontmatter"
-    preview_path: "posts/.html"
+    preview_path: "posts/{{slug}}.html"
 
     fields:
       - label: "العنوان"
