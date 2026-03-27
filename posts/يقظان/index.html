@@ -3,11 +3,41 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>يقظان</title>
+
+    <!-- ── PAGE TITLE ─────────────────────────────────────────────── -->
+      <title>يقظان | المدونة الشخصية لمحمد الجندي</title>
+
+    <!-- ── META DESCRIPTION ───────────────────────────────────────── -->
+      <meta name="description" content="هل يمكن للعقل وحده أن يعثر على الخالق؟" />
+
+    <!-- ── CANONICAL ──────────────────────────────────────────────── -->
+    <link rel="canonical" href="https://aljundi.org/posts/يقظان/" />
+
+    <!-- ── OPEN GRAPH ─────────────────────────────────────────────── -->
+    <meta property="og:site_name" content="المدونة الشخصية لمحمد الجندي" />
+    <meta property="og:locale" content="ar_AR" />
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content="يقظان | المدونة الشخصية لمحمد الجندي" />
+      <meta property="og:description" content="هل يمكن للعقل وحده أن يعثر على الخالق؟" />
+    <meta property="og:url" content="https://aljundi.org/posts/يقظان/" />
+      <meta property="og:image" content="https://aljundi.org/images/uploads/ChatGPT Image Mar 26, 2026, 12_29_04 PM.png" />
+
+    <!-- ── TWITTER CARD ───────────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="يقظان | المدونة الشخصية لمحمد الجندي" />
+      <meta name="twitter:description" content="هل يمكن للعقل وحده أن يعثر على الخالق؟" />
+      <meta name="twitter:image" content="https://aljundi.org/images/uploads/ChatGPT Image Mar 26, 2026, 12_29_04 PM.png" />
+
+    <!-- ── FONTS ──────────────────────────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif+Arabic:wght@300;400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Noto+Naskh+Arabic:wght@400;500&family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/style.css" />
+
+    <!-- ── SITEMAP DISCOVERY ──────────────────────────────────────── -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- ── THEME TOKENS ──────────────────────────────────────────── -->
     <style>
       :root {
         --bg:              #ffffff;
@@ -124,7 +154,6 @@
         const catBtns = Array.from(document.querySelectorAll(".cat-btn"));
         const isHomepage = cards.length > 0;
 
-        // ── HOMEPAGE MODE ──────────────────────────────────────────────
         if (isHomepage) {
           const searchInput = document.getElementById("search-input");
           const monthSelect = document.getElementById("filter-month");
@@ -133,7 +162,6 @@
 
           let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
 
-          // Populate month/year dropdowns
           const months = new Set();
           const years  = new Set();
           cards.forEach(c => {
@@ -182,43 +210,34 @@
             applyFilters();
           }
 
-          // Wire up category buttons
           catBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-              setActiveCategory(btn.dataset.cat.trim());
-            });
+            btn.addEventListener("click", () => setActiveCategory(btn.dataset.cat.trim()));
           });
 
           monthSelect.addEventListener("change", () => { activeMonth = monthSelect.value; applyFilters(); });
           yearSelect.addEventListener("change",  () => { activeYear  = yearSelect.value;  applyFilters(); });
           searchInput.addEventListener("input",  () => { searchTerm  = searchInput.value.trim(); applyFilters(); });
 
-          // If arriving from a post page with ?cat=, activate that category
           const urlParams = new URLSearchParams(window.location.search);
           const catParam  = urlParams.get("cat");
           if (catParam) {
             setActiveCategory(catParam);
-            // Clean the URL without reloading
             history.replaceState(null, "", window.location.pathname);
           }
 
-        // ── POST PAGE MODE ─────────────────────────────────────────────
         } else {
-          // Category buttons navigate back to homepage filtered by category
           catBtns.forEach(btn => {
             btn.addEventListener("click", () => {
               const cat = btn.dataset.cat.trim();
-              if (cat) {
-                window.location.href = "/?cat=" + encodeURIComponent(cat);
-              } else {
-                window.location.href = "/";
-              }
+              window.location.href = cat ? "/?cat=" + encodeURIComponent(cat) : "/";
             });
           });
         }
 
       })();
     </script>
-    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dd0d3b92c042407c9bcd1bfec41dd9bb"}'></script><!-- End Cloudflare Web Analytics -->
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dd0d3b92c042407c9bcd1bfec41dd9bb"}'></script>
   </body>
 </html>
