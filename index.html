@@ -59,99 +59,121 @@
 
     <main>
       <div class="container">
-  <section class="hero">
-    <p class="kicker">مدوّنة شخصية</p>
-    <h1 class="hero-headline">أكتب هنا لأفهم نفسي أكثر…</h1>
-    <p class="lead">أفكار يومية، تأملات، وملاحظات من الكتب.</p>
-  </section>
-  <section id="entries">
-    <p class="section-label">أحدث التدوينات</p>
-    <div class="post-list">
-      <article class="post-card"
-        data-cat="دين"
-        data-month="03"
-        data-year="2026"
-        data-title="يقظان"
-        data-desc="هل يمكن للعقل وحده أن يعثر على الخالق؟">
-        <div class="post-thumb">
-            <img src="/images/uploads/ChatGPT Image Mar 26, 2026, 12_29_04 PM.png" alt="يقظان" loading="lazy" />
+
+  <!-- ── HERO FEATURED POST (post index 0) ──────────── -->
+    <div class="hero-post post-card"
+      data-cat="دين"
+      data-month="03"
+      data-year="2026"
+      data-title="يقظان"
+      data-desc="هل يمكن للعقل وحده أن يعثر على الخالق؟">
+
+      <div class="hero-post-image">
+          <img src="/images/uploads/ChatGPT Image Mar 26, 2026, 12_29_04 PM.png" alt="يقظان" loading="lazy" />
+          <div class="hero-post-image-overlay"></div>
+          <span class="hero-post-cat">دين</span>
+      </div>
+
+      <div class="hero-post-content">
+        <div>
+          <p class="hero-post-eyebrow">المقالة المميّزة</p>
+          <h2 class="hero-post-title">
+            <a href="/posts/يقظان/">يقظان</a>
+          </h2>
+            <p class="hero-post-desc">هل يمكن للعقل وحده أن يعثر على الخالق؟</p>
         </div>
-        <div class="post-body">
-          <div class="post-meta">
-            <span class="post-date">٢٦ مارس ٢٠٢٦</span>
-              <span class="post-cat-tag">دين</span>
+        <div>
+          <div class="hero-post-meta">
+            <span>٢٦ مارس ٢٠٢٦</span>
           </div>
-          <h3><a href="/posts/يقظان/">يقظان</a></h3>
-            <p>هل يمكن للعقل وحده أن يعثر على الخالق؟</p>
+          <a class="hero-read-btn" href="/posts/يقظان/">اقرأ المقالة ←</a>
         </div>
-      </article>
-      <article class="post-card"
+      </div>
+    </div>
+
+  <!-- ── GRID POSTS (posts 2–4) ─────────────────────── -->
+  <p class="section-label">أحدث المقالات</p>
+  <div class="post-grid">
+      <article class="post-grid-card post-card"
         data-cat="الأمة المكتئبة"
         data-month="03"
         data-year="2026"
         data-title="الأمة المكتثبة"
         data-desc="المقدمة">
-        <div class="post-thumb">
+
+        <div class="grid-card-thumb">
             <img src="/images/uploads/ChatGPT Image Mar 19, 2026, 05_49_53 PM.png" alt="الأمة المكتثبة" loading="lazy" />
         </div>
-        <div class="post-body">
-          <div class="post-meta">
-            <span class="post-date">١٩ مارس ٢٠٢٦</span>
-              <span class="post-cat-tag">الأمة المكتئبة</span>
-          </div>
-          <h3><a href="/posts/الأمة-المكتثبة/">الأمة المكتثبة</a></h3>
-            <p>المقدمة</p>
+
+        <div class="grid-card-body">
+            <p class="grid-card-cat">الأمة المكتئبة</p>
+          <h3 class="grid-card-title">
+            <a href="/posts/الأمة-المكتثبة/">الأمة المكتثبة</a>
+          </h3>
+            <p class="grid-card-desc">المقدمة</p>
+          <p class="grid-card-date">١٩ مارس ٢٠٢٦</p>
         </div>
       </article>
-      <article class="post-card"
+      <article class="post-grid-card post-card"
         data-cat=""
         data-month="03"
         data-year="2026"
         data-title="الكاشفة"
         data-desc="الطوفان الذي كشف كل عوراتنا">
-        <div class="post-thumb">
-            <div class="post-thumb-default" aria-hidden="true">
+
+        <div class="grid-card-thumb">
+            <div class="grid-card-thumb-default" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
                 <path d="M3 9h18M9 21V9"/>
               </svg>
             </div>
         </div>
-        <div class="post-body">
-          <div class="post-meta">
-            <span class="post-date">١٨ مارس ٢٠٢٦</span>
-          </div>
-          <h3><a href="/posts/الكاشفة/">الكاشفة</a></h3>
-            <p>الطوفان الذي كشف كل عوراتنا</p>
+
+        <div class="grid-card-body">
+          <h3 class="grid-card-title">
+            <a href="/posts/الكاشفة/">الكاشفة</a>
+          </h3>
+            <p class="grid-card-desc">الطوفان الذي كشف كل عوراتنا</p>
+          <p class="grid-card-date">١٨ مارس ٢٠٢٦</p>
         </div>
       </article>
-      <article class="post-card"
+      <article class="post-grid-card post-card"
         data-cat="متفرقات"
         data-month="03"
         data-year="2026"
         data-title="الزير"
         data-desc="قصة قصيرة">
-        <div class="post-thumb">
+
+        <div class="grid-card-thumb">
             <img src="/images/uploads/ChatGPT Image Mar 19, 2026, 04_07_49 PM.png" alt="الزير" loading="lazy" />
         </div>
-        <div class="post-body">
-          <div class="post-meta">
-            <span class="post-date">١٨ مارس ٢٠٢٦</span>
-              <span class="post-cat-tag">متفرقات</span>
-          </div>
-          <h3><a href="/posts/الزير/">الزير</a></h3>
-            <p>قصة قصيرة</p>
+
+        <div class="grid-card-body">
+            <p class="grid-card-cat">متفرقات</p>
+          <h3 class="grid-card-title">
+            <a href="/posts/الزير/">الزير</a>
+          </h3>
+            <p class="grid-card-desc">قصة قصيرة</p>
+          <p class="grid-card-date">١٨ مارس ٢٠٢٦</p>
         </div>
       </article>
+  </div>
+
+  <!-- ── LIST POSTS (posts 5+) ───────────────────────── -->
+  <p class="section-label">المزيد من المقالات</p>
+  <div class="post-list">
       <article class="post-card"
         data-cat="متفرقات"
         data-month="03"
         data-year="2026"
         data-title="التدوينة الأولى"
         data-desc="التدوينة الأولى: لماذا بدأت هذه المدوّنة؟">
+
         <div class="post-thumb">
             <img src="/images/uploads/Screenshot 2026-03-25 162715.png" alt="التدوينة الأولى" loading="lazy" />
         </div>
+
         <div class="post-body">
           <div class="post-meta">
             <span class="post-date">١٥ مارس ٢٠٢٦</span>
@@ -161,9 +183,10 @@
             <p>التدوينة الأولى: لماذا بدأت هذه المدوّنة؟</p>
         </div>
       </article>
-    </div>
-    <p class="no-results" id="no-results">لا توجد تدوينات تطابق بحثك.</p>
-  </section>
+  </div>
+
+  <p class="no-results" id="no-results">لا توجد تدوينات تطابق بحثك.</p>
+
   <section id="about" class="about-section">
     <p class="section-label">عن المدوّنة</p>
     <p>عزيزي القارئ،
@@ -174,6 +197,7 @@
 
 أما إن واصلت القراءة، فمرحبًا بك في رحلة البحث عن المعنى، والشفاء.</p>
   </section>
+
 </div>
 
     </main>
