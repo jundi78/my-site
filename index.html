@@ -18,12 +18,11 @@ title: محمد الجندي
 
       <div class="hero-post-image">
         {%- if post.data.thumbnail %}
-          <img src="{{ post.data.thumbnail }}" alt="{{ post.data.title }}" loading="lazy" />
-          <div class="hero-post-image-overlay"></div>
+          <img class="hero-post-image-bg" src="{{ post.data.thumbnail }}" alt="{{ post.data.title }}" loading="lazy" />
         {%- else %}
           <div class="hero-post-image-default"></div>
-          <div class="hero-post-image-overlay"></div>
         {%- endif %}
+        <div class="hero-post-image-overlay"></div>
         {%- if post.data.category %}
           <span class="hero-post-cat">{{ post.data.category | trim }}</span>
         {%- endif %}
