@@ -3,11 +3,68 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ title }}</title>
+
+    <!-- ── PAGE TITLE ─────────────────────────────────────────────── -->
+    {%- if title and title != theme.site_name %}
+      <title>{{ title }} | {{ theme.site_name }}</title>
+    {%- else %}
+      <title>{{ theme.site_name }} | {{ theme.hero_headline }}</title>
+    {%- endif %}
+
+    <!-- ── META DESCRIPTION ───────────────────────────────────────── -->
+    {%- if description %}
+      <meta name="description" content="{{ description }}" />
+    {%- elif theme.hero_subtext %}
+      <meta name="description" content="{{ theme.hero_subtext }}" />
+    {%- endif %}
+
+    <!-- ── CANONICAL ──────────────────────────────────────────────── -->
+    <link rel="canonical" href="https://aljundi.org{{ page.url }}" />
+
+    <!-- ── OPEN GRAPH ─────────────────────────────────────────────── -->
+    <meta property="og:site_name" content="{{ theme.site_name }}" />
+    <meta property="og:locale" content="ar_AR" />
+    {%- if title and title != theme.site_name %}
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content="{{ title }} | {{ theme.site_name }}" />
+    {%- else %}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="{{ theme.site_name }} | {{ theme.hero_headline }}" />
+    {%- endif %}
+    {%- if description %}
+      <meta property="og:description" content="{{ description }}" />
+    {%- elif theme.hero_subtext %}
+      <meta property="og:description" content="{{ theme.hero_subtext }}" />
+    {%- endif %}
+    <meta property="og:url" content="https://aljundi.org{{ page.url }}" />
+    {%- if thumbnail %}
+      <meta property="og:image" content="https://aljundi.org{{ thumbnail }}" />
+    {%- endif %}
+
+    <!-- ── TWITTER CARD ───────────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    {%- if title and title != theme.site_name %}
+      <meta name="twitter:title" content="{{ title }} | {{ theme.site_name }}" />
+    {%- else %}
+      <meta name="twitter:title" content="{{ theme.site_name }} | {{ theme.hero_headline }}" />
+    {%- endif %}
+    {%- if description %}
+      <meta name="twitter:description" content="{{ description }}" />
+    {%- endif %}
+    {%- if thumbnail %}
+      <meta name="twitter:image" content="https://aljundi.org{{ thumbnail }}" />
+    {%- endif %}
+
+    <!-- ── FONTS ──────────────────────────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif+Arabic:wght@300;400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Noto+Naskh+Arabic:wght@400;500&family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/style.css" />
+
+    <!-- ── SITEMAP DISCOVERY ──────────────────────────────────────── -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- ── THEME TOKENS ──────────────────────────────────────────── -->
     <style>
       :root {
         --bg:              {{ theme.color_bg }};
@@ -72,7 +129,6 @@
         const catBtns = Array.from(document.querySelectorAll(".cat-btn"));
         const isHomepage = cards.length > 0;
 
-        // ── HOMEPAGE MODE ──────────────────────────────────────────────
         if (isHomepage) {
           const searchInput = document.getElementById("search-input");
           const monthSelect = document.getElementById("filter-month");
@@ -81,7 +137,6 @@
 
           let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
 
-          // Populate month/year dropdowns
           const months = new Set();
           const years  = new Set();
           cards.forEach(c => {
@@ -130,43 +185,34 @@
             applyFilters();
           }
 
-          // Wire up category buttons
           catBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-              setActiveCategory(btn.dataset.cat.trim());
-            });
+            btn.addEventListener("click", () => setActiveCategory(btn.dataset.cat.trim()));
           });
 
           monthSelect.addEventListener("change", () => { activeMonth = monthSelect.value; applyFilters(); });
           yearSelect.addEventListener("change",  () => { activeYear  = yearSelect.value;  applyFilters(); });
           searchInput.addEventListener("input",  () => { searchTerm  = searchInput.value.trim(); applyFilters(); });
 
-          // If arriving from a post page with ?cat=, activate that category
           const urlParams = new URLSearchParams(window.location.search);
           const catParam  = urlParams.get("cat");
           if (catParam) {
             setActiveCategory(catParam);
-            // Clean the URL without reloading
             history.replaceState(null, "", window.location.pathname);
           }
 
-        // ── POST PAGE MODE ─────────────────────────────────────────────
         } else {
-          // Category buttons navigate back to homepage filtered by category
           catBtns.forEach(btn => {
             btn.addEventListener("click", () => {
               const cat = btn.dataset.cat.trim();
-              if (cat) {
-                window.location.href = "/?cat=" + encodeURIComponent(cat);
-              } else {
-                window.location.href = "/";
-              }
+              window.location.href = cat ? "/?cat=" + encodeURIComponent(cat) : "/";
             });
           });
         }
 
       })();
     </script>
-    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dd0d3b92c042407c9bcd1bfec41dd9bb"}'></script><!-- End Cloudflare Web Analytics -->
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dd0d3b92c042407c9bcd1bfec41dd9bb"}'></script>
   </body>
 </html>
