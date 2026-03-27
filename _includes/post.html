@@ -17,5 +17,67 @@ layout: base.html
     {%- endif %}
 
     {{ content | safe }}
+
+    <!-- ── RELATED POSTS ──────────────────────────────────────────── -->
+    {%- set currentUrl = page.url %}
+    {%- set currentCat = category %}
+    {%- set relatedPosts = [] %}
+    {%- for post in collections.posts | reverse %}
+      {%- if post.url != currentUrl and post.data.category == currentCat and relatedPosts | length < 3 %}
+        {%- set relatedPosts = relatedPosts.concat([post]) %}
+      {%- endif %}
+    {%- endfor %}
+
+    {%- if relatedPosts | length > 0 %}
+    <aside class="related-posts">
+      <p class="related-posts-label">اقرأ أيضاً</p>
+      <div class="related-posts-grid">
+        {%- for post in relatedPosts %}
+        <a class="related-post-card" href="{{ post.url }}">
+          <div class="related-post-thumb">
+            {%- if post.data.thumbnail %}
+              <img src="{{ post.data.thumbnail }}" alt="{{ post.data.title }}" loading="lazy" />
+            {%- else %}
+              <div class="related-post-thumb-default" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <path d="M3 9h18M9 21V9"/>
+                </svg>
+              </div>
+            {%- endif %}
+          </div>
+          <div class="related-post-body">
+            {%- if post.data.category %}
+              <p class="related-post-cat">{{ post.data.category | trim }}</p>
+            {%- endif %}
+            <p class="related-post-title">{{ post.data.title }}</p>
+            <p class="related-post-date">{{ post.date | date }}</p>
+          </div>
+        </a>
+        {%- endfor %}
+      </div>
+    </aside>
+    {%- endif %}
+
+  </article>
+</div>---
+layout: base.html
+---
+
+<div class="container">
+  <article class="article">
+    <header class="article-header">
+      <p class="kicker">
+        {{ date | date }}
+        {%- if category %} — <span class="post-cat-tag">{{ category }}</span>{%- endif %}
+      </p>
+      <h1>{{ title }}</h1>
+    </header>
+
+    {%- if thumbnail %}
+      <img class="article-thumb" src="{{ thumbnail }}" alt="{{ title }}" />
+    {%- endif %}
+
+    {{ content | safe }}
   </article>
 </div>
