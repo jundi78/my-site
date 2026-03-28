@@ -185,6 +185,7 @@ collections:
           - { label: "علوم", value: "علوم" }
           - { label: "تاريخ", value: "تاريخ" }
           - { label: "متفرقات", value: "متفرقات" }
+          - { label: "من أنا", value: "من أنا" }
 
       - label: "صورة مصغّرة"
         name: "thumbnail"
