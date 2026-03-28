@@ -11,7 +11,8 @@
     "دين",
     "علوم",
     "تاريخ",
-    "متفرقات"
+    "متفرقات",
+    "من أنا"
   ],
   "colors_group": {
     "color_bg": "#ffffff",
@@ -39,6 +40,6 @@
   "font_body": "Amiri",
   "font_ui": "IBM Plex Sans Arabic",
   "font_size_base": "18",
-  "spacing_section": "40",
-  "max_width": "860"
+  "max_width": "860",
+  "spacing_section": "40"
 }
