@@ -60,7 +60,14 @@ collections:
               label: "تصنيف"
               name: "category"
               widget: "string"
-
+            - label: "السلاسل"
+            name: "series"
+            widget: "list"
+            hint: "أضف أو احذف السلاسل — ستظهر تلقائيًا في الصفحة الرئيسية وفي قائمة التدوينات"
+            field:
+              label: "سلسلة"
+              name: "series"
+              widget: "string"
           - label: "ألوان"
             name: "colors_group"
             widget: "object"
@@ -182,8 +189,21 @@ collections:
         widget: "select"
         required: false
         options:
-{% for cat in theme.categories %}          - { label: "{{ cat }}", value: "{{ cat }}" }
-{% endfor %}
+        {% for cat in theme.categories %}          - { label: "{{ cat }}", value: "{{ cat }}" }
+        {% endfor %}
+      - label: "السلسلة"
+        name: "series"
+        widget: "select"
+        required: false
+        options:
+        {% for s in theme.series %}          - { label: "{{ s }}", value: "{{ s }}" }
+        {% endfor %}
+      - label: "ترتيب الفصل"
+        name: "seriesOrder"
+        widget: "number"
+        required: false
+        value_type: "int"
+        min: 1
       - label: "صورة مصغّرة"
         name: "thumbnail"
         widget: "image"
