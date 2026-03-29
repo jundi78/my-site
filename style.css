@@ -1,15 +1,27 @@
 /* style.css — editorial redesign */
 /* ==========================================================================
-   This file is fully annotated.
-   The current surgical fix is focused on homepage card behavior:
-   1) "أحدث المقالات" must keep its original vertical card layout
-      (image above text).
-   2) "المزيد من المقالات" must stay in a 3-column grid on desktop,
-      but each card itself should be horizontal
-      (image beside text).
-   3) We scope the horizontal .post-card behavior ONLY to .post-list,
-      because .post-grid-card and .hero-post also carry the .post-card class
-      in the templates.
+   Fully annotated stylesheet.
+
+   CURRENT SURGICAL FIX
+   --------------------
+   The homepage has two different card systems:
+
+   1) "أحدث المقالات"
+      - Must be VERTICAL on desktop:
+        image on top, text below.
+
+   2) "المزيد من المقالات"
+      - Must stay COMPACT/HORIZONTAL on desktop:
+        image beside text.
+
+   Why the previous attempt still failed:
+   - The "أحدث المقالات" cards use both classes:
+       .post-grid-card and .post-card
+   - In practice, another flex rule kept leaking into that section.
+   - So this version uses HIGHER-SPECIFICITY selectors plus !important
+     ONLY where needed, to force the grid cards back to vertical.
+
+   This keeps the rest of the design unchanged.
    ========================================================================== */
 
 :root {
@@ -351,8 +363,14 @@ a:hover { text-decoration: underline; }
   font-family: var(--font-ui);
 }
 
-/* ─── POST GRID (first 3 posts after hero) ────────────── */
-/* This section must stay vertical: image on top, text below. */
+/* ─── POST GRID (أحدث المقالات) ───────────────────────── */
+/* Desktop/tablet goal:
+   - Cards remain vertical
+   - Image on top
+   - Text below
+   The selectors below are intentionally very specific and use !important
+   only where needed to defeat any leaked horizontal flex rule.
+*/
 
 .post-grid {
   display: grid;
@@ -361,33 +379,37 @@ a:hover { text-decoration: underline; }
   margin-bottom: 2.5rem;
 }
 
-.post-grid-card {
+.post-grid > .post-grid-card {
   border: 1px solid var(--line);
   border-radius: 10px;
   overflow: hidden;
   transition: box-shadow .18s, transform .18s;
   background: var(--bg);
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
   padding: 0;
   margin-bottom: 0;
 }
-.post-grid-card:hover {
+.post-grid > .post-grid-card:hover {
   box-shadow: 0 4px 20px rgba(0,0,0,.07);
   transform: translateY(-2px);
 }
-.post-grid-card.hidden { display: none; }
+.post-grid > .post-grid-card.hidden { display: none !important; }
 
-.grid-card-thumb {
-  height: 140px;
+.post-grid > .post-grid-card .grid-card-thumb {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 140px !important;
   overflow: hidden;
   background: var(--soft);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  order: 0 !important;
 }
-.grid-card-thumb img {
+.post-grid > .post-grid-card .grid-card-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -407,7 +429,12 @@ a:hover { text-decoration: underline; }
   color: var(--text);
 }
 
-.grid-card-body { padding: .9rem 1rem 1rem; }
+.post-grid > .post-grid-card .grid-card-body {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  order: 1 !important;
+  padding: .9rem 1rem 1rem;
+}
 
 .grid-card-cat {
   font-family: var(--font-ui);
@@ -425,7 +452,7 @@ a:hover { text-decoration: underline; }
   color: var(--text);
   transition: color .12s;
 }
-.post-grid-card:hover .grid-card-title { color: var(--accent-warm); }
+.post-grid > .post-grid-card:hover .grid-card-title { color: var(--accent-warm); }
 .grid-card-title a { color: inherit; }
 .grid-card-title a:hover { text-decoration: none; }
 
@@ -444,12 +471,8 @@ a:hover { text-decoration: underline; }
   margin-top: 10px;
 }
 
-/* ─── POST LIST (homepage: المزيد من المقالات) ───────────────────── */
-/* Surgical fix:
-   - Only cards inside .post-list should be horizontal.
-   - We do NOT apply horizontal layout to the generic .post-card class,
-     because that class is reused by .hero-post and .post-grid-card.
-*/
+/* ─── POST LIST (المزيد من المقالات) ─────────────────── */
+/* Only this section should have horizontal cards. */
 
 .post-list {
   display: grid;
@@ -645,18 +668,18 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 @media (max-width: 900px) {
   .hero-post-image { height: 200px; }
 
-  /* "أحدث المقالات" grid becomes 2 columns on tablet */
+  /* أحدث المقالات: 2 columns on tablet */
   .post-grid { grid-template-columns: 1fr 1fr; }
 
-  /* "المزيد من المقالات" becomes 2 columns on tablet */
+  /* المزيد من المقالات: 2 columns on tablet */
   .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-  /* Related posts on article pages also become 2 columns */
+  /* Related posts on article pages: 2 columns */
   .related-posts-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 560px) {
-  /* Homepage "more articles" becomes 1 card per row on small screens */
+  /* المزيد من المقالات: 1 card per row on small screens */
   .post-list {
     grid-template-columns: 1fr;
   }
@@ -666,7 +689,7 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
     min-width: 100px;
   }
 
-  /* Related posts on article pages become 1 column */
+  /* Related posts on article pages: 1 column */
   .related-posts-grid {
     grid-template-columns: 1fr;
   }
@@ -683,25 +706,25 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   .search-input { width: 140px; }
   body { font-size: 17px; }
 
-  /* Keep the intended mobile behavior for "أحدث المقالات":
-     on very small screens, cards switch to horizontal rows. */
+  /* On very small screens only, أحدث المقالات becomes horizontal */
   .post-grid { grid-template-columns: 1fr; gap: 1rem; }
 
-  .post-grid-card {
-    flex-direction: row;
-    align-items: stretch;
+  .post-grid > .post-grid-card {
+    flex-direction: row !important;
+    align-items: stretch !important;
   }
 
-  .grid-card-thumb {
-    width: 100px;
-    height: auto;
+  .post-grid > .post-grid-card .grid-card-thumb {
+    width: 100px !important;
+    min-width: 100px !important;
+    height: auto !important;
     flex-shrink: 0;
-    order: 2;
+    order: 2 !important;
   }
 
-  .grid-card-body {
-    flex: 1;
-    order: 1;
+  .post-grid > .post-grid-card .grid-card-body {
+    flex: 1 1 auto !important;
+    order: 1 !important;
   }
 
   /* Series card: slightly smaller image on mobile */
