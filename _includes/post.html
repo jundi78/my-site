@@ -2,12 +2,25 @@
 layout: base.html
 ---
 
+{%- set seriesUrl = "" %}
+{%- if series and theme.series %}
+  {%- for s in theme.series %}
+    {%- if s.name == series %}
+      {%- set seriesUrl = "/series/" ~ s.slug ~ "/" %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if not seriesUrl %}
+    {%- set seriesUrl = "/series/" ~ (series | slugify) ~ "/" %}
+  {%- endif %}
+{%- endif %}
+
 <div class="container">
   <article class="article">
     <header class="article-header">
       <p class="kicker">
         {{ date | date }}
         {%- if category %} — <span class="post-cat-tag">{{ category }}</span>{%- endif %}
+        {%- if series %} — <a class="post-cat-tag" href="{{ seriesUrl }}" style="text-decoration: none;">{{ series }}</a>{%- endif %}
       </p>
       <h1>{{ title }}</h1>
     </header>
@@ -17,9 +30,12 @@ layout: base.html
     {%- endif %}
 
     {{ content | safe }}
-<!-- ── SERIES NAVIGATION ────────────────────────── -->
+
     {%- if series %}
-      {%- set chapters = collections.seriesPosts[series] %}
+      {%- set chapters = [] %}
+      {%- if collections.seriesPosts[series] %}
+        {%- set chapters = collections.seriesPosts[series] %}
+      {%- endif %}
       {%- set nextChapter = null %}
       {%- for ch in chapters %}
         {%- if ch.data.seriesOrder == seriesOrder + 1 %}
@@ -28,56 +44,52 @@ layout: base.html
       {%- endfor %}
 
       <div style="margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 2rem;">
-
-        {# Breadcrumb #}
         <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; font-size: 13px;">
-          <a href="/series/{{ series | slugify }}/" style="color: var(--accent); text-decoration: none;">{{ series }}</a>
+          <a href="{{ seriesUrl }}" style="color: var(--accent); text-decoration: none;">{{ series }}</a>
           <span style="color: var(--line);">›</span>
           <span style="color: var(--text); font-weight: 500;">الفصل {{ seriesOrder }}: {{ title }}</span>
         </div>
 
         {%- if nextChapter %}
-        {# Next chapter card #}
-        <a href="{{ nextChapter.url }}" style="display: flex; align-items: center; gap: 16px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.5rem; text-decoration: none; color: inherit;">
-          <div style="flex: 1;">
-            <p style="font-size: 11px; color: var(--muted); margin-bottom: 5px;">الفصل التالي · {{ nextChapter.data.seriesOrder }} من {{ chapters | length }}</p>
-            <p style="font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--text);">{{ nextChapter.data.title }}</p>
-            {%- if nextChapter.data.description %}
-            <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0;">{{ nextChapter.data.description }}</p>
-            {%- endif %}
-          </div>
-          <div style="min-width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text);">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <line x1="13" y1="8" x2="3" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <polyline points="7,4 3,8 7,12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </a>
-
+          <a href="{{ nextChapter.url }}" style="display: flex; align-items: center; gap: 16px; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.5rem; text-decoration: none; color: inherit;">
+            <div style="flex: 1;">
+              <p style="font-size: 11px; color: var(--muted); margin-bottom: 5px;">الفصل التالي · {{ nextChapter.data.seriesOrder }} من {{ chapters | length }}</p>
+              <p style="font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--text);">{{ nextChapter.data.title }}</p>
+              {%- if nextChapter.data.description %}
+                <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0;">{{ nextChapter.data.description }}</p>
+              {%- endif %}
+            </div>
+            <div style="min-width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text);">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <line x1="13" y1="8" x2="3" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <polyline points="7,4 3,8 7,12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </a>
         {%- else %}
-        {# Last chapter — series complete #}
-        <div style="background: #E1F5EE; border: 1px solid #9FE1CB; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 14px;">
-          <div style="min-width: 36px; height: 36px; border-radius: 50%; background: #1D9E75; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8 6,11 13,4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div style="background: #E1F5EE; border: 1px solid #9FE1CB; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 14px;">
+            <div style="min-width: 36px; height: 36px; border-radius: 50%; background: #1D9E75; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <polyline points="3,8 6,11 13,4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <p style="font-size: 14px; font-weight: 500; color: #085041; margin-bottom: 3px;">اكتملت السلسلة</p>
+              <p style="font-size: 13px; color: #0F6E56; margin: 0;">
+                هذا آخر فصول {{ series }} ·
+                <a href="{{ seriesUrl }}" style="color: #0F6E56; text-decoration: underline;">عد إلى فهرس السلسلة</a>
+              </p>
+            </div>
           </div>
-          <div>
-            <p style="font-size: 14px; font-weight: 500; color: #085041; margin-bottom: 3px;">اكتملت السلسلة</p>
-            <p style="font-size: 13px; color: #0F6E56; margin: 0;">
-              هذا آخر فصول {{ series }} ·
-              <a href="/series/{{ series | slugify }}/" style="color: #0F6E56; text-decoration: underline;">عد إلى فهرس السلسلة</a>
-            </p>
-          </div>
-        </div>
         {%- endif %}
-
       </div>
     {%- endif %}
-    <!-- ── RELATED POSTS ────────────────────────────── -->
+
     {%- set currentUrl = page.url %}
     {%- set currentCat = category %}
     {%- set relatedCount = 0 %}
-
     {%- set relatedPosts = [] %}
+
     {%- for p in collections.posts %}
       {%- if p.url != currentUrl and p.data.category == currentCat and relatedCount < 3 %}
         {%- set relatedPosts = relatedPosts.concat([p]) %}
@@ -86,35 +98,34 @@ layout: base.html
     {%- endfor %}
 
     {%- if relatedPosts | length > 0 %}
-    <aside class="related-posts">
-      <p class="related-posts-label">اقرأ أيضاً</p>
-      <div class="related-posts-grid">
-        {%- for p in relatedPosts %}
-        <a class="related-post-card" href="{{ p.url }}">
-          <div class="related-post-thumb">
-            {%- if p.data.thumbnail %}
-              <img src="{{ p.data.thumbnail }}" alt="{{ p.data.title }}" loading="lazy" />
-            {%- else %}
-              <div class="related-post-thumb-default" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/>
-                  <path d="M3 9h18M9 21V9"/>
-                </svg>
+      <aside class="related-posts">
+        <p class="related-posts-label">اقرأ أيضاً</p>
+        <div class="related-posts-grid">
+          {%- for p in relatedPosts %}
+            <a class="related-post-card" href="{{ p.url }}">
+              <div class="related-post-thumb">
+                {%- if p.data.thumbnail %}
+                  <img src="{{ p.data.thumbnail }}" alt="{{ p.data.title }}" loading="lazy" />
+                {%- else %}
+                  <div class="related-post-thumb-default" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                  </div>
+                {%- endif %}
               </div>
-            {%- endif %}
-          </div>
-          <div class="related-post-body">
-            {%- if p.data.category %}
-              <p class="related-post-cat">{{ p.data.category | trim }}</p>
-            {%- endif %}
-            <p class="related-post-title">{{ p.data.title }}</p>
-            <p class="related-post-date">{{ p.date | date }}</p>
-          </div>
-        </a>
-        {%- endfor %}
-      </div>
-    </aside>
+              <div class="related-post-body">
+                {%- if p.data.category %}
+                  <p class="related-post-cat">{{ p.data.category | trim }}</p>
+                {%- endif %}
+                <p class="related-post-title">{{ p.data.title }}</p>
+                <p class="related-post-date">{{ p.date | date }}</p>
+              </div>
+            </a>
+          {%- endfor %}
+        </div>
+      </aside>
     {%- endif %}
-
   </article>
 </div>
