@@ -9,12 +9,9 @@ backend:
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
-
 locale: "ar"
 
 collections:
-
-  # ── Site Settings ────────────────────────────────────────
   - name: "settings"
     label: "إعدادات الموقع"
     files:
@@ -22,7 +19,6 @@ collections:
         label: "المظهر والمحتوى"
         file: "_data/theme.json"
         fields:
-
           - label: "اسم المدوّنة"
             name: "site_name"
             widget: "string"
@@ -69,14 +65,28 @@ collections:
               - label: "اسم السلسلة"
                 name: "name"
                 widget: "string"
+
               - label: "الرابط (slug)"
                 name: "slug"
                 widget: "string"
                 hint: "بالإنجليزية بدون مسافات، مثال: my-series"
+
               - label: "صورة الغلاف"
                 name: "cover"
                 widget: "image"
                 required: false
+
+              - label: "وصف السلسلة (SEO)"
+                name: "description"
+                widget: "string"
+                required: false
+                hint: "يُستخدم في وصف الصفحة وفي محركات البحث"
+
+              - label: "مقدمة السلسلة"
+                name: "intro"
+                widget: "text"
+                required: false
+                hint: "فقرة تظهر أعلى صفحة السلسلة"
 
           - label: "ألوان"
             name: "colors_group"
@@ -171,7 +181,6 @@ collections:
                 step: 4
                 default: 40
 
-  # ── Posts ────────────────────────────────────────────────
   - name: "posts"
     label: "التدوينات"
     label_singular: "تدوينة"
@@ -181,7 +190,6 @@ collections:
     extension: "md"
     format: "frontmatter"
     preview_path: "{% raw %}posts/{{slug}}.html{% endraw %}"
-
     fields:
       - label: "العنوان"
         name: "title"
@@ -199,15 +207,19 @@ collections:
         widget: "select"
         required: false
         options:
-{% for cat in theme.categories %}          - { label: "{{ cat }}", value: "{{ cat }}" }
-{% endfor %}
+          {% for cat in theme.categories %}
+          - { label: "{{ cat }}", value: "{{ cat }}" }
+          {% endfor %}
+
       - label: "السلسلة"
         name: "series"
         widget: "select"
         required: false
         options:
-{% for s in theme.series %}          - { label: "{{ s.name }}", value: "{{ s.name }}" }
-{% endfor %}
+          {% for s in theme.series %}
+          - { label: "{{ s.name }}", value: "{{ s.name }}" }
+          {% endfor %}
+
       - label: "ترتيب الفصل"
         name: "seriesOrder"
         widget: "number"
