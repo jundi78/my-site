@@ -119,18 +119,22 @@
   </div>
 
   <!-- ── SERIES STRIP ───────────────────────────────── -->
-    <p class="section-label">السلاسل</p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 2rem;">
-        <a href="/series/alamt-almktybt/" style="display: block; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit;">
-            <img src="/images/uploads/ChatGPT Image Mar 29, 2026, 08_23_11 AM.png" alt="الأمة المكتئبة" style="width: 100%; height: 160px; object-fit: cover; display: block;" loading="lazy" />
-          <div style="padding: 1.25rem;">
-            <div style="background: var(--bg); border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 500; color: var(--accent); display: inline-block; margin-bottom: 10px; border: 1px solid var(--line);">
-              3 فصول
+    <div id="series-strip">
+      <p class="section-label">السلاسل</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 2rem;">
+          <a href="/series/alamt-almktybt/" class="series-card">
+            <div class="series-card-body">
+              <div>
+                <div class="series-card-badge">3 فصول</div>
+                <p class="series-card-name">الأمة المكتئبة</p>
+              </div>
+              <div class="series-card-cta">اقرأ السلسلة ←</div>
             </div>
-            <p style="font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--text);">الأمة المكتئبة</p>
-            <div style="font-size: 13px; font-weight: 500; color: var(--accent); margin-top: 14px;">اقرأ السلسلة ←</div>
-          </div>
-        </a>
+            <div class="series-card-image">
+                <img src="/images/uploads/ChatGPT Image Mar 29, 2026, 08_23_11 AM.png" alt="الأمة المكتئبة" loading="lazy" />
+            </div>
+          </a>
+      </div>
     </div>
 
   <!-- ── GRID: posts 2–4 ────────────────────────────── -->
