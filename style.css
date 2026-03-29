@@ -1,4 +1,16 @@
 /* style.css — editorial redesign */
+/* ==========================================================================
+   This file is fully annotated.
+   The current surgical fix is focused on homepage card behavior:
+   1) "أحدث المقالات" must keep its original vertical card layout
+      (image above text).
+   2) "المزيد من المقالات" must stay in a 3-column grid on desktop,
+      but each card itself should be horizontal
+      (image beside text).
+   3) We scope the horizontal .post-card behavior ONLY to .post-list,
+      because .post-grid-card and .hero-post also carry the .post-card class
+      in the templates.
+   ========================================================================== */
 
 :root {
   --bg:              #ffffff;
@@ -340,6 +352,7 @@ a:hover { text-decoration: underline; }
 }
 
 /* ─── POST GRID (first 3 posts after hero) ────────────── */
+/* This section must stay vertical: image on top, text below. */
 
 .post-grid {
   display: grid;
@@ -432,11 +445,10 @@ a:hover { text-decoration: underline; }
 }
 
 /* ─── POST LIST (homepage: المزيد من المقالات) ───────────────────── */
-/*
-   IMPORTANT FIX:
-   - This section should visually match the compact editorial cards.
-   - Cards are side by side on desktop.
-   - Inside each card, the image sits beside the text, not above it.
+/* Surgical fix:
+   - Only cards inside .post-list should be horizontal.
+   - We do NOT apply horizontal layout to the generic .post-card class,
+     because that class is reused by .hero-post and .post-grid-card.
 */
 
 .post-list {
@@ -445,7 +457,7 @@ a:hover { text-decoration: underline; }
   gap: 1rem;
 }
 
-.post-card {
+.post-list > .post-card {
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -456,13 +468,15 @@ a:hover { text-decoration: underline; }
   background: var(--bg);
   min-width: 0;
 }
-.post-card:hover {
+
+.post-list > .post-card:hover {
   box-shadow: 0 4px 20px rgba(0,0,0,.07);
   transform: translateY(-2px);
 }
-.post-card.hidden { display: none; }
 
-.post-thumb {
+.post-list > .post-card.hidden { display: none; }
+
+.post-list > .post-card .post-thumb {
   width: 120px;
   min-width: 120px;
   height: auto;
@@ -472,13 +486,15 @@ a:hover { text-decoration: underline; }
   flex-shrink: 0;
   background: var(--soft);
 }
-.post-thumb img {
+
+.post-list > .post-card .post-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.post-thumb-default {
+
+.post-list > .post-card .post-thumb-default {
   width: 100%;
   height: 100%;
   background: var(--soft);
@@ -486,14 +502,15 @@ a:hover { text-decoration: underline; }
   align-items: center;
   justify-content: center;
 }
-.post-thumb-default svg {
+
+.post-list > .post-card .post-thumb-default svg {
   width: 22px;
   height: 22px;
   opacity: .15;
   color: var(--text);
 }
 
-.post-body {
+.post-list > .post-card .post-body {
   flex: 1;
   min-width: 0;
   padding: 1rem 1.1rem 1.1rem;
@@ -502,6 +519,7 @@ a:hover { text-decoration: underline; }
   justify-content: center;
 }
 
+/* Shared typography for homepage list cards */
 .post-meta {
   display: flex;
   align-items: center;
@@ -535,7 +553,9 @@ a:hover { text-decoration: underline; }
   color: var(--text);
   transition: color .12s;
 }
-.post-card:hover .post-body h3 { color: var(--accent-warm); }
+
+.post-list > .post-card:hover .post-body h3 { color: var(--accent-warm); }
+
 .post-body h3 a { color: inherit; }
 .post-body h3 a:hover { text-decoration: none; }
 
@@ -624,37 +644,15 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
 @media (max-width: 900px) {
   .hero-post-image { height: 200px; }
+
+  /* "أحدث المقالات" grid becomes 2 columns on tablet */
   .post-grid { grid-template-columns: 1fr 1fr; }
 
-  /* Homepage "more articles" becomes 2 cards per row on tablet */
+  /* "المزيد من المقالات" becomes 2 columns on tablet */
   .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 
-@media (max-width: 480px) {
-  .brand { font-size: 22px; }
-  .topbar-controls { gap: 6px; }
-  .search-input { width: 140px; }
-  body { font-size: 17px; }
-
-  /* Grid cards: switch to horizontal on mobile */
-  .post-grid { grid-template-columns: 1fr; gap: 1rem; }
-  .post-grid-card {
-    flex-direction: row;
-    align-items: stretch;
-  }
-  .grid-card-thumb {
-    width: 100px;
-    height: auto;
-    flex-shrink: 0;
-    order: 2;
-  }
-  .grid-card-body {
-    flex: 1;
-    order: 1;
-  }
-
-  /* Series card: slightly smaller image on mobile */
-  .series-card-image { width: 100px; }
+  /* Related posts on article pages also become 2 columns */
+  .related-posts-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 560px) {
@@ -663,10 +661,51 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
     grid-template-columns: 1fr;
   }
 
-  .post-thumb {
+  .post-list > .post-card .post-thumb {
     width: 100px;
     min-width: 100px;
   }
+
+  /* Related posts on article pages become 1 column */
+  .related-posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .related-post-thumb {
+    width: 100px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand { font-size: 22px; }
+  .topbar-controls { gap: 6px; }
+  .search-input { width: 140px; }
+  body { font-size: 17px; }
+
+  /* Keep the intended mobile behavior for "أحدث المقالات":
+     on very small screens, cards switch to horizontal rows. */
+  .post-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+  .post-grid-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .grid-card-thumb {
+    width: 100px;
+    height: auto;
+    flex-shrink: 0;
+    order: 2;
+  }
+
+  .grid-card-body {
+    flex: 1;
+    order: 1;
+  }
+
+  /* Series card: slightly smaller image on mobile */
+  .series-card-image { width: 100px; }
 }
 
 /* ─── RELATED POSTS (article page only) ───────────────── */
@@ -769,21 +808,4 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   font-size: 11px;
   color: var(--hint);
   margin: 0;
-}
-
-@media (max-width: 900px) {
-  .related-posts-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 560px) {
-  .related-posts-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .related-post-thumb {
-    width: 100px;
-    min-width: 100px;
-  }
 }
