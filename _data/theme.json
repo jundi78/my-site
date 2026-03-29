@@ -15,7 +15,7 @@
     "من أنا"
   ],
   "series": [
-    "الأمة المكتئبة"
+    { "name": "الأمة المكتئبة", "slug": "alamt-almktybt", "cover": "" }
   ],
   "colors_group": {
     "color_bg": "#ffffff",
