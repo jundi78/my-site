@@ -19,7 +19,6 @@ module.exports = function (eleventyConfig) {
       day: "numeric",
     });
   });
-
   // Zero-padded month: "03"
   eleventyConfig.addFilter("dateMonth", function (date) {
     if (!date) return "";
@@ -27,13 +26,28 @@ module.exports = function (eleventyConfig) {
     if (isNaN(d)) return "";
     return String(d.getUTCMonth() + 1).padStart(2, "0");
   });
-
   // Four-digit year: "2026"
   eleventyConfig.addFilter("dateYear", function (date) {
     if (!date) return "";
     const d = new Date(date);
     if (isNaN(d)) return "";
     return String(d.getUTCFullYear());
+  });
+
+  // Group posts by series, sorted by seriesOrder
+  eleventyConfig.addCollection("seriesPosts", function (api) {
+    const posts = api.getFilteredByTag("posts");
+    const grouped = {};
+    posts.forEach(post => {
+      const s = post.data.series;
+      if (!s) return;
+      if (!grouped[s]) grouped[s] = [];
+      grouped[s].push(post);
+    });
+    Object.keys(grouped).forEach(name => {
+      grouped[name].sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0));
+    });
+    return grouped;
   });
 
   return {
