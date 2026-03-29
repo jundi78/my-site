@@ -65,10 +65,18 @@ collections:
             name: "series"
             widget: "list"
             hint: "أضف أو احذف السلاسل — ستظهر تلقائيًا في الصفحة الرئيسية وفي قائمة التدوينات"
-            field:
-              label: "سلسلة"
-              name: "series"
-              widget: "string"
+            fields:
+              - label: "اسم السلسلة"
+                name: "name"
+                widget: "string"
+              - label: "الرابط (slug)"
+                name: "slug"
+                widget: "string"
+                hint: "بالإنجليزية بدون مسافات، مثال: my-series"
+              - label: "صورة الغلاف"
+                name: "cover"
+                widget: "image"
+                required: false
 
           - label: "ألوان"
             name: "colors_group"
@@ -198,7 +206,7 @@ collections:
         widget: "select"
         required: false
         options:
-{% for s in theme.series %}          - { label: "{{ s }}", value: "{{ s }}" }
+{% for s in theme.series %}          - { label: "{{ s.name }}", value: "{{ s.name }}" }
 {% endfor %}
       - label: "ترتيب الفصل"
         name: "seriesOrder"
