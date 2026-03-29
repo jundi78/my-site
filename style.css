@@ -476,6 +476,54 @@ a.archive-pill.active {
 
 /* ─── SERIES STRIP ────────────────────────────────────── */
 
+/* ── Deck wrapper ──────────────────────────────────────
+   .series-deck is the positioning context for the stacked
+   card effect. The two backing layers sit behind the real
+   .series-card, shifted right and down so they appear the
+   same width as the top card but peek out below it.
+   The spacer div at the bottom of the wrapper reserves
+   the vertical space the peeking layers occupy.
+*/
+
+.series-deck {
+  position: relative;
+}
+
+/* Both backing layers share base styles */
+.series-deck-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Height matches the real card — set by the top card's
+     natural height, so we stretch to fill */
+  bottom: 0;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--soft);
+  pointer-events: none; /* layers are decorative — never intercept clicks */
+}
+
+/* Layer 2 (middle): slightly down and to the right */
+.series-deck-layer-2 {
+  z-index: 1;
+  transform: translateY(7px) translateX(10px);
+}
+
+/* Layer 3 (bottom): further down and further right */
+.series-deck-layer-3 {
+  z-index: 0;
+  transform: translateY(13px) translateX(20px);
+}
+
+/* Spacer that pushes the grid cell height down enough to
+   show the peeking bottom layer (13px offset + a little
+   breathing room) */
+.series-deck-spacer {
+  height: 18px;
+}
+
+/* The real top card */
 .series-card {
   display: flex;
   flex-direction: row;
@@ -486,12 +534,22 @@ a.archive-pill.active {
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow .18s, transform .18s;
+  position: relative; /* sits above the layers */
+  z-index: 2;
+  transition: transform .18s;
 }
-.series-card:hover {
-  box-shadow: 0 4px 20px rgba(0,0,0,.07);
-  transform: translateY(-2px);
+
+/* On hover: top card lifts, layers drop further to
+   exaggerate the deck depth */
+.series-deck:hover .series-card {
+  transform: translateY(-3px);
   text-decoration: none;
+}
+.series-deck:hover .series-deck-layer-2 {
+  transform: translateY(11px) translateX(10px);
+}
+.series-deck:hover .series-deck-layer-3 {
+  transform: translateY(18px) translateX(20px);
 }
 
 .series-card-image {
@@ -923,6 +981,9 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
   /* Series card: slightly smaller image on mobile */
   .series-card-image { width: 100px; }
+  /* Deck layers: reduce offsets on mobile so they don't clip */
+  .series-deck-layer-2 { transform: translateY(6px) translateX(8px); }
+  .series-deck-layer-3 { transform: translateY(11px) translateX(15px); }
 }
 
 /* ─── RELATED POSTS (article page only) ───────────────── */
