@@ -287,7 +287,7 @@ a:hover { text-decoration: underline; }
   width: 140px;
   background: var(--line);
   overflow: hidden;
-  order: 2; /* image on the right in RTL */
+  order: 2;
 }
 .series-card-image img {
   width: 100%;
@@ -304,7 +304,7 @@ a:hover { text-decoration: underline; }
 .series-card-body {
   flex: 1;
   padding: 1.25rem;
-  order: 1; /* text on the left in RTL */
+  order: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -354,7 +354,6 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
   transition: box-shadow .18s, transform .18s;
   background: var(--bg);
-  /* override post-card flex when used in grid */
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -432,23 +431,21 @@ a:hover { text-decoration: underline; }
   margin-top: 10px;
 }
 
-/* ─── POST LIST (remaining posts) ─────────────────────── */
-/* Homepage "المزيد من المقالات":
-   - 3 cards side by side on desktop
-   - image beside text inside each card
-   - 2 columns on tablet
-   - 1 column on mobile
+/* ─── POST LIST (homepage: المزيد من المقالات) ───────────────────── */
+/*
+   IMPORTANT FIX:
+   - This section should visually match the compact editorial cards.
+   - Cards are side by side on desktop.
+   - Inside each card, the image sits beside the text, not above it.
 */
 
 .post-list {
-  /* Was: display:flex; flex-direction:column; */
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
 .post-card {
-  /* Keep the existing card look, but make the internal layout horizontal */
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -459,18 +456,13 @@ a:hover { text-decoration: underline; }
   background: var(--bg);
   min-width: 0;
 }
-
 .post-card:hover {
   box-shadow: 0 4px 20px rgba(0,0,0,.07);
   transform: translateY(-2px);
 }
-
-.post-card.hidden {
-  display: none;
-}
+.post-card.hidden { display: none; }
 
 .post-thumb {
-  /* Fixed media column so the image sits beside the text */
   width: 120px;
   min-width: 120px;
   height: auto;
@@ -478,15 +470,14 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
   border: none;
   flex-shrink: 0;
+  background: var(--soft);
 }
-
 .post-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-
 .post-thumb-default {
   width: 100%;
   height: 100%;
@@ -495,7 +486,6 @@ a:hover { text-decoration: underline; }
   align-items: center;
   justify-content: center;
 }
-
 .post-thumb-default svg {
   width: 22px;
   height: 22px;
@@ -504,7 +494,6 @@ a:hover { text-decoration: underline; }
 }
 
 .post-body {
-  /* Text column */
   flex: 1;
   min-width: 0;
   padding: 1rem 1.1rem 1.1rem;
@@ -513,24 +502,60 @@ a:hover { text-decoration: underline; }
   justify-content: center;
 }
 
-/* Tablet: 2 cards per row */
-@media (max-width: 900px) {
-  .post-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
 }
 
-/* Mobile: 1 card per row, but still horizontal */
-@media (max-width: 560px) {
-  .post-list {
-    grid-template-columns: 1fr;
-  }
-
-  .post-thumb {
-    width: 100px;
-    min-width: 100px;
-  }
+.post-date {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--hint);
 }
+
+.post-cat-tag {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--soft);
+}
+
+.post-body h3 {
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 4px;
+  color: var(--text);
+  transition: color .12s;
+}
+.post-card:hover .post-body h3 { color: var(--accent-warm); }
+.post-body h3 a { color: inherit; }
+.post-body h3 a:hover { text-decoration: none; }
+
+.post-body p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  line-height: 1.6;
+}
+
+.no-results {
+  display: none;
+  padding: 32px 0;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--hint);
+  text-align: center;
+}
+
 /* ─── ABOUT ───────────────────────────────────────────── */
 
 .about-section {
@@ -597,9 +622,12 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
 /* ─── RESPONSIVE ──────────────────────────────────────── */
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .hero-post-image { height: 200px; }
   .post-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Homepage "more articles" becomes 2 cards per row on tablet */
+  .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 480px) {
@@ -618,21 +646,30 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
     width: 100px;
     height: auto;
     flex-shrink: 0;
-    order: 2; /* image on the right in RTL */
+    order: 2;
   }
   .grid-card-body {
     flex: 1;
     order: 1;
   }
 
-  /* Post list: keep vertical but smaller image */
-  .post-thumb { height: 140px; }
-
   /* Series card: slightly smaller image on mobile */
   .series-card-image { width: 100px; }
 }
 
-/* ─── RELATED POSTS ───────────────────────────────────── */
+@media (max-width: 560px) {
+  /* Homepage "more articles" becomes 1 card per row on small screens */
+  .post-list {
+    grid-template-columns: 1fr;
+  }
+
+  .post-thumb {
+    width: 100px;
+    min-width: 100px;
+  }
+}
+
+/* ─── RELATED POSTS (article page only) ───────────────── */
 
 .related-posts {
   margin-top: calc(var(--spacing-section) * 1.2);
@@ -650,82 +687,73 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   border-bottom: 1px solid var(--line);
 }
 
-.article .related-posts-grid {
+.related-posts-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  align-items: stretch;
 }
 
-.article .related-post-card {
+.related-post-card {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 100%;
-  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 10px;
   overflow: hidden;
   text-decoration: none;
   color: var(--text);
   background: #fff;
+  min-width: 0;
   transition: box-shadow .18s, transform .18s;
 }
-.article .related-post-card:hover {
+.related-post-card:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,.07);
   transform: translateY(-2px);
   text-decoration: none;
 }
 
-.article .related-post-thumb {
-  width: 116px;
-  min-width: 116px;
-  max-width: 116px;
-  min-height: 100%;
+.related-post-thumb {
+  width: 110px;
+  min-width: 110px;
   background: var(--soft);
   overflow: hidden;
   flex-shrink: 0;
-  border-left: 1px solid var(--line);
 }
-.article .related-post-thumb img,
-.article .related-post-thumb-default {
+.related-post-thumb img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
   display: block;
 }
-.article .related-post-thumb img {
-  object-fit: cover;
-}
-.article .related-post-thumb-default {
+.related-post-thumb-default {
+  width: 100%;
+  height: 100%;
   min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.article .related-post-thumb-default svg {
+.related-post-thumb-default svg {
   width: 24px;
   height: 24px;
   opacity: .15;
   color: var(--text);
 }
 
-.article .related-post-body {
+.related-post-body {
   flex: 1;
   min-width: 0;
   padding: .8rem .95rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
-.article .related-post-cat {
+.related-post-cat {
   font-family: var(--font-ui);
   font-size: 11px;
   color: var(--hint);
   margin: 0 0 4px;
 }
 
-.article .related-post-title {
+.related-post-title {
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 700;
@@ -734,9 +762,9 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   color: var(--text);
   transition: color .12s;
 }
-.article .related-post-card:hover .related-post-title { color: var(--accent-warm); }
+.related-post-card:hover .related-post-title { color: var(--accent-warm); }
 
-.article .related-post-date {
+.related-post-date {
   font-family: var(--font-ui);
   font-size: 11px;
   color: var(--hint);
@@ -744,19 +772,18 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 }
 
 @media (max-width: 900px) {
-  .article .related-posts-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .related-posts-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 560px) {
-  .article .related-posts-grid {
+  .related-posts-grid {
     grid-template-columns: 1fr;
   }
 
-  .article .related-post-thumb {
+  .related-post-thumb {
     width: 100px;
     min-width: 100px;
-    max-width: 100px;
   }
 }
