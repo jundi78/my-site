@@ -1,274 +1,80 @@
----
-layout: base.html
-title: محمد الجندي
-seo_title:  المدونة الشخصية لمحمد الجندي
-seo_description: مدونة شخصية عربية يكتب فيها محمد الجندي مقالات وتأملات وملاحظات في السياسة والدين والعلوم والتاريخ، إلى جانب اليوميات والنصوص الشخصية.
----
-<div class="container">
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPassthroughCopy("style.css");
+  eleventyConfig.addPassthroughCopy("admin/index.html");
+  eleventyConfig.addPassthroughCopy("images");
+  eleventyConfig.addPassthroughCopy("CNAME");
+  eleventyConfig.addPassthroughCopy("robots.txt");
 
-  {#
-    ─────────────────────────────────────────────────────────────
-    Homepage data preparation
-    - Start from newest posts first.
-    - Resolve the hero post from theme.featuredPost when available.
-    - Put every non-hero post into remainingPosts.
-    ─────────────────────────────────────────────────────────────
-  #}
-  {%- set allPosts = collections.posts | reverse %}
+  eleventyConfig.setFrontMatterParsingOptions({
+    excerpt: false,
+  });
 
-  {%- set heroPost = null %}
-  {%- set remainingPosts = [] %}
-  {%- for post in allPosts %}
-    {%- if heroPost == null and theme.featuredPost and post.fileSlug == theme.featuredPost %}
-      {%- set heroPost = post %}
-    {%- else %}
-      {%- set remainingPosts = remainingPosts.concat([post]) %}
-    {%- endif %}
-  {%- endfor %}
+  eleventyConfig.addFilter("date", function (date) {
+    if (!date) return "";
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return String(date);
+    return d.toLocaleDateString("ar-EG", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  });
 
-  {#
-    Fallback:
-    If no featured post is configured, use the newest post as hero,
-    then rebuild remainingPosts from everything after the first item.
-  #}
-  {%- if heroPost == null and allPosts | length > 0 %}
-    {%- set heroPost = allPosts[0] %}
-    {%- set remainingPosts = [] %}
-    {%- for post in allPosts %}
-      {%- if loop.index0 >= 1 %}
-        {%- set remainingPosts = remainingPosts.concat([post]) %}
-      {%- endif %}
-    {%- endfor %}
-  {%- endif %}
+  eleventyConfig.addFilter("dateMonth", function (date) {
+    if (!date) return "";
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return "";
+    return String(d.getUTCMonth() + 1).padStart(2, "0");
+  });
 
-  {#
-    ─────────────────────────────────────────────────────────────
-    HERO SECTION
-    - Shows the pinned post when configured.
-    - Otherwise shows the newest post.
-    ─────────────────────────────────────────────────────────────
-  #}
-  {%- if heroPost %}
-  <div class="hero-post post-card"
-    data-cat="{{ heroPost.data.category | trim if heroPost.data.category else '' }}"
-    data-month="{{ heroPost.date | dateMonth }}"
-    data-year="{{ heroPost.date | dateYear }}"
-    data-title="{{ heroPost.data.title }}"
-    data-desc="{{ heroPost.data.description if heroPost.data.description else '' }}">
+  eleventyConfig.addFilter("dateYear", function (date) {
+    if (!date) return "";
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return "";
+    return String(d.getUTCFullYear());
+  });
 
-    <div class="hero-post-image">
-      {%- if heroPost.data.thumbnail %}
-        <img class="hero-post-image-bg" src="{{ heroPost.data.thumbnail }}" alt="{{ heroPost.data.title }}" loading="lazy" />
-      {%- else %}
-        <div class="hero-post-image-default"></div>
-      {%- endif %}
+  eleventyConfig.addFilter("dateISO", function (date) {
+    if (!date) return "";
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toISOString().slice(0, 10);
+  });
 
-      <div class="hero-post-image-overlay"></div>
+  eleventyConfig.addCollection("seriesPosts", function (api) {
+    const posts = api.getFilteredByTag("posts");
+    const grouped = {};
 
-      {%- if heroPost.data.category %}
-        <span class="hero-post-cat">{{ heroPost.data.category | trim }}</span>
-      {%- endif %}
-    </div>
+    posts.forEach((post) => {
+      const s = post.data.series;
+      if (!s) return;
+      if (!grouped[s]) grouped[s] = [];
+      grouped[s].push(post);
+    });
 
-    <div class="hero-post-content">
-      <div>
-        <h2 class="hero-post-title">
-          <a href="{{ heroPost.url }}">{{ heroPost.data.title }}</a>
-        </h2>
+    Object.keys(grouped).forEach((name) => {
+      grouped[name].sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0));
+    });
 
-        {%- if heroPost.data.description %}
-          <p class="hero-post-desc">{{ heroPost.data.description }}</p>
-        {%- endif %}
-      </div>
+    return grouped;
+  });
 
-      <div>
-        <div class="hero-post-meta">
-          <span>{{ heroPost.date | date }}</span>
-        </div>
-        <a class="hero-read-btn" href="{{ heroPost.url }}">اقرأ المقالة ←</a>
-      </div>
-    </div>
-  </div>
-  {%- endif %}
+  // Filter to look up series posts by name from the seriesPosts collection.
+  // Usage: collections.seriesPosts | getSeriesPosts(s.name)
+  // This is more reliable than bracket notation with Arabic keys in Nunjucks.
+  eleventyConfig.addFilter("getSeriesPosts", function (seriesPosts, name) {
+    if (!seriesPosts || !name) return [];
+    return seriesPosts[name] || [];
+  });
 
-  {#
-    ─────────────────────────────────────────────────────────────
-    SERIES STRIP
-    - Only render if at least one defined series actually has chapters.
-    ─────────────────────────────────────────────────────────────
-  #}
-  {%- if theme.series | length %}
-
-    {#
-      Nunjucks scoping note:
-      Any variable set inside a for/if block does NOT propagate
-      outside it in Nunjucks. So we skip the pre-check entirely.
-      We always render the strip wrapper when series are defined,
-      and rely on the inner {% if chapters | length %} to only
-      render cards that actually have posts. If nothing renders
-      inside, the strip stays visually empty but that is fine —
-      in practice there is always at least one series with posts.
-    #}
-    <div id="series-strip">
-      <p class="section-label">السلاسل</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 2rem; overflow: visible;">
-        {%- for s in theme.series %}
-          {%- set chapters = collections.seriesPosts | getSeriesPosts(s.name) %}
-          {%- if chapters | length %}
-
-          {#
-            Deck wrapper:
-            - .series-deck        → positioning context, holds the spacer height
-            - .series-deck-layer  → backing cards (purely decorative, not clickable)
-            - .series-card        → the real top card, z-index above the layers
-            The layers are shifted right (translateX positive = RTL right)
-            so they appear the same size as the top card, just peeking below.
-          #}
-          <div class="series-deck">
-            <div class="series-deck-layer series-deck-layer-3"></div>
-            <div class="series-deck-layer series-deck-layer-2"></div>
-
-            <a href="/series/{{ s.slug }}/" class="series-card">
-              <div class="series-card-body">
-                <div>
-                  <div class="series-card-badge">{{ chapters | length }} فصول</div>
-                  <p class="series-card-name">{{ s.name }}</p>
-                </div>
-                <div class="series-card-cta">اقرأ السلسلة ←</div>
-              </div>
-
-              <div class="series-card-image">
-                {%- if s.cover %}
-                  <img src="{{ s.cover }}" alt="{{ s.name }}" loading="lazy" />
-                {%- else %}
-                  <div class="series-card-image-placeholder"></div>
-                {%- endif %}
-              </div>
-            </a>
-
-            {# Spacer so the grid cell is tall enough to show the peeking layers #}
-            <div class="series-deck-spacer"></div>
-          </div>
-
-          {%- endif %}
-        {%- endfor %}
-      </div>
-    </div>
-  {%- endif %}
-
-  {#
-    ─────────────────────────────────────────────────────────────
-    LATEST POSTS GRID
-    - Show the first 3 posts after the hero.
-    - These stay in the 3-column grid section.
-    ─────────────────────────────────────────────────────────────
-  #}
-  {%- if remainingPosts | length > 0 %}
-  <p class="section-label">أحدث المقالات</p>
-  <div class="post-grid">
-    {%- for post in remainingPosts %}
-      {%- if loop.index0 <= 2 %}
-      <article class="post-grid-card post-card"
-        data-cat="{{ post.data.category | trim if post.data.category else '' }}"
-        data-month="{{ post.date | dateMonth }}"
-        data-year="{{ post.date | dateYear }}"
-        data-title="{{ post.data.title }}"
-        data-desc="{{ post.data.description if post.data.description else '' }}">
-
-        <div class="grid-card-thumb">
-          {%- if post.data.thumbnail %}
-            <img src="{{ post.data.thumbnail }}" alt="{{ post.data.title }}" loading="lazy" />
-          {%- else %}
-            <div class="grid-card-thumb-default" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 9h18M9 21V9"/>
-              </svg>
-            </div>
-          {%- endif %}
-        </div>
-
-        <div class="grid-card-body">
-          {%- if post.data.category %}
-            <p class="grid-card-cat">{{ post.data.category | trim }}</p>
-          {%- endif %}
-
-          <h3 class="grid-card-title">
-            <a href="{{ post.url }}">{{ post.data.title }}</a>
-          </h3>
-
-          {%- if post.data.description %}
-            <p class="grid-card-desc">{{ post.data.description }}</p>
-          {%- endif %}
-
-          <p class="grid-card-date">{{ post.date | date }}</p>
-        </div>
-      </article>
-      {%- endif %}
-    {%- endfor %}
-  </div>
-  {%- endif %}
-
-  {#
-    ─────────────────────────────────────────────────────────────
-    MORE ARTICLES
-    IMPORTANT FIX:
-    - Show ONLY the next 3 posts after the grid.
-    - Grid already consumed indexes 0, 1, 2.
-    - This section should therefore render indexes 3, 4, 5 only.
-    ─────────────────────────────────────────────────────────────
-  #}
-  {%- if remainingPosts | length > 3 %}
-  <p class="section-label">المزيد من المقالات</p>
-  <div class="post-list">
-    {%- for post in remainingPosts %}
-      {%- if loop.index0 >= 3 and loop.index0 <= 5 %}
-      <article class="post-card"
-        data-cat="{{ post.data.category | trim if post.data.category else '' }}"
-        data-month="{{ post.date | dateMonth }}"
-        data-year="{{ post.date | dateYear }}"
-        data-title="{{ post.data.title }}"
-        data-desc="{{ post.data.description if post.data.description else '' }}">
-
-        <div class="post-thumb">
-          {%- if post.data.thumbnail %}
-            <img src="{{ post.data.thumbnail }}" alt="{{ post.data.title }}" loading="lazy" />
-          {%- else %}
-            <div class="post-thumb-default" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 9h18M9 21V9"/>
-              </svg>
-            </div>
-          {%- endif %}
-        </div>
-
-        <div class="post-body">
-          <div class="post-meta">
-            <span class="post-date">{{ post.date | date }}</span>
-            {%- if post.data.category %}
-              <span class="post-cat-tag">{{ post.data.category | trim }}</span>
-            {%- endif %}
-          </div>
-
-          <h3><a href="{{ post.url }}">{{ post.data.title }}</a></h3>
-
-          {%- if post.data.description %}
-            <p>{{ post.data.description }}</p>
-          {%- endif %}
-        </div>
-      </article>
-      {%- endif %}
-    {%- endfor %}
-  </div>
-  {%- endif %}
-
-  <p class="no-results" id="no-results" style="display:none">لا توجد تدوينات تطابق بحثك.</p>
-
-  <section id="about" class="about-section">
-    <p class="section-label">عن المدوّنة</p>
-    <p>{{ theme.about_text }}</p>
-  </section>
-
-</div>
+  return {
+    dir: {
+      input: ".",
+      output: "_site",
+      includes: "_includes",
+    },
+    templateFormats: ["html", "md", "njk"],
+    htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk",
+  };
+};
