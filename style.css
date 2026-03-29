@@ -162,6 +162,192 @@ a:hover { text-decoration: underline; }
   border-color: var(--accent);
 }
 
+/* ─── BRAND + ARCHIVE NAV (header) ───────────────────── */
+/* Groups the site name and the "أرشيف" link side by side. */
+
+.brand-nav {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+
+.archive-nav-link {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .15s;
+  white-space: nowrap;
+}
+.archive-nav-link:hover { color: var(--text); text-decoration: none; }
+
+/* Active state: current page indicator */
+.archive-nav-link--active {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ─── ARCHIVE PAGE ────────────────────────────────────── */
+
+.archive-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 28px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Reuse .section-label appearance without bottom border
+   (the border belongs to .archive-header instead) */
+.archive-header .section-label {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.archive-count {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--hint);
+  margin: 0;
+}
+
+/* Full-width single-column list of horizontal cards */
+.archive-list {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin-bottom: var(--spacing-section);
+}
+
+/* Each archive card is a horizontal row — image beside text.
+   Reuses the same visual language as .post-list > .post-card. */
+.archive-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+  transition: box-shadow .18s, transform .18s;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+.archive-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,.07);
+  transform: translateY(-2px);
+}
+
+/* Thumbnail column */
+.archive-card-thumb {
+  width: 130px;
+  min-width: 130px;
+  flex-shrink: 0;
+  background: var(--soft);
+  overflow: hidden;
+}
+.archive-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.archive-card-thumb-default {
+  width: 100%;
+  height: 100%;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.archive-card-thumb-default svg {
+  width: 22px;
+  height: 22px;
+  opacity: .15;
+  color: var(--text);
+}
+
+/* Text column */
+.archive-card-body {
+  flex: 1;
+  min-width: 0;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Meta row: date · category · series */
+.archive-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.archive-card-date {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--hint);
+}
+
+.archive-card-cat {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--soft);
+}
+
+.archive-card-series {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--accent-warm);
+  background: var(--soft);
+}
+
+.archive-card-title {
+  font-family: var(--font-body);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0 0 4px;
+  color: var(--text);
+  transition: color .12s;
+}
+.archive-card:hover .archive-card-title { color: var(--accent-warm); }
+.archive-card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.archive-card-title a:hover { text-decoration: none; }
+
+.archive-card-desc {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.archive-empty {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--hint);
+  text-align: center;
+  padding: 48px 0;
+}
+
 /* ─── HERO FEATURED POST ──────────────────────────────── */
 
 .hero-post {
@@ -705,6 +891,12 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   .topbar-controls { gap: 6px; }
   .search-input { width: 140px; }
   body { font-size: 17px; }
+
+  /* Archive cards: narrower thumb on small screens */
+  .archive-card-thumb {
+    width: 90px;
+    min-width: 90px;
+  }
 
   /* On very small screens only, أحدث المقالات becomes horizontal */
   .post-grid { grid-template-columns: 1fr; gap: 1rem; }
