@@ -13,8 +13,8 @@ eleventyComputed:
   thumbnail: "{{ s.cover if s.cover else '' }}"
 ---
 {%- set chapters = [] %}
-{%- if collections.seriesPosts[s.name] %}
-  {%- set chapters = collections.seriesPosts[s.name] %}
+{%- if collections.seriesPosts %}
+  {%- set chapters = collections.seriesPosts | getSeriesPosts(s.name) %}
 {%- endif %}
 
 <div class="container">
