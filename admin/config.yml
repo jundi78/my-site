@@ -201,7 +201,7 @@ collections:
         widget: "select"
         required: false
         options:
-          - { label: "الأمة المكتئبة", value: "الأمة المكتئبة" }
+          - { label: "[object Object]", value: "[object Object]" }
 
       - label: "ترتيب الفصل"
         name: "seriesOrder"
