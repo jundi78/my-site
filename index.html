@@ -113,23 +113,41 @@ seo_description: مدونة شخصية عربية يكتب فيها محمد ا�
         {%- for s in theme.series %}
           {%- set chapters = collections.seriesPosts[s.name] %}
           {%- if chapters | length %}
-          <a href="/series/{{ s.slug }}/" class="series-card">
-            <div class="series-card-body">
-              <div>
-                <div class="series-card-badge">{{ chapters | length }} فصول</div>
-                <p class="series-card-name">{{ s.name }}</p>
-              </div>
-              <div class="series-card-cta">اقرأ السلسلة ←</div>
-            </div>
 
-            <div class="series-card-image">
-              {%- if s.cover %}
-                <img src="{{ s.cover }}" alt="{{ s.name }}" loading="lazy" />
-              {%- else %}
-                <div class="series-card-image-placeholder"></div>
-              {%- endif %}
-            </div>
-          </a>
+          {#
+            Deck wrapper:
+            - .series-deck        → positioning context, holds the spacer height
+            - .series-deck-layer  → backing cards (purely decorative, not clickable)
+            - .series-card        → the real top card, z-index above the layers
+            The layers are shifted right (translateX positive = RTL right)
+            so they appear the same size as the top card, just peeking below.
+          #}
+          <div class="series-deck">
+            <div class="series-deck-layer series-deck-layer-3"></div>
+            <div class="series-deck-layer series-deck-layer-2"></div>
+
+            <a href="/series/{{ s.slug }}/" class="series-card">
+              <div class="series-card-body">
+                <div>
+                  <div class="series-card-badge">{{ chapters | length }} فصول</div>
+                  <p class="series-card-name">{{ s.name }}</p>
+                </div>
+                <div class="series-card-cta">اقرأ السلسلة ←</div>
+              </div>
+
+              <div class="series-card-image">
+                {%- if s.cover %}
+                  <img src="{{ s.cover }}" alt="{{ s.name }}" loading="lazy" />
+                {%- else %}
+                  <div class="series-card-image-placeholder"></div>
+                {%- endif %}
+              </div>
+            </a>
+
+            {# Spacer so the grid cell is tall enough to show the peeking layers #}
+            <div class="series-deck-spacer"></div>
+          </div>
+
           {%- endif %}
         {%- endfor %}
       </div>
