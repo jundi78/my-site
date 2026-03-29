@@ -6,43 +6,61 @@ title: محمد الجندي
 
   {%- set allPosts = collections.posts | reverse %}
 
-  <!-- ── HERO: most recent post ─────────────────────── -->
-  {%- if allPosts | length > 0 %}
-  {%- set hero = allPosts[0] %}
+  <!-- ── RESOLVE HERO ───────────────────────────────── -->
+  {%- set heroPost = null %}
+  {%- set remainingPosts = [] %}
+  {%- for post in allPosts %}
+    {%- if heroPost == null and theme.featuredPost and post.fileSlug == theme.featuredPost %}
+      {%- set heroPost = post %}
+    {%- else %}
+      {%- set remainingPosts = remainingPosts.concat([post]) %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if heroPost == null and allPosts | length > 0 %}
+    {%- set heroPost = allPosts[0] %}
+    {%- set remainingPosts = [] %}
+    {%- for post in allPosts %}
+      {%- if loop.index0 >= 1 %}
+        {%- set remainingPosts = remainingPosts.concat([post]) %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+
+  <!-- ── HERO: pinned or most recent ───────────────── -->
+  {%- if heroPost %}
   <div class="hero-post post-card"
-    data-cat="{{ hero.data.category | trim if hero.data.category else '' }}"
-    data-month="{{ hero.date | dateMonth }}"
-    data-year="{{ hero.date | dateYear }}"
-    data-title="{{ hero.data.title }}"
-    data-desc="{{ hero.data.description if hero.data.description else '' }}">
+    data-cat="{{ heroPost.data.category | trim if heroPost.data.category else '' }}"
+    data-month="{{ heroPost.date | dateMonth }}"
+    data-year="{{ heroPost.date | dateYear }}"
+    data-title="{{ heroPost.data.title }}"
+    data-desc="{{ heroPost.data.description if heroPost.data.description else '' }}">
 
     <div class="hero-post-image">
-      {%- if hero.data.thumbnail %}
-        <img class="hero-post-image-bg" src="{{ hero.data.thumbnail }}" alt="{{ hero.data.title }}" loading="lazy" />
+      {%- if heroPost.data.thumbnail %}
+        <img class="hero-post-image-bg" src="{{ heroPost.data.thumbnail }}" alt="{{ heroPost.data.title }}" loading="lazy" />
       {%- else %}
         <div class="hero-post-image-default"></div>
       {%- endif %}
       <div class="hero-post-image-overlay"></div>
-      {%- if hero.data.category %}
-        <span class="hero-post-cat">{{ hero.data.category | trim }}</span>
+      {%- if heroPost.data.category %}
+        <span class="hero-post-cat">{{ heroPost.data.category | trim }}</span>
       {%- endif %}
     </div>
 
     <div class="hero-post-content">
       <div>
-        <p class="hero-post-eyebrow">المقالة المميّزة</p>
         <h2 class="hero-post-title">
-          <a href="{{ hero.url }}">{{ hero.data.title }}</a>
+          <a href="{{ heroPost.url }}">{{ heroPost.data.title }}</a>
         </h2>
-        {%- if hero.data.description %}
-          <p class="hero-post-desc">{{ hero.data.description }}</p>
+        {%- if heroPost.data.description %}
+          <p class="hero-post-desc">{{ heroPost.data.description }}</p>
         {%- endif %}
       </div>
       <div>
         <div class="hero-post-meta">
-          <span>{{ hero.date | date }}</span>
+          <span>{{ heroPost.date | date }}</span>
         </div>
-        <a class="hero-read-btn" href="{{ hero.url }}">اقرأ المقالة ←</a>
+        <a class="hero-read-btn" href="{{ heroPost.url }}">اقرأ المقالة ←</a>
       </div>
     </div>
   </div>
@@ -86,12 +104,12 @@ title: محمد الجندي
     {%- endif %}
   {%- endif %}
 
-  <!-- ── GRID: posts 2–4 ────────────────────────────── -->
-  {%- if allPosts | length > 1 %}
+  <!-- ── GRID: next 3 posts after hero ─────────────── -->
+  {%- if remainingPosts | length > 0 %}
   <p class="section-label">أحدث المقالات</p>
   <div class="post-grid">
-    {%- for post in allPosts %}
-      {%- if loop.index0 >= 1 and loop.index0 <= 3 %}
+    {%- for post in remainingPosts %}
+      {%- if loop.index0 <= 2 %}
       <article class="post-grid-card post-card"
         data-cat="{{ post.data.category | trim if post.data.category else '' }}"
         data-month="{{ post.date | dateMonth }}"
@@ -130,12 +148,12 @@ title: محمد الجندي
   </div>
   {%- endif %}
 
-  <!-- ── LIST: posts 5+ ─────────────────────────────── -->
-  {%- if allPosts | length > 4 %}
+  <!-- ── LIST: posts 4+ ─────────────────────────────── -->
+  {%- if remainingPosts | length > 3 %}
   <p class="section-label">المزيد من المقالات</p>
   <div class="post-list">
-    {%- for post in allPosts %}
-      {%- if loop.index0 >= 4 %}
+    {%- for post in remainingPosts %}
+      {%- if loop.index0 >= 3 %}
       <article class="post-card"
         data-cat="{{ post.data.category | trim if post.data.category else '' }}"
         data-month="{{ post.date | dateMonth }}"
