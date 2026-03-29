@@ -3,17 +3,29 @@ permalink: /sitemap.xml
 eleventyExcludeFromCollections: true
 layout: null
 ---
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aljundi.org/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  {%- for s in theme.series %}
+    {%- set chapters = collections.seriesPosts[s.name] %}
+    {%- if chapters and chapters | length %}
+  <url>
+    <loc>https://aljundi.org/series/{{ s.slug }}/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+    {%- endif %}
+  {%- endfor %}
+
   {%- for post in collections.posts | reverse %}
   <url>
     <loc>https://aljundi.org{{ post.url }}</loc>
-    <lastmod>{{ post.date | dateYear }}-{{ post.date | dateMonth }}-01</lastmod>
+    <lastmod>{{ post.date | dateISO }}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
