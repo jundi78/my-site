@@ -57,27 +57,31 @@ title: محمد الجندي
       {%- endif %}
     {%- endfor %}
     {%- if hasAnySeries %}
-    <p class="section-label">السلاسل</p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 2rem;">
-      {%- for s in theme.series %}
-        {%- set chapters = collections.seriesPosts[s.name] %}
-        {%- if chapters | length %}
-        <a href="/series/{{ s.slug }}/" style="display: block; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit;">
-          {%- if s.cover %}
-            <img src="{{ s.cover }}" alt="{{ s.name }}" style="width: 100%; height: 160px; object-fit: cover; display: block;" loading="lazy" />
-          {%- else %}
-            <div style="width: 100%; height: 160px; background: var(--line);"></div>
-          {%- endif %}
-          <div style="padding: 1.25rem;">
-            <div style="background: var(--bg); border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 500; color: var(--accent); display: inline-block; margin-bottom: 10px; border: 1px solid var(--line);">
-              {{ chapters | length }} فصول
+    <div id="series-strip">
+      <p class="section-label">السلاسل</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 2rem;">
+        {%- for s in theme.series %}
+          {%- set chapters = collections.seriesPosts[s.name] %}
+          {%- if chapters | length %}
+          <a href="/series/{{ s.slug }}/" class="series-card">
+            <div class="series-card-body">
+              <div>
+                <div class="series-card-badge">{{ chapters | length }} فصول</div>
+                <p class="series-card-name">{{ s.name }}</p>
+              </div>
+              <div class="series-card-cta">اقرأ السلسلة ←</div>
             </div>
-            <p style="font-size: 16px; font-weight: 500; margin-bottom: 6px; color: var(--text);">{{ s.name }}</p>
-            <div style="font-size: 13px; font-weight: 500; color: var(--accent); margin-top: 14px;">اقرأ السلسلة ←</div>
-          </div>
-        </a>
-        {%- endif %}
-      {%- endfor %}
+            <div class="series-card-image">
+              {%- if s.cover %}
+                <img src="{{ s.cover }}" alt="{{ s.name }}" loading="lazy" />
+              {%- else %}
+                <div class="series-card-image-placeholder"></div>
+              {%- endif %}
+            </div>
+          </a>
+          {%- endif %}
+        {%- endfor %}
+      </div>
     </div>
     {%- endif %}
   {%- endif %}
