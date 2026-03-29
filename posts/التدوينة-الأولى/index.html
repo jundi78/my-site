@@ -51,6 +51,241 @@
     <header class="site-header">
       <div class="container">
         <div class="topbar-main">
+          
+          <div class="brand-nav">
+            <a class="brand" href="/">المدونة الشخصية لمحمد الجندي</a>
+            <a class="archive-nav-link" href="/archive/">أرشيف</a>
+          </div>
+          <div class="topbar-controls">
+            <select class="date-select" id="filter-month" aria-label="تصفّح بالشهر">
+              <option value="">الشهر</option>
+            </select>
+            <select class="date-select" id="filter-year" aria-label="تصفّح بالسنة">
+              <option value="">السنة</option>
+            </select>
+            <input class="search-input" id="search-input" type="search" placeholder="ابحث في التدوينات…" aria-label="بحث" />
+          </div>
+        </div>
+
+        <div class="catbar">
+          <span class="catbar-label">التصنيفات</span>
+          <button class="cat-btn active" data-cat="">الكل</button>
+            <button class="cat-btn" data-cat="سياسة">سياسة</button>
+            <button class="cat-btn" data-cat="دين">دين</button>
+            <button class="cat-btn" data-cat="علوم">علوم</button>
+            <button class="cat-btn" data-cat="تاريخ">تاريخ</button>
+            <button class="cat-btn" data-cat="متفرقات">متفرقات</button>
+            <button class="cat-btn" data-cat="من أنا">من أنا</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      
+
+<div class="container">
+  <article class="article">
+    <header class="article-header">
+      <p class="kicker">
+        ١٥ مارس ٢٠٢٦ — <span class="post-cat-tag">متفرقات</span>
+      </p>
+      <h1>التدوينة الأولى</h1>
+    </header>
+      <img class="article-thumb" src="/images/uploads/Screenshot 2026-03-25 162715.png" alt="التدوينة الأولى" />
+
+    <p>أردت مكانًا بسيطًا أكتب فيه دون تعقيد. صفحة بيضاء، كلام واضح، وأرشيف صغير يعود إليه المرء بعد سنوات فيجد أثر الأيام كما كان.</p>
+<p>سأكتب هنا أفكارًا متناثرة: ما يمرّ في الذهن، ما يتغير في الداخل، وما أتعلمه من الناس والكتب. ومع الوقت قد أضيف بعض ما يتعلّق بالعائلة والتاريخ والذكريات… لكن البداية ستكون “كتابة فقط”.</p>
+
+      <aside class="related-posts">
+        <p class="related-posts-label">اقرأ أيضاً</p>
+        <div class="related-posts-grid">
+            <a class="related-post-card" href="/posts/الزير/">
+              <div class="related-post-thumb">
+                  <img src="/images/uploads/ChatGPT Image Mar 19, 2026, 04_07_49 PM.png" alt="الزير" loading="lazy" />
+              </div>
+              <div class="related-post-body">
+                  <p class="related-post-cat">متفرقات</p>
+                <p class="related-post-title">الزير</p>
+                <p class="related-post-date">١٨ مارس ٢٠٢٦</p>
+              </div>
+            </a>
+        </div>
+      </aside>
+  </article>
+</div>
+
+    </main>
+
+    <div class="container">
+      <footer class="site-footer">
+        © <span id="year"></span> — المدونة الشخصية لمحمد الجندي
+      </footer>
+    </div>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      (function () {
+        const cards = Array.from(document.querySelectorAll(".post-card[data-cat]"));
+        const catBtns = Array.from(document.querySelectorAll(".cat-btn"));
+        const isHomepage = cards.length > 0;
+
+        if (isHomepage) {
+          const searchInput = document.getElementById("search-input");
+          const monthSelect = document.getElementById("filter-month");
+          const yearSelect = document.getElementById("filter-year");
+          const noResults = document.getElementById("no-results");
+          const seriesStrip = document.getElementById("series-strip");
+
+          let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
+
+          const months = new Set();
+          const years = new Set();
+          cards.forEach(c => {
+            if (c.dataset.month) months.add(c.dataset.month);
+            if (c.dataset.year) years.add(c.dataset.year);
+          });
+
+          const arMonths = {
+            "01": "يناير", "02": "فبراير", "03": "مارس", "04": "أبريل",
+            "05": "مايو", "06": "يونيو", "07": "يوليو", "08": "أغسطس",
+            "09": "سبتمبر", "10": "أكتوبر", "11": "نوفمبر", "12": "ديسمبر"
+          };
+
+          Array.from(months).sort().forEach(m => {
+            const opt = document.createElement("option");
+            opt.value = m;
+            opt.textContent = arMonths[m] || m;
+            monthSelect.appendChild(opt);
+          });
+
+          Array.from(years).sort().reverse().forEach(y => {
+            const opt = document.createElement("option");
+            opt.value = y;
+            opt.textContent = y;
+            yearSelect.appendChild(opt);
+          });
+
+          function applyFilters() {
+            let visible = 0;
+            cards.forEach(card => {
+              const matchCat = !activeCat || card.dataset.cat.trim() === activeCat.trim();
+              const matchMonth = !activeMonth || card.dataset.month === activeMonth;
+              const matchYear = !activeYear || card.dataset.year === activeYear;
+              const matchSearch = !searchTerm || card.dataset.title.includes(searchTerm) || card.dataset.desc.includes(searchTerm);
+              const show = matchCat && matchMonth && matchYear && matchSearch;
+              card.classList.toggle("hidden", !show);
+              if (show) visible++;
+            });
+
+            if (noResults) {
+              noResults.style.display = visible === 0 ? "block" : "none";
+            }
+
+            if (seriesStrip) {
+              seriesStrip.style.display = activeCat ? "none" : "";
+            }
+          }
+
+          function setActiveCategory(cat) {
+            activeCat = cat;
+            catBtns.forEach(b => {
+              b.classList.toggle("active", b.dataset.cat.trim() === cat.trim());
+            });
+            applyFilters();
+          }
+
+          catBtns.forEach(btn => {
+            btn.addEventListener("click", () => setActiveCategory(btn.dataset.cat.trim()));
+          });
+
+          monthSelect.addEventListener("change", () => {
+            activeMonth = monthSelect.value;
+            applyFilters();
+          });
+
+          yearSelect.addEventListener("change", () => {
+            activeYear = yearSelect.value;
+            applyFilters();
+          });
+
+          searchInput.addEventListener("input", () => {
+            searchTerm = searchInput.value.trim();
+            applyFilters();
+          });
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const catParam = urlParams.get("cat");
+          if (catParam) {
+            setActiveCategory(catParam);
+            history.replaceState(null, "", window.location.pathname);
+          }
+        } else {
+          catBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+              const cat = btn.dataset.cat.trim();
+              window.location.href = cat ? "/?cat=" + encodeURIComponent(cat) : "/";
+            });
+          });
+        }
+      })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "dd0d3b92c042407c9bcd1bfec41dd9bb"}'></script>
+  </body>
+</html><!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>التدوينة الأولى | المدونة الشخصية لمحمد الجندي</title>
+      <meta name="description" content="التدوينة الأولى: لماذا بدأت هذه المدوّنة؟" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+
+    <link rel="canonical" href="https://aljundi.org/posts/التدوينة-الأولى/" />
+
+    <meta property="og:site_name" content="المدونة الشخصية لمحمد الجندي" />
+    <meta property="og:locale" content="ar_AR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="التدوينة الأولى | المدونة الشخصية لمحمد الجندي" />
+      <meta property="og:description" content="التدوينة الأولى: لماذا بدأت هذه المدوّنة؟" />
+    <meta property="og:url" content="https://aljundi.org/posts/التدوينة-الأولى/" />
+      <meta property="og:image" content="https://aljundi.org/images/uploads/Screenshot 2026-03-25 162715.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="التدوينة الأولى | المدونة الشخصية لمحمد الجندي" />
+      <meta name="twitter:description" content="التدوينة الأولى: لماذا بدأت هذه المدوّنة؟" />
+      <meta name="twitter:image" content="https://aljundi.org/images/uploads/Screenshot 2026-03-25 162715.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif+Arabic:wght@300;400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Noto+Naskh+Arabic:wght@400;500&family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <style>
+      :root {
+        --bg:              #ffffff;
+        --text:            #111111;
+        --muted:           #555555;
+        --hint:            #999999;
+        --line:            #e2e2e2;
+        --soft:            #f6f6f4;
+        --accent:          #111111;
+        --font-body:       "Amiri", "Amiri", serif;
+        --font-ui:         "IBM Plex Sans Arabic", "IBM Plex Sans Arabic", sans-serif;
+        --font-size-base:  18px;
+        --max-width:       860px;
+        --spacing-section: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="topbar-main">
           <a class="brand" href="/">المدونة الشخصية لمحمد الجندي</a>
           <div class="topbar-controls">
             <select class="date-select" id="filter-month" aria-label="تصفّح بالشهر">
