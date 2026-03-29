@@ -1,3 +1,4 @@
+
 backend:
   name: github
   repo: jundi78/my-site
@@ -9,6 +10,7 @@ public_folder: "/images/uploads"
 locale: "ar"
 
 collections:
+  # ── Site Settings ────────────────────────────────────────
   - name: "settings"
     label: "إعدادات الموقع"
     files:
@@ -35,6 +37,40 @@ collections:
             name: "hero_subtext"
             widget: "string"
             hint: "الجملة الصغيرة أسفل العنوان الرئيسي"
+
+          # ───────────────────────────────────────────────────
+          # Hero article picker
+          # القيمة هنا يجب أن تساوي post.fileSlug
+          # لأن index.html يحلّ البطل بهذه المقارنة:
+          # post.fileSlug == theme.featuredPost
+          #
+          # إذا كانت القيمة فارغة:
+          # سيعود الموقع تلقائيًا إلى أحدث مقال.
+          # ───────────────────────────────────────────────────
+          - label: "المقالة المميّزة في الواجهة"
+            name: "featuredPost"
+            widget: "select"
+            required: false
+            hint: "اختر المقالة التي تريد إظهارها في قسم البطل. إذا تركتها فارغة، سيظهر أحدث مقال تلقائيًا."
+            options:
+              - { label: "تلقائيًا: أحدث مقال", value: "" }
+
+              - { label: "الأمة المكتئبة (4) - أسباب المرض", value: "الأمة-المكتئبة-4-أسباب-المرض" }
+
+              - { label: "الأمة المكتئبة (3) - أعراض مرضنا", value: "الأمة-المكتئبة-3-أعراض-مرضنا" }
+
+              - { label: "الأمة المكتئبة (2) - هل نحن أمة فعلًا؟", value: "الأمة-المكتئبة-2-هل-نحن-أمة-فعلًا؟" }
+
+              - { label: "يقظان", value: "يقظان" }
+
+              - { label: "الأمة المكتئبة (1) - المقدمة", value: "الأمة-المكتئبة-1-المقدمة" }
+
+              - { label: "الزير", value: "الزير" }
+
+              - { label: "التدوينة الأولى", value: "التدوينة-الأولى" }
+
+              - { label: "عن محمد الجندي وجيله", value: "عن-محمد-الجندي-وجيله" }
+
 
           - label: "نص قسم 'عن المدوّنة'"
             name: "about_text"
@@ -178,6 +214,7 @@ collections:
                 step: 4
                 default: 40
 
+  # ── Posts ────────────────────────────────────────────────
   - name: "posts"
     label: "التدوينات"
     label_singular: "تدوينة"
@@ -204,28 +241,28 @@ collections:
         widget: "select"
         required: false
         options:
-          
+
           - { label: "سياسة", value: "سياسة" }
-          
+
           - { label: "دين", value: "دين" }
-          
+
           - { label: "علوم", value: "علوم" }
-          
+
           - { label: "تاريخ", value: "تاريخ" }
-          
+
           - { label: "متفرقات", value: "متفرقات" }
-          
+
           - { label: "من أنا", value: "من أنا" }
-          
+
 
       - label: "السلسلة"
         name: "series"
         widget: "select"
         required: false
         options:
-          
+
           - { label: "الأمة المكتئبة", value: "الأمة المكتئبة" }
-          
+
 
       - label: "ترتيب الفصل"
         name: "seriesOrder"
