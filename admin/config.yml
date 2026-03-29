@@ -201,8 +201,7 @@ collections:
         widget: "select"
         required: false
         options:
-          - { label: "سلسلة يقظان", value: "سلسلة يقظان" }
-          - { label: "مشروع الأمة المكتئبة", value: "مشروع الأمة المكتئبة" }
+          - { label: "الأمة المكتئبة", value: "الأمة المكتئبة" }
 
       - label: "ترتيب الفصل"
         name: "seriesOrder"
