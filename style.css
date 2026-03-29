@@ -162,30 +162,16 @@ a:hover { text-decoration: underline; }
   border-color: var(--accent);
 }
 
-/* ─── BRAND + ARCHIVE NAV (header) ───────────────────── */
-/* Groups the site name and the "أرشيف" link side by side. */
+/* ─── ARCHIVE PILL (catbar) ───────────────────────────── */
+/* The archive link sits at the end of the catbar. It reuses
+   all .cat-btn styles; this rule only handles <a> specifics. */
 
-.brand-nav {
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
+a.archive-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-right: auto; /* pushes it to the far end of the flex row (RTL: left side) */
 }
-
-.archive-nav-link {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color .15s;
-  white-space: nowrap;
-}
-.archive-nav-link:hover { color: var(--text); text-decoration: none; }
-
-/* Active state: current page indicator */
-.archive-nav-link--active {
-  color: var(--text);
-  font-weight: 600;
-}
+a.archive-pill:hover { text-decoration: none; }
 
 /* ─── ARCHIVE PAGE ────────────────────────────────────── */
 
@@ -242,10 +228,11 @@ a:hover { text-decoration: underline; }
   transform: translateY(-2px);
 }
 
-/* Thumbnail column */
+/* Thumbnail column — matches .post-list > .post-card .post-thumb exactly */
 .archive-card-thumb {
-  width: 130px;
-  min-width: 130px;
+  width: 120px;
+  min-width: 120px;
+  height: auto;
   flex-shrink: 0;
   background: var(--soft);
   overflow: hidden;
@@ -892,10 +879,10 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   .search-input { width: 140px; }
   body { font-size: 17px; }
 
-  /* Archive cards: narrower thumb on small screens */
+  /* Archive cards: narrower thumb on small screens — matches post-list */
   .archive-card-thumb {
-    width: 90px;
-    min-width: 90px;
+    width: 100px;
+    min-width: 100px;
   }
 
   /* On very small screens only, أحدث المقالات becomes horizontal */
