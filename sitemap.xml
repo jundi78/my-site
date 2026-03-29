@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aljundi.org/</loc>
@@ -6,8 +6,13 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://aljundi.org/series/alamt-almktybt/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://aljundi.org/posts/الأمة-المكتئبة-4-أسباب-المرض/</loc>
-    <lastmod>2026-04-01</lastmod>
+    <lastmod>2026-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19,31 +24,31 @@
   </url>
   <url>
     <loc>https://aljundi.org/posts/الأمة-المكتئبة-2-هل-نحن-أمة-فعلًا؟/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aljundi.org/posts/يقظان/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aljundi.org/posts/الأمة-المكتئبة-1-المقدمة/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aljundi.org/posts/الزير/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aljundi.org/posts/التدوينة-الأولى/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
