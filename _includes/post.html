@@ -32,9 +32,8 @@ layout: base.html
     {{ content | safe }}
 
     {%- if series %}
-      {%- set chapters = [] %}
-      {%- if collections.seriesPosts[series] %}
-        {%- set chapters = collections.seriesPosts[series] %}
+      {%- set chapters = collections.seriesPosts | getSeriesPosts(series) %}
+      {%- if chapters | length %}
       {%- endif %}
       {%- set nextChapter = null %}
       {%- for ch in chapters %}
