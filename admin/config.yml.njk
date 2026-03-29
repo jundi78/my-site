@@ -1,6 +1,7 @@
 ---
 permalink: /admin/config.yml
 ---
+
 backend:
   name: github
   repo: jundi78/my-site
@@ -12,6 +13,7 @@ public_folder: "/images/uploads"
 locale: "ar"
 
 collections:
+  # ── Site Settings ────────────────────────────────────────
   - name: "settings"
     label: "إعدادات الموقع"
     files:
@@ -38,6 +40,26 @@ collections:
             name: "hero_subtext"
             widget: "string"
             hint: "الجملة الصغيرة أسفل العنوان الرئيسي"
+
+          # ───────────────────────────────────────────────────
+          # Hero article picker
+          # القيمة هنا يجب أن تساوي post.fileSlug
+          # لأن index.html يحلّ البطل بهذه المقارنة:
+          # post.fileSlug == theme.featuredPost
+          #
+          # إذا كانت القيمة فارغة:
+          # سيعود الموقع تلقائيًا إلى أحدث مقال.
+          # ───────────────────────────────────────────────────
+          - label: "المقالة المميّزة في الواجهة"
+            name: "featuredPost"
+            widget: "select"
+            required: false
+            hint: "اختر المقالة التي تريد إظهارها في قسم البطل. إذا تركتها فارغة، سيظهر أحدث مقال تلقائيًا."
+            options:
+              - { label: "تلقائيًا: أحدث مقال", value: "" }
+{% for post in collections.posts | reverse %}
+              - { label: "{{ post.data.title | replace('"', '\\"') }}", value: "{{ post.fileSlug }}" }
+{% endfor %}
 
           - label: "نص قسم 'عن المدوّنة'"
             name: "about_text"
@@ -181,6 +203,7 @@ collections:
                 step: 4
                 default: 40
 
+  # ── Posts ────────────────────────────────────────────────
   - name: "posts"
     label: "التدوينات"
     label_singular: "تدوينة"
@@ -207,18 +230,18 @@ collections:
         widget: "select"
         required: false
         options:
-          {% for cat in theme.categories %}
+{% for cat in theme.categories %}
           - { label: "{{ cat }}", value: "{{ cat }}" }
-          {% endfor %}
+{% endfor %}
 
       - label: "السلسلة"
         name: "series"
         widget: "select"
         required: false
         options:
-          {% for s in theme.series %}
+{% for s in theme.series %}
           - { label: "{{ s.name }}", value: "{{ s.name }}" }
-          {% endfor %}
+{% endfor %}
 
       - label: "ترتيب الفصل"
         name: "seriesOrder"
