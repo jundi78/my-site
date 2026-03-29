@@ -197,7 +197,6 @@ collections:
         required: false
         options:
           - { label: "سياسة", value: "سياسة" }
-          - { label: "الأمة المكتئبة", value: "الأمة المكتئبة" }
           - { label: "دين", value: "دين" }
           - { label: "علوم", value: "علوم" }
           - { label: "تاريخ", value: "تاريخ" }
