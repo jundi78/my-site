@@ -5,31 +5,54 @@ pagination:
   alias: s
 permalink: "/series/{{ s.slug }}/"
 layout: base.html
+eleventyComputed:
+  title: "{{ s.name }}"
+  seo_title: "{{ s.name }} | سلسلة في المدونة الشخصية لمحمد الجندي"
+  description: "{{ s.description if s.description else 'سلسلة مقالات منشورة في المدونة الشخصية لمحمد الجندي.' }}"
+  seo_description: "{{ s.description if s.description else 'سلسلة مقالات منشورة في المدونة الشخصية لمحمد الجندي.' }}"
+  thumbnail: "{{ s.cover if s.cover else '' }}"
 ---
-{%- set chapters = collections.seriesPosts[s.name] %}
+{%- set chapters = [] %}
+{%- if collections.seriesPosts[s.name] %}
+  {%- set chapters = collections.seriesPosts[s.name] %}
+{%- endif %}
+
 <div class="container">
   <a href="/" style="font-size: 13px; color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 1.5rem;">→ العودة للرئيسية</a>
+
   <div style="margin-bottom: 2rem;">
     <div style="display: inline-block; background: var(--soft); border-radius: 6px; padding: 5px 12px; font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 0.75rem;">
       {{ chapters | length }} فصول
     </div>
     <h1 style="font-size: 1.75rem; font-weight: 500; margin-bottom: 0;">{{ s.name }}</h1>
+    {%- if s.intro %}
+      <p style="font-size: 15px; color: var(--muted); line-height: 1.9; margin-top: 1rem; max-width: 70ch;">
+        {{ s.intro }}
+      </p>
+    {%- endif %}
   </div>
-  <div style="border: 1px solid var(--line); border-radius: 12px; overflow: hidden;">
-    {%- for chapter in chapters %}
-    <a href="{{ chapter.url }}" style="display: flex; align-items: flex-start; gap: 16px; padding: 1rem 1.5rem; {%- if not loop.last %} border-bottom: 1px solid var(--line);{%- endif %} text-decoration: none; color: inherit;">
-      <div style="min-width: 28px; height: 28px; border-radius: 50%; background: var(--soft); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--accent); flex-shrink: 0;">
-        {{ chapter.data.seriesOrder }}
-      </div>
-      <div style="flex: 1;">
-        <p style="font-size: 12px; color: var(--muted); margin-bottom: 3px;">الفصل {{ chapter.data.seriesOrder }}</p>
-        <p style="font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text);">{{ chapter.data.title }}</p>
-        {%- if chapter.data.description %}
-        <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0;">{{ chapter.data.description }}</p>
-        {%- endif %}
-      </div>
-      <div style="font-size: 13px; color: var(--accent); margin-top: 4px; white-space: nowrap; flex-shrink: 0;">اقرأ ←</div>
-    </a>
-    {%- endfor %}
-  </div>
+
+  {%- if chapters | length > 0 %}
+    <div style="border: 1px solid var(--line); border-radius: 12px; overflow: hidden;">
+      {%- for chapter in chapters %}
+        <a href="{{ chapter.url }}" style="display: flex; align-items: flex-start; gap: 16px; padding: 1rem 1.5rem; {%- if not loop.last %} border-bottom: 1px solid var(--line);{%- endif %} text-decoration: none; color: inherit;">
+          <div style="min-width: 28px; height: 28px; border-radius: 50%; background: var(--soft); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--accent); flex-shrink: 0;">
+            {{ chapter.data.seriesOrder }}
+          </div>
+          <div style="flex: 1;">
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 3px;">الفصل {{ chapter.data.seriesOrder }}</p>
+            <p style="font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text);">{{ chapter.data.title }}</p>
+            {%- if chapter.data.description %}
+              <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0;">{{ chapter.data.description }}</p>
+            {%- endif %}
+          </div>
+          <div style="font-size: 13px; color: var(--accent); margin-top: 4px; white-space: nowrap; flex-shrink: 0;">اقرأ ←</div>
+        </a>
+      {%- endfor %}
+    </div>
+  {%- else %}
+    <div style="border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.5rem; color: var(--muted);">
+      لا توجد فصول منشورة في هذه السلسلة بعد.
+    </div>
+  {%- endif %}
 </div>
