@@ -15,7 +15,11 @@
     "من أنا"
   ],
   "series": [
-    { "name": "الأمة المكتئبة", "slug": "alamt-almktybt", "cover": "" }
+    {
+      "name": "الأمة المكتئبة",
+      "slug": "alamt-almktybt",
+      "cover": "/images/uploads/ChatGPT Image Mar 29, 2026, 08_23_11 AM.png"
+    }
   ],
   "colors_group": {
     "color_bg": "#ffffff",
@@ -43,6 +47,6 @@
   "font_body": "Amiri",
   "font_ui": "IBM Plex Sans Arabic",
   "font_size_base": "18",
-  "spacing_section": "40",
-  "max_width": "860"
+  "max_width": "860",
+  "spacing_section": "40"
 }
