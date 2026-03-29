@@ -487,17 +487,19 @@ a.archive-pill.active {
 
 .series-deck {
   position: relative;
+  /* Padding-bottom reserves space for the peeking layers below the card */
+  padding-bottom: 18px;
 }
 
 /* Both backing layers share base styles */
 .series-deck-layer {
   position: absolute;
+  /* Match the top card exactly: same left/right edges, same top */
   top: 0;
   left: 0;
   right: 0;
-  /* Height matches the real card — set by the top card's
-     natural height, so we stretch to fill */
-  bottom: 0;
+  /* Bottom stops before the spacer padding so height mirrors the card */
+  bottom: 18px;
   border-radius: 12px;
   border: 1px solid var(--line);
   background: var(--soft);
@@ -516,11 +518,10 @@ a.archive-pill.active {
   transform: translateY(13px) translateX(20px);
 }
 
-/* Spacer that pushes the grid cell height down enough to
-   show the peeking bottom layer (13px offset + a little
-   breathing room) */
+/* No longer needed as a separate element — padding-bottom on .series-deck
+   handles the space reservation */
 .series-deck-spacer {
-  height: 18px;
+  display: none;
 }
 
 /* The real top card */
@@ -984,6 +985,8 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   /* Deck layers: reduce offsets on mobile so they don't clip */
   .series-deck-layer-2 { transform: translateY(6px) translateX(8px); }
   .series-deck-layer-3 { transform: translateY(11px) translateX(15px); }
+  .series-deck:hover .series-deck-layer-2 { transform: translateY(9px) translateX(8px); }
+  .series-deck:hover .series-deck-layer-3 { transform: translateY(15px) translateX(15px); }
 }
 
 /* ─── RELATED POSTS (article page only) ───────────────── */
