@@ -59,6 +59,14 @@ module.exports = function (eleventyConfig) {
     return grouped;
   });
 
+  // Filter to look up series posts by name from the seriesPosts collection.
+  // Usage: collections.seriesPosts | getSeriesPosts(s.name)
+  // This is more reliable than bracket notation with Arabic keys in Nunjucks.
+  eleventyConfig.addFilter("getSeriesPosts", function (seriesPosts, name) {
+    if (!seriesPosts || !name) return [];
+    return seriesPosts[name] || [];
+  });
+
   return {
     dir: {
       input: ".",
