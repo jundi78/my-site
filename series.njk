@@ -14,7 +14,7 @@ eleventyComputed:
 ---
 {%- set chapters = [] %}
 {%- if collections.seriesPosts %}
-  {%- set chapters = collections.seriesPosts | getSeriesPosts(s.name) %}
+  {%- set chapters = collections.seriesPosts | getSeriesPosts(s.id) %}
 {%- endif %}
 
 <div class="container">
