@@ -32,7 +32,7 @@ layout: base.html
     {{ content | safe }}
 
     {%- if series %}
-      {%- set chapters = collections.seriesPosts | getSeriesPosts(series) %}
+      {%- set chapters = collections.seriesPosts | getSeriesPosts(series_id) %}
       {%- if chapters | length %}
       {%- endif %}
       {%- set nextChapter = null %}
