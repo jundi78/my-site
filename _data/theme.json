@@ -16,7 +16,7 @@
   ],
   "series": [
     {
-      "name": "الأمة المكتئبة: سلسلة مقالات تتأمل في الجذور التاريخية والنفسية لحالة الاكتئاب الجمعي في العالم العربي والإسلامي.",
+      "name": "الأمة المكتئبة",
       "slug": "alamt-almktybt",
       "cover": "/images/uploads/ChatGPT Image Mar 29, 2026, 08_23_11 AM.png",
       "description": "سلسلة مقالات تتأمل في الجذور التاريخية والنفسية لحالة الاكتئاب الجمعي في العالم العربي والإسلامي.",
@@ -49,6 +49,6 @@
   "font_body": "Amiri",
   "font_ui": "IBM Plex Sans Arabic",
   "font_size_base": "18",
-  "max_width": "860",
-  "spacing_section": "40"
+  "spacing_section": "40",
+  "max_width": "860"
 }
