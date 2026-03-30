@@ -855,19 +855,42 @@ a.archive-pill.active {
   text-align: center;
 }
 
-/* ─── ABOUT ───────────────────────────────────────────── */
+/* ─── ABOUT STRIP ─────────────────────────────────────── */
+/* Full-width strip outside .container — wider than the main
+   content column, visually set apart with a soft background
+   and a distinct font color. */
 
-.about-section {
-  padding: var(--spacing-section) 0 16px;
+.about-strip {
+  background: var(--soft);
   border-top: 1px solid var(--line);
   margin-top: var(--spacing-section);
+  padding: calc(var(--spacing-section) * 1.2) 0;
 }
-.about-section p {
+
+/* Inner wrapper matches the main max-width but allows the
+   background to bleed edge-to-edge */
+.about-strip-inner {
+  width: min(calc(var(--max-width) + 120px), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.about-strip-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--hint);
+  letter-spacing: .07em;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-strip-text {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 15px;
+  font-family: var(--font-body);
   margin: 0;
-  max-width: 60ch;
-  line-height: 1.9;
+  line-height: 2;
+  white-space: pre-line; /* preserves the \n line breaks in about_text */
 }
 
 /* ─── FOOTER ──────────────────────────────────────────── */
