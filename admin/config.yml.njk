@@ -87,11 +87,23 @@ collections:
               - label: "اسم السلسلة"
                 name: "name"
                 widget: "string"
+                hint: "اسم العرض — يمكن تغييره بحرية دون أن يؤثر على الربط مع التدوينات"
+
+              - label: "المعرّف الداخلي (ID)"
+                name: "id"
+                widget: "string"
+                hint: "معرّف ثابت بالإنجليزية — لا تغيّره بعد إنشائه، مثال: my-series. يُستخدم لربط التدوينات بالسلسلة"
+
+              - label: "وصف مختصر (يظهر في الصفحة الرئيسية)"
+                name: "tagline"
+                widget: "string"
+                required: false
+                hint: "جملة قصيرة تظهر أسفل اسم السلسلة في الشريط"
 
               - label: "الرابط (slug)"
                 name: "slug"
                 widget: "string"
-                hint: "بالإنجليزية بدون مسافات، مثال: my-series"
+                hint: "بالإنجليزية بدون مسافات، مثال: my-series. يمكن تغييره (سيغيّر الرابط فقط، ليس الربط مع التدوينات)"
 
               - label: "صورة الغلاف"
                 name: "cover"
@@ -249,6 +261,16 @@ collections:
         required: false
         value_type: "int"
         min: 1
+
+      - label: "معرّف السلسلة (series_id)"
+        name: "series_id"
+        widget: "select"
+        required: false
+        hint: "اختر السلسلة التي تنتمي إليها هذه التدوينة — هذا هو الرابط الفعلي الثابت"
+        options:
+{% for s in theme.series %}
+          - { label: "{{ s.name }}", value: "{{ s.id }}" }
+{% endfor %}
 
       - label: "صورة مصغّرة"
         name: "thumbnail"
