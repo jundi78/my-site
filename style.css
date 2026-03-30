@@ -856,21 +856,19 @@ a.archive-pill.active {
 }
 
 /* ─── ABOUT STRIP ─────────────────────────────────────── */
-/* Full-width strip outside .container — wider than the main
-   content column, visually set apart with a soft background
-   and a distinct font color. */
+/* Full-width editorial band outside the main container.
+   Keeps the section visually distinct, but makes the text
+   feel more intentional, premium, and readable. */
 
 .about-strip {
   background: var(--soft);
   border-top: 1px solid var(--line);
   margin-top: var(--spacing-section);
-  padding: calc(var(--spacing-section) * 1.2) 0;
+  padding: calc(var(--spacing-section) * 1.15) 0;
 }
 
-/* Inner wrapper matches the main max-width but allows the
-   background to bleed edge-to-edge */
 .about-strip-inner {
-  width: min(calc(var(--max-width) + 120px), calc(100% - 32px));
+  width: min(calc(var(--max-width) + 80px), calc(100% - 32px));
   margin: 0 auto;
 }
 
@@ -878,30 +876,41 @@ a.archive-pill.active {
   font-family: var(--font-ui);
   font-size: 11px;
   color: var(--hint);
-  letter-spacing: .07em;
-  margin: 0 0 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 18px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--line);
 }
 
 .about-strip-text {
-  color: var(--muted);
-  font-size: 15px;
+  color: var(--text);
+  font-size: 17px;
   font-family: var(--font-body);
+  line-height: 2.05;
   margin: 0;
-  line-height: 2;
-  white-space: pre-line; /* preserves the \n line breaks in about_text */
+  max-width: 72ch;
+  white-space: pre-line; /* preserves line breaks from about_text */
 }
 
-/* ─── FOOTER ──────────────────────────────────────────── */
+/* Mobile refinement */
+@media (max-width: 640px) {
+  .about-strip {
+    padding: 32px 0;
+  }
 
-.site-footer {
-  padding: 20px 0;
-  color: var(--hint);
-  font-size: 13px;
-  font-family: var(--font-ui);
-  border-top: 1px solid var(--line);
-  margin-top: var(--spacing-section);
+  .about-strip-inner {
+    width: calc(100% - 24px);
+  }
+
+  .about-strip-label {
+    margin-bottom: 14px;
+  }
+
+  .about-strip-text {
+    font-size: 15px;
+    line-height: 1.95;
+  }
 }
 
 /* ─── ARTICLE PAGE ────────────────────────────────────── */
