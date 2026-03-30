@@ -602,6 +602,15 @@ a.archive-pill.active {
   font-family: var(--font-body);
 }
 
+.series-card-tagline {
+  /* Short blurb shown below the series name in the strip */
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 4px 0 0;
+}
+
 .series-card-cta {
   font-size: 13px;
   font-weight: 500;
