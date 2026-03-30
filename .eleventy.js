@@ -46,25 +46,27 @@ module.exports = function (eleventyConfig) {
     const grouped = {};
 
     posts.forEach((post) => {
-      const s = post.data.series;
-      if (!s) return;
-      if (!grouped[s]) grouped[s] = [];
-      grouped[s].push(post);
+      // Key by series_id (stable ASCII string) not series name (Arabic).
+      // This allows renaming the display name freely without breaking lookups.
+      const id = post.data.series_id;
+      if (!id) return;
+      if (!grouped[id]) grouped[id] = [];
+      grouped[id].push(post);
     });
 
-    Object.keys(grouped).forEach((name) => {
-      grouped[name].sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0));
+    Object.keys(grouped).forEach((id) => {
+      grouped[id].sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0));
     });
 
     return grouped;
   });
 
-  // Filter to look up series posts by name from the seriesPosts collection.
-  // Usage: collections.seriesPosts | getSeriesPosts(s.name)
-  // This is more reliable than bracket notation with Arabic keys in Nunjucks.
-  eleventyConfig.addFilter("getSeriesPosts", function (seriesPosts, name) {
-    if (!seriesPosts || !name) return [];
-    return seriesPosts[name] || [];
+  // Filter to look up series posts by id from the seriesPosts collection.
+  // Usage in Nunjucks: collections.seriesPosts | getSeriesPosts(s.id)
+  // Using a JS filter avoids Nunjucks dynamic bracket-notation issues.
+  eleventyConfig.addFilter("getSeriesPosts", function (seriesPosts, id) {
+    if (!seriesPosts || !id) return [];
+    return seriesPosts[id] || [];
   });
 
   return {
