@@ -285,7 +285,9 @@
 
       (function () {
         const cards = Array.from(document.querySelectorAll(".post-card[data-cat]"));
-        const catBtns = Array.from(document.querySelectorAll(".cat-btn"));
+        // Only select buttons that have a data-cat attribute — this excludes
+        // the archive pill link which has no data-cat and would crash .trim().
+        const catBtns = Array.from(document.querySelectorAll(".cat-btn[data-cat]"));
         const isHomepage = cards.length > 0;
 
         if (isHomepage) {
