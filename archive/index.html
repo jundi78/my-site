@@ -333,9 +333,9 @@
           const noResults   = document.getElementById("no-results");
           const seriesStrip = document.getElementById("series-strip");
 
-          // ── Hero element — hidden when any filter is active ──
-          // This prevents the hero from persisting above filtered results,
-          // since it is a full post card that always renders regardless of category.
+          // ── Hero element — treated like any other card for filtering ──
+          // It hides when the active category/search/date doesn't match it,
+          // and shows when it does — same logic as all other post cards.
           const heroEl = document.querySelector(".hero-post");
 
           let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
@@ -415,12 +415,16 @@
               seriesStrip.style.display = activeCat ? "none" : "";
             }
 
-            // ── Hero strip: hide when any filter is active ──
-            // The hero is a full post card pinned at the top of the homepage.
-            // When the user filters, the hero disappears so only matching
-            // cards in the grid/list are visible.
+            // ── Hero: participates in filtering like any other card ──
+            // Shows when it matches the active filters, hides when it doesn't.
+            // This means the hero appears in its own category results instead
+            // of being unconditionally hidden whenever any filter is active.
             if (heroEl) {
-              heroEl.style.display = filtering ? "none" : "";
+              const heroMatchesCat    = !activeCat    || heroEl.dataset.cat.trim() === activeCat.trim();
+              const heroMatchesMonth  = !activeMonth  || heroEl.dataset.month      === activeMonth;
+              const heroMatchesYear   = !activeYear   || heroEl.dataset.year       === activeYear;
+              const heroMatchesSearch = !searchTerm   || heroEl.dataset.title.includes(searchTerm) || heroEl.dataset.desc.includes(searchTerm);
+              heroEl.style.display = (heroMatchesCat && heroMatchesMonth && heroMatchesYear && heroMatchesSearch) ? "" : "none";
             }
           }
 
