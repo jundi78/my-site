@@ -4,12 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    
+
+    
+
+    
+
+    
+
+    
+
     <title>الأمة المكتئبة (1) - المقدمة | المدونة الشخصية لمحمد الجندي</title>
       <meta name="description" content="المقدمة" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
 
     <link rel="canonical" href="https://aljundi.org/posts/الأمة-المكتئبة-1-المقدمة/" />
 
+    
     <meta property="og:site_name" content="المدونة الشخصية لمحمد الجندي" />
     <meta property="og:locale" content="ar_AR" />
     <meta property="og:type" content="article" />
@@ -18,11 +29,13 @@
     <meta property="og:url" content="https://aljundi.org/posts/الأمة-المكتئبة-1-المقدمة/" />
       <meta property="og:image" content="https://aljundi.org/images/uploads/ChatGPT Image Mar 29, 2026, 08_23_11 AM.png" />
 
+    
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="الأمة المكتئبة (1) - المقدمة | المدونة الشخصية لمحمد الجندي" />
       <meta name="twitter:description" content="المقدمة" />
       <meta name="twitter:image" content="https://aljundi.org/images/uploads/ChatGPT Image Mar 29, 2026, 08_23_11 AM.png" />
 
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif+Arabic:wght@300;400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Noto+Naskh+Arabic:wght@400;500&family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet" />
@@ -30,6 +43,7 @@
 
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
+    
     <style>
       :root {
         --bg:              #ffffff;
@@ -50,6 +64,8 @@
   <body>
     <header class="site-header">
       <div class="container">
+
+        
         <div class="topbar-main">
           <a class="brand" href="/">المدونة الشخصية لمحمد الجندي</a>
           <div class="topbar-controls">
@@ -63,6 +79,7 @@
           </div>
         </div>
 
+        
         <div class="catbar">
           <span class="catbar-label">التصنيفات</span>
           <button class="cat-btn active" data-cat="">الكل</button>
@@ -75,6 +92,7 @@
           
           <a class="cat-btn archive-pill" href="/archive/">أرشيف ←</a>
         </div>
+
       </div>
     </header>
 
@@ -180,35 +198,51 @@
     </div>
 
     <script>
+      // ── Footer year ──
       document.getElementById("year").textContent = new Date().getFullYear();
 
       (function () {
+        // ── Collect all filterable post cards (those with data-cat) ──
         const cards = Array.from(document.querySelectorAll(".post-card[data-cat]"));
-        // Only select buttons that have a data-cat attribute — this excludes
-        // the archive pill link which has no data-cat and would crash .trim().
+
+        // ── Category buttons only — exclude archive pill (no data-cat) ──
+        // IMPORTANT: do NOT change this to ".cat-btn" — the archive pill
+        // has no data-cat and calling .dataset.cat.trim() on it crashes JS silently.
         const catBtns = Array.from(document.querySelectorAll(".cat-btn[data-cat]"));
+
+        // ── Detect homepage by presence of filterable cards ──
         const isHomepage = cards.length > 0;
 
         if (isHomepage) {
+          // ────────────────────────────────────────────────
+          // HOMEPAGE — filters work client-side (hide/show)
+          // ────────────────────────────────────────────────
+
           const searchInput = document.getElementById("search-input");
           const monthSelect = document.getElementById("filter-month");
-          const yearSelect = document.getElementById("filter-year");
-          const noResults = document.getElementById("no-results");
+          const yearSelect  = document.getElementById("filter-year");
+          const noResults   = document.getElementById("no-results");
           const seriesStrip = document.getElementById("series-strip");
+
+          // ── Hero element — hidden when any category filter is active ──
+          // This prevents the hero from persisting above filtered results,
+          // since it is a full post card that always renders regardless of category.
+          const heroEl = document.querySelector(".hero-post");
 
           let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
 
+          // ── Populate month/year dropdowns from card metadata ──
           const months = new Set();
-          const years = new Set();
+          const years  = new Set();
           cards.forEach(c => {
             if (c.dataset.month) months.add(c.dataset.month);
-            if (c.dataset.year) years.add(c.dataset.year);
+            if (c.dataset.year)  years.add(c.dataset.year);
           });
 
           const arMonths = {
             "01": "يناير", "02": "فبراير", "03": "مارس", "04": "أبريل",
-            "05": "مايو", "06": "يونيو", "07": "يوليو", "08": "أغسطس",
-            "09": "سبتمبر", "10": "أكتوبر", "11": "نوفمبر", "12": "ديسمبر"
+            "05": "مايو",  "06": "يونيو",  "07": "يوليو", "08": "أغسطس",
+            "09": "سبتمبر","10": "أكتوبر", "11": "نوفمبر","12": "ديسمبر"
           };
 
           Array.from(months).sort().forEach(m => {
@@ -225,27 +259,40 @@
             yearSelect.appendChild(opt);
           });
 
+          // ── Core filter function — runs on every state change ──
           function applyFilters() {
             let visible = 0;
+
             cards.forEach(card => {
-              const matchCat = !activeCat || card.dataset.cat.trim() === activeCat.trim();
-              const matchMonth = !activeMonth || card.dataset.month === activeMonth;
-              const matchYear = !activeYear || card.dataset.year === activeYear;
-              const matchSearch = !searchTerm || card.dataset.title.includes(searchTerm) || card.dataset.desc.includes(searchTerm);
+              const matchCat    = !activeCat    || card.dataset.cat.trim()   === activeCat.trim();
+              const matchMonth  = !activeMonth  || card.dataset.month        === activeMonth;
+              const matchYear   = !activeYear   || card.dataset.year         === activeYear;
+              const matchSearch = !searchTerm   || card.dataset.title.includes(searchTerm) || card.dataset.desc.includes(searchTerm);
               const show = matchCat && matchMonth && matchYear && matchSearch;
               card.classList.toggle("hidden", !show);
               if (show) visible++;
             });
 
+            // ── Empty state message ──
             if (noResults) {
               noResults.style.display = visible === 0 ? "block" : "none";
             }
 
+            // ── Series strip: hide when any category is active ──
             if (seriesStrip) {
               seriesStrip.style.display = activeCat ? "none" : "";
             }
+
+            // ── Hero strip: hide when any category is active ──
+            // The hero is a full post card pinned at the top of the homepage.
+            // When the user filters by category, the hero should disappear
+            // so that only the matching cards in the grid/list are visible.
+            if (heroEl) {
+              heroEl.style.display = activeCat ? "none" : "";
+            }
           }
 
+          // ── Set active category and re-run filters ──
           function setActiveCategory(cat) {
             activeCat = cat;
             catBtns.forEach(b => {
@@ -254,6 +301,7 @@
             applyFilters();
           }
 
+          // ── Event listeners ──
           catBtns.forEach(btn => {
             btn.addEventListener("click", () => setActiveCategory(btn.dataset.cat.trim()));
           });
@@ -273,13 +321,19 @@
             applyFilters();
           });
 
+          // ── Handle ?cat= query param (coming from non-homepage category click) ──
           const urlParams = new URLSearchParams(window.location.search);
-          const catParam = urlParams.get("cat");
+          const catParam  = urlParams.get("cat");
           if (catParam) {
             setActiveCategory(catParam);
+            // Clean the URL after applying the filter — no reload needed
             history.replaceState(null, "", window.location.pathname);
           }
+
         } else {
+          // ────────────────────────────────────────────────
+          // NON-HOMEPAGE — category clicks redirect to /?cat=
+          // ────────────────────────────────────────────────
           catBtns.forEach(btn => {
             btn.addEventListener("click", () => {
               const cat = btn.dataset.cat.trim();
@@ -290,6 +344,7 @@
       })();
     </script>
 
+    
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "dd0d3b92c042407c9bcd1bfec41dd9bb"}'></script>
   </body>
 </html>
