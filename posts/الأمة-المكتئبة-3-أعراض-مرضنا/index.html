@@ -226,6 +226,8 @@
 
       (function () {
         // ── Collect all filterable post cards (those with data-cat) ──
+        // Note: hero-as-card is NOT included here — it is managed separately
+        // via heroAsCard below, so it doesn't interfere with the cards[] logic.
         const cards = Array.from(document.querySelectorAll(".post-card[data-cat]"));
 
         // ── Category buttons only — exclude archive pill (no data-cat) ──
@@ -247,10 +249,14 @@
           const noResults   = document.getElementById("no-results");
           const seriesStrip = document.getElementById("series-strip");
 
-          // ── Hero element — treated like any other card for filtering ──
-          // It hides when the active category/search/date doesn't match it,
-          // and shows when it does — same logic as all other post cards.
-          const heroEl = document.querySelector(".hero-post");
+          // ── Hero strip — the full-width hero layout, shown by default ──
+          // Hidden entirely when any filter is active.
+          const heroStrip = document.getElementById("hero-strip");
+
+          // ── Hero as card — a regular post-list card duplicate of the hero ──
+          // Hidden by default. Shown (if matching) when a filter is active,
+          // so the hero post participates in filtered results as a normal card.
+          const heroAsCard = document.getElementById("hero-as-card");
 
           let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
 
@@ -271,6 +277,12 @@
             if (c.dataset.month) months.add(c.dataset.month);
             if (c.dataset.year)  years.add(c.dataset.year);
           });
+
+          // Also include hero dates in dropdowns (it's not in cards[])
+          if (heroStrip) {
+            if (heroStrip.dataset.month) months.add(heroStrip.dataset.month);
+            if (heroStrip.dataset.year)  years.add(heroStrip.dataset.year);
+          }
 
           const arMonths = {
             "01": "يناير", "02": "فبراير", "03": "مارس", "04": "أبريل",
@@ -319,6 +331,31 @@
               if (show) visible++;
             });
 
+            // ── Hero strip / hero-as-card swap ──
+            // When no filter: show the full hero strip, hide the card version.
+            // When filtering: hide the strip, show the card version only if
+            // the hero post matches the active filters.
+            if (heroStrip) {
+              heroStrip.style.display = filtering ? "none" : "";
+            }
+
+            if (heroAsCard) {
+              if (filtering) {
+                // Check if hero matches all active filters
+                const src = heroStrip || heroAsCard; // read data from either
+                const matchCat    = !activeCat    || src.dataset.cat.trim() === activeCat.trim();
+                const matchMonth  = !activeMonth  || src.dataset.month      === activeMonth;
+                const matchYear   = !activeYear   || src.dataset.year       === activeYear;
+                const matchSearch = !searchTerm   || src.dataset.title.includes(searchTerm) || src.dataset.desc.includes(searchTerm);
+                const heroMatches = matchCat && matchMonth && matchYear && matchSearch;
+                heroAsCard.style.display = heroMatches ? "" : "none";
+                if (heroMatches) visible++;
+              } else {
+                // No filter active — card version always hidden, strip takes over
+                heroAsCard.style.display = "none";
+              }
+            }
+
             // ── Empty state message ──
             if (noResults) {
               noResults.style.display = visible === 0 ? "block" : "none";
@@ -327,18 +364,6 @@
             // ── Series strip: hide when any category is active ──
             if (seriesStrip) {
               seriesStrip.style.display = activeCat ? "none" : "";
-            }
-
-            // ── Hero: participates in filtering like any other card ──
-            // Shows when it matches the active filters, hides when it doesn't.
-            // This means the hero appears in its own category results instead
-            // of being unconditionally hidden whenever any filter is active.
-            if (heroEl) {
-              const heroMatchesCat    = !activeCat    || heroEl.dataset.cat.trim() === activeCat.trim();
-              const heroMatchesMonth  = !activeMonth  || heroEl.dataset.month      === activeMonth;
-              const heroMatchesYear   = !activeYear   || heroEl.dataset.year       === activeYear;
-              const heroMatchesSearch = !searchTerm   || heroEl.dataset.title.includes(searchTerm) || heroEl.dataset.desc.includes(searchTerm);
-              heroEl.style.display = (heroMatchesCat && heroMatchesMonth && heroMatchesYear && heroMatchesSearch) ? "" : "none";
             }
           }
 
