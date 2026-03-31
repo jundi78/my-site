@@ -333,14 +333,24 @@
           const noResults   = document.getElementById("no-results");
           const seriesStrip = document.getElementById("series-strip");
 
-          // ── Hero element — hidden when any category filter is active ──
+          // ── Hero element — hidden when any filter is active ──
           // This prevents the hero from persisting above filtered results,
           // since it is a full post card that always renders regardless of category.
           const heroEl = document.querySelector(".hero-post");
 
           let activeCat = "", activeMonth = "", activeYear = "", searchTerm = "";
 
+          // ── On page load: snapshot which cards start with homepage-hidden ──
+          // We need this so we can restore the class when filters are cleared.
+          // Cards beyond index 5 are rendered with homepage-hidden in the HTML,
+          // and JS re-applies it when returning to the unfiltered state.
+          cards.forEach(card => {
+            card.dataset.homepageHidden = card.classList.contains("homepage-hidden") ? "true" : "false";
+          });
+
           // ── Populate month/year dropdowns from card metadata ──
+          // Uses all cards including homepage-hidden ones so dropdowns
+          // reflect the full date range of all posts.
           const months = new Set();
           const years  = new Set();
           cards.forEach(c => {
@@ -370,9 +380,22 @@
 
           // ── Core filter function — runs on every state change ──
           function applyFilters() {
+            const filtering = !!(activeCat || activeMonth || activeYear || searchTerm);
             let visible = 0;
 
             cards.forEach(card => {
+              if (filtering) {
+                // Any filter active: lift the homepage display cap so ALL posts
+                // can participate in category/search/date results.
+                card.classList.remove("homepage-hidden");
+              } else {
+                // No filter active: restore homepage-hidden on cards that
+                // originally had it, bringing back the default index-capped layout.
+                if (card.dataset.homepageHidden === "true") {
+                  card.classList.add("homepage-hidden");
+                }
+              }
+
               const matchCat    = !activeCat    || card.dataset.cat.trim()   === activeCat.trim();
               const matchMonth  = !activeMonth  || card.dataset.month        === activeMonth;
               const matchYear   = !activeYear   || card.dataset.year         === activeYear;
@@ -392,12 +415,12 @@
               seriesStrip.style.display = activeCat ? "none" : "";
             }
 
-            // ── Hero strip: hide when any category is active ──
+            // ── Hero strip: hide when any filter is active ──
             // The hero is a full post card pinned at the top of the homepage.
-            // When the user filters by category, the hero should disappear
-            // so that only the matching cards in the grid/list are visible.
+            // When the user filters, the hero disappears so only matching
+            // cards in the grid/list are visible.
             if (heroEl) {
-              heroEl.style.display = activeCat ? "none" : "";
+              heroEl.style.display = filtering ? "none" : "";
             }
           }
 
