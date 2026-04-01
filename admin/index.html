@@ -1,10 +1,261 @@
 <!doctype html>
-<html>
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Content Manager</title>
+    <meta name="robots" content="noindex" />
+    <title>إدارة المحتوى — المدوّنة</title>
+
+    <!-- Fonts: Amiri (body/titles) + IBM Plex Sans Arabic (UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ─────────────────────────────────────────────────────────
+         ALJUNDI.ORG — SVELTIA CMS CUSTOM THEME
+         Strategy: override CSS custom properties on :root,
+         then patch specific Sveltia elements by attribute/class.
+         Sveltia renders into the regular DOM (no shadow DOM),
+         so these rules apply normally after the app mounts.
+         ───────────────────────────────────────────────────────── */
+
+      /* 1 ── GLOBAL FONT & BASE ──────────────────────────────── */
+      * { box-sizing: border-box; }
+
+      body {
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        background: #f7f5f1 !important;
+        direction: rtl;
+      }
+
+      /* 2 ── SVELTIA CSS VARIABLE OVERRIDES ─────────────────────
+         Sveltia uses --accent / --accent-vivid for its blue.
+         We replace them with our green. */
+      :root {
+        --accent:           #1a6b4a !important;
+        --accent-vivid:     #1a6b4a !important;
+        --accent-light:     #eaf5ef !important;
+        --accent-dark:      #0f5038 !important;
+        --font-family:      'IBM Plex Sans Arabic', sans-serif !important;
+      }
+
+      /* 3 ── SIDEBAR ─────────────────────────────────────────────
+         Target Sveltia's left/right nav panel.
+         Sveltia uses [role="navigation"] and .sidebar class. */
+      [class*="sidebar"],
+      [class*="nav-sidebar"],
+      aside[class] {
+        background: #0e2218 !important;
+        border-color: transparent !important;
+      }
+
+      /* Sidebar heading "Collections" label */
+      [class*="sidebar"] [class*="title"],
+      [class*="sidebar"] [class*="heading"],
+      [class*="sidebar"] h2,
+      [class*="sidebar"] h3 {
+        color: rgba(255, 255, 255, 0.35) !important;
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        font-size: 10px !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+      }
+
+      /* Sidebar nav links (collection items) */
+      [class*="sidebar"] a,
+      [class*="sidebar"] button,
+      [class*="sidebar"] [role="listitem"],
+      [class*="sidebar"] [class*="item"] {
+        color: rgba(255, 255, 255, 0.55) !important;
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        font-size: 13px !important;
+        border-radius: 6px !important;
+      }
+
+      /* Sidebar active item */
+      [class*="sidebar"] a[aria-current],
+      [class*="sidebar"] [class*="selected"],
+      [class*="sidebar"] [aria-selected="true"],
+      [class*="sidebar"] [class*="active"] {
+        background: rgba(26, 107, 74, 0.3) !important;
+        color: #6edba8 !important;
+        border-right: 2px solid #1a6b4a !important;
+      }
+
+      /* Sidebar hover */
+      [class*="sidebar"] a:hover,
+      [class*="sidebar"] button:hover {
+        background: rgba(255, 255, 255, 0.06) !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+
+      /* Sidebar count badges */
+      [class*="sidebar"] [class*="badge"],
+      [class*="sidebar"] [class*="count"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(255, 255, 255, 0.4) !important;
+        font-size: 10px !important;
+        border-radius: 10px !important;
+        padding: 1px 7px !important;
+      }
+
+      /* 4 ── TOPBAR / TOOLBAR ────────────────────────────────── */
+      [class*="toolbar"],
+      [class*="topbar"],
+      header[class] {
+        background: #ffffff !important;
+        border-bottom: 1px solid #e8e6e1 !important;
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+      }
+
+      /* 5 ── MAIN CONTENT AREA ───────────────────────────────── */
+      main,
+      [role="main"],
+      [class*="content-area"],
+      [class*="main-content"] {
+        background: #f7f5f1 !important;
+      }
+
+      /* 6 ── ENTRY LIST ROWS ─────────────────────────────────── */
+      [class*="entry-list"] li,
+      [class*="item-list"] li,
+      [class*="collection"] li,
+      [class*="entry-item"],
+      [class*="list-item"] {
+        background: #ffffff !important;
+        border: 0.5px solid #e8e6e1 !important;
+        border-radius: 8px !important;
+        margin-bottom: 7px !important;
+        transition: box-shadow 0.15s, transform 0.15s !important;
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+      }
+
+      [class*="entry-list"] li:hover,
+      [class*="item-list"] li:hover,
+      [class*="entry-item"]:hover,
+      [class*="list-item"]:hover {
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07) !important;
+        transform: translateY(-1px) !important;
+      }
+
+      /* Entry title text in list */
+      [class*="entry-list"] [class*="title"],
+      [class*="list-item"] [class*="title"],
+      [class*="entry-item"] [class*="title"] {
+        font-family: 'Amiri', serif !important;
+        font-size: 16px !important;
+        color: #111111 !important;
+        font-weight: 700 !important;
+      }
+
+      /* 7 ── SEARCH BAR ──────────────────────────────────────── */
+      input[type="search"],
+      [class*="search"] input,
+      [class*="search-input"],
+      [placeholder*="Search"],
+      [placeholder*="ابحث"] {
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        border-radius: 20px !important;
+        border: 1px solid #e8e6e1 !important;
+        background: #f7f5f1 !important;
+        font-size: 13px !important;
+        direction: rtl !important;
+      }
+
+      input[type="search"]:focus,
+      [class*="search"] input:focus {
+        border-color: #1a6b4a !important;
+        outline: none !important;
+        box-shadow: 0 0 0 2px rgba(26, 107, 74, 0.12) !important;
+      }
+
+      /* 8 ── BUTTONS ─────────────────────────────────────────── */
+      /* Primary "New" / save buttons */
+      button[class*="primary"],
+      [class*="btn-primary"],
+      [class*="new-button"],
+      button[class*="save"] {
+        background: #1a6b4a !important;
+        border-color: #1a6b4a !important;
+        color: #ffffff !important;
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        border-radius: 6px !important;
+        font-size: 13px !important;
+      }
+
+      button[class*="primary"]:hover,
+      [class*="btn-primary"]:hover {
+        background: #155a3d !important;
+        border-color: #155a3d !important;
+      }
+
+      /* 9 ── EDITOR PANE ─────────────────────────────────────── */
+      /* Force RTL on text inputs and the rich-text editor */
+      [class*="editor"] textarea,
+      [class*="editor"] input[type="text"],
+      [class*="editor"] [contenteditable],
+      [class*="markdown"] [contenteditable],
+      [class*="rich-text"] [contenteditable] {
+        font-family: 'Amiri', serif !important;
+        font-size: 18px !important;
+        line-height: 1.9 !important;
+        direction: rtl !important;
+        text-align: right !important;
+        color: #111111 !important;
+      }
+
+      /* Regular string/text fields in editor */
+      [class*="editor"] input[type="text"],
+      [class*="string-field"] input,
+      [class*="field"] input[type="text"] {
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        font-size: 15px !important;
+        direction: rtl !important;
+        text-align: right !important;
+        border-radius: 6px !important;
+        border: 1px solid #e8e6e1 !important;
+      }
+
+      [class*="editor"] input[type="text"]:focus,
+      [class*="field"] input[type="text"]:focus {
+        border-color: #1a6b4a !important;
+        box-shadow: 0 0 0 2px rgba(26, 107, 74, 0.12) !important;
+        outline: none !important;
+      }
+
+      /* Field labels */
+      [class*="field"] label,
+      [class*="field-label"],
+      [class*="widget"] label {
+        font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        font-size: 12px !important;
+        color: #555555 !important;
+        font-weight: 500 !important;
+      }
+
+      /* 10 ── PAGE TITLE (e.g. "التدوينات") ─────────────────── */
+      [class*="page-title"],
+      [class*="collection-header"] h1,
+      [class*="collection-header"] h2,
+      h1[class],
+      h2[class] {
+        font-family: 'Amiri', serif !important;
+        color: #111111 !important;
+        font-weight: 700 !important;
+      }
+
+      /* 11 ── SCROLLBARS (Chromium only) ─────────────────────── */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #d0cec9; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #b0aea9; }
+    </style>
   </head>
+
   <body>
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
   </body>
