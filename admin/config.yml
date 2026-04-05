@@ -38,15 +38,6 @@ collections:
             widget: "string"
             hint: "الجملة الصغيرة أسفل العنوان الرئيسي"
 
-          # ───────────────────────────────────────────────────
-          # Hero article picker
-          # القيمة هنا يجب أن تساوي post.fileSlug
-          # لأن index.html يحلّ البطل بهذه المقارنة:
-          # post.fileSlug == theme.featuredPost
-          #
-          # إذا كانت القيمة فارغة:
-          # سيعود الموقع تلقائيًا إلى أحدث مقال.
-          # ───────────────────────────────────────────────────
           - label: "المقالة المميّزة في الواجهة"
             name: "featuredPost"
             widget: "select"
@@ -313,6 +304,26 @@ collections:
       - label: "المحتوى"
         name: "body"
         widget: "markdown"
+        # ── Toolbar buttons ─────────────────────────────────
+        # Full set: formatting + structure + media
+        buttons:
+          - bold
+          - italic
+          - strikethrough
+          - code
+          - heading-one
+          - heading-two
+          - heading-three
+          - numbered-list
+          - bulleted-list
+          - blockquote
+          - link
+          - image
+        # ── Editor components ────────────────────────────────
+        # These appear in the [+] insert menu inside the editor
+        editor_components:
+          - image
+          - code-block
 
       - label: "مسودة"
         name: "draft"
