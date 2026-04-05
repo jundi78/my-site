@@ -272,6 +272,8 @@ collections:
 
           - { label: "الأمة المكتئبة", value: "الأمة المكتئبة" }
 
+          - { label: "سعد الجندي", value: "سعد الجندي" }
+
 
       - label: "ترتيب الفصل"
         name: "seriesOrder"
@@ -288,6 +290,8 @@ collections:
         options:
 
           - { label: "الأمة المكتئبة", value: "alamt-almktybt" }
+
+          - { label: "سعد الجندي", value: "saad-aljundi" }
 
 
       - label: "صورة مصغّرة"
