@@ -69,6 +69,23 @@ module.exports = function (eleventyConfig) {
     return seriesPosts[id] || [];
   });
 
+  // YouTube embed shortcode
+  // Usage in any .md post: {% youtube "VIDEO_ID" %}
+  // The VIDEO_ID is the part after ?v= in the YouTube URL.
+  // Example: https://www.youtube.com/watch?v=dQw4w9WgXcQ → {% youtube "dQw4w9WgXcQ" %}
+  // Renders a fully responsive 16:9 iframe styled via .youtube-embed in style.css.
+  eleventyConfig.addShortcode("youtube", function (videoId) {
+    return `<div class="youtube-embed">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/${videoId}"
+    title="YouTube video"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    loading="lazy"
+  ></iframe>
+</div>`;
+  });
+
   return {
     dir: {
       input: ".",
