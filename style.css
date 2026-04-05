@@ -749,7 +749,7 @@ a.archive-pill.active {
   transition: box-shadow .18s, transform .18s;
   background: var(--bg);
   min-width: 0;
-  height: 72px !important;
+  height: 96px !important;
 }
 
 .post-list > .post-card:hover {
@@ -760,9 +760,9 @@ a.archive-pill.active {
 .post-list > .post-card.hidden { display: none !important; }
 
 .post-list > .post-card .post-thumb {
-  width: 72px !important;
-  min-width: 72px !important;
-  height: 72px !important;
+  width: 96px !important;
+  min-width: 96px !important;
+  height: 96px !important;
   border-radius: 0;
   overflow: hidden;
   flex-shrink: 0 !important;
@@ -801,26 +801,39 @@ a.archive-pill.active {
   flex-direction: column !important;
   justify-content: center;
   order: 1 !important;
+  overflow: hidden;
 }
 
-/* Hide description and meta in compact mode — title only */
-.post-list > .post-card .post-body p,
+/* Hide meta row (date/category) — keep title + description only */
 .post-list > .post-card .post-body .post-meta {
   display: none !important;
 }
 
+/* Title — slightly larger, 1 line max with ellipsis */
 .post-body h3 {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   line-height: 1.3;
-  margin: 0;
+  margin: 0 0 3px;
   color: var(--text);
   transition: color .12s;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Description — smaller, 1 line max with ellipsis */
+.post-list > .post-card .post-body p {
+  display: block !important;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .post-list > .post-card:hover .post-body h3 { color: var(--accent-warm); }
