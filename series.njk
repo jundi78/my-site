@@ -33,7 +33,7 @@ eleventyComputed:
   </div>
 
   {%- if chapters | length > 0 %}
-    <div style="border: 1px solid var(--line); border-radius: 12px; overflow: hidden;">
+    <div style="border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 4rem;">
       {%- for chapter in chapters %}
         <a href="{{ chapter.url }}" style="display: flex; align-items: flex-start; gap: 16px; padding: 1rem 1.5rem; {%- if not loop.last %} border-bottom: 1px solid var(--line);{%- endif %} text-decoration: none; color: inherit;">
           <div style="min-width: 28px; height: 28px; border-radius: 50%; background: var(--soft); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--accent); flex-shrink: 0;">
