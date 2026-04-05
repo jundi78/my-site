@@ -728,37 +728,39 @@ a.archive-pill.active {
 }
 
 /* ─── POST LIST (المزيد من المقالات) ─────────────────── */
-/* Only this section should have horizontal cards. */
+/* Compact 2-column grid: short rows, small thumb, no description.
+   Wider feel, much less vertical space than the previous 3-column layout. */
 
 .post-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .6rem;
 }
 
 .post-list > .post-card {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: center;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   transition: box-shadow .18s, transform .18s;
   background: var(--bg);
   min-width: 0;
+  height: 64px; /* fixed compact height */
 }
 
 .post-list > .post-card:hover {
-  box-shadow: 0 4px 20px rgba(0,0,0,.07);
-  transform: translateY(-2px);
+  box-shadow: 0 3px 12px rgba(0,0,0,.07);
+  transform: translateY(-1px);
 }
 
 .post-list > .post-card.hidden { display: none; }
 
 .post-list > .post-card .post-thumb {
-  width: 120px;
-  min-width: 120px;
-  height: auto;
+  width: 64px;
+  min-width: 64px;
+  height: 64px;
   border-radius: 0;
   overflow: hidden;
   border: none;
@@ -783,8 +785,8 @@ a.archive-pill.active {
 }
 
 .post-list > .post-card .post-thumb-default svg {
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
   opacity: .15;
   color: var(--text);
 }
@@ -792,10 +794,16 @@ a.archive-pill.active {
 .post-list > .post-card .post-body {
   flex: 1;
   min-width: 0;
-  padding: 1rem 1.1rem 1.1rem;
+  padding: 0 .85rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2px;
+}
+
+/* Hide description in compact mode — title + meta only */
+.post-list > .post-card .post-body p {
+  display: none;
 }
 
 /* Shared typography for homepage list cards */
@@ -803,13 +811,13 @@ a.archive-pill.active {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
 .post-date {
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--hint);
 }
 
@@ -825,26 +833,23 @@ a.archive-pill.active {
 
 .post-body h3 {
   font-family: var(--font-body);
-  font-size: 19px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.35;
-  margin: 0 0 4px;
+  line-height: 1.3;
+  margin: 0;
   color: var(--text);
   transition: color .12s;
+  /* clamp title to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .post-list > .post-card:hover .post-body h3 { color: var(--accent-warm); }
 
 .post-body h3 a { color: inherit; }
 .post-body h3 a:hover { text-decoration: none; }
-
-.post-body p {
-  margin: 0;
-  font-size: 14px;
-  color: var(--muted);
-  font-family: var(--font-ui);
-  line-height: 1.6;
-}
 
 .no-results {
   display: none;
@@ -959,7 +964,7 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   /* أحدث المقالات: 2 columns on tablet */
   .post-grid { grid-template-columns: 1fr 1fr; }
 
-  /* المزيد من المقالات: 2 columns on tablet */
+  /* المزيد من المقالات: stays 2 columns on tablet */
   .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   /* Related posts on article pages: 2 columns */
@@ -973,8 +978,8 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   }
 
   .post-list > .post-card .post-thumb {
-    width: 100px;
-    min-width: 100px;
+    width: 64px;
+    min-width: 64px;
   }
 
   /* Related posts on article pages: 1 column */
