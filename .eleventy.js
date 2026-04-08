@@ -4,11 +4,9 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("images");
   eleventyConfig.addPassthroughCopy("CNAME");
   eleventyConfig.addPassthroughCopy("robots.txt");
-
   eleventyConfig.setFrontMatterParsingOptions({
     excerpt: false,
   });
-
   eleventyConfig.addFilter("date", function (date) {
     if (!date) return "";
     const d = new Date(date);
@@ -19,32 +17,29 @@ module.exports = function (eleventyConfig) {
       day: "numeric",
     });
   });
-
   eleventyConfig.addFilter("dateMonth", function (date) {
     if (!date) return "";
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return "";
     return String(d.getUTCMonth() + 1).padStart(2, "0");
   });
-
   eleventyConfig.addFilter("dateYear", function (date) {
     if (!date) return "";
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return "";
     return String(d.getUTCFullYear());
   });
-
   eleventyConfig.addFilter("dateISO", function (date) {
     if (!date) return "";
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return "";
     return d.toISOString().slice(0, 10);
   });
-eleventyConfig.addFilter("encodeURIComponent", val => encodeURIComponent(val));
+  // encodeURI preserves slashes — encodeURIComponent would break /images/uploads/file.png
+  eleventyConfig.addFilter("encodeURIComponent", val => encodeURI(val));
   eleventyConfig.addCollection("seriesPosts", function (api) {
     const posts = api.getFilteredByTag("posts");
     const grouped = {};
-
     posts.forEach((post) => {
       // Key by series_id (stable ASCII string) not series name (Arabic).
       // This allows renaming the display name freely without breaking lookups.
@@ -53,14 +48,11 @@ eleventyConfig.addFilter("encodeURIComponent", val => encodeURIComponent(val));
       if (!grouped[id]) grouped[id] = [];
       grouped[id].push(post);
     });
-
     Object.keys(grouped).forEach((id) => {
       grouped[id].sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0));
     });
-
     return grouped;
   });
-
   // Filter to look up series posts by id from the seriesPosts collection.
   // Usage in Nunjucks: collections.seriesPosts | getSeriesPosts(s.id)
   // Using a JS filter avoids Nunjucks dynamic bracket-notation issues.
@@ -68,7 +60,6 @@ eleventyConfig.addFilter("encodeURIComponent", val => encodeURIComponent(val));
     if (!seriesPosts || !id) return [];
     return seriesPosts[id] || [];
   });
-
   // YouTube embed shortcode
   // Usage in any .md post: {% youtube "VIDEO_ID" %}
   // The VIDEO_ID is the part after ?v= in the YouTube URL.
@@ -85,7 +76,6 @@ eleventyConfig.addFilter("encodeURIComponent", val => encodeURIComponent(val));
   ></iframe>
 </div>`;
   });
-
   return {
     dir: {
       input: ".",
