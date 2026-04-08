@@ -8,3 +8,11 @@
     "@11ty/eleventy": "^2.0.1"
   }
 }
+"scripts": {
+  "build": "eleventy",
+  "generate-og": "node scripts/generate-og.js"
+},
+"dependencies": {
+  "@napi-rs/canvas": "^0.1.44",
+  "gray-matter": "^4.0.3"
+}
