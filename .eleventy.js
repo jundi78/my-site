@@ -40,7 +40,7 @@ module.exports = function (eleventyConfig) {
     if (Number.isNaN(d.getTime())) return "";
     return d.toISOString().slice(0, 10);
   });
-
+eleventyConfig.addFilter("encodeURIComponent", val => encodeURIComponent(val));
   eleventyConfig.addCollection("seriesPosts", function (api) {
     const posts = api.getFilteredByTag("posts");
     const grouped = {};
