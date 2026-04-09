@@ -1,44 +1,87 @@
-/* style.css — editorial redesign */
 /* ==========================================================================
-   Fully annotated stylesheet.
+   style.css — aljundi.org editorial stylesheet
+   ==========================================================================
 
-   CURRENT SURGICAL FIX
-   --------------------
-   The homepage has two different card systems:
+   TABLE OF CONTENTS
+   -----------------
+   1.  CSS Custom Properties (design tokens)
+   2.  Reset & Base
+   3.  Layout Container
+   4.  Header & Topbar
+   5.  Search Input
+   6.  Date Dropdowns
+   7.  Category Bar (catbar)
+   8.  Archive Pill
+   9.  Archive Page
+   10. Hero Featured Post
+   11. Section Label
+   12. Series Strip & Deck Effect  ← equal-height fix lives here
+   13. Post Grid (أحدث المقالات)
+   14. Post List (المزيد من المقالات)
+   15. About Strip
+   16. Article Page
+   17. Related Posts
+   18. Responsive Breakpoints
 
-   1) "أحدث المقالات"
-      - Must be VERTICAL on desktop:
-        image on top, text below.
+   CARD SYSTEM NOTES
+   -----------------
+   There are three distinct card systems on the homepage, each with
+   intentionally different layouts. CSS specificity conflicts between
+   them are resolved with high-specificity selectors and !important
+   only where absolutely necessary.
 
-   2) "المزيد من المقالات"
-      - Must stay COMPACT/HORIZONTAL on desktop:
-        image beside text.
+   A) .post-grid > .post-grid-card  — VERTICAL (image top, text below)
+      Used in "أحدث المقالات" (indexes 0–2).
 
-   Why the previous attempt still failed:
-   - The "أحدث المقالات" cards use both classes:
-       .post-grid-card and .post-card
-   - In practice, another flex rule kept leaking into that section.
-   - So this version uses HIGHER-SPECIFICITY selectors plus !important
-     ONLY where needed, to force the grid cards back to vertical.
+   B) .post-list > .post-card       — COMPACT HORIZONTAL (thumb beside text)
+      Used in "المزيد من المقالات" (indexes 3+).
+      Cards also carry .post-card and .post-grid-card on the homepage,
+      so !important is required to defeat grid column rules leaking in.
 
-   This keeps the rest of the design unchanged.
+   C) .series-card inside .series-deck — HORIZONTAL with deck layers
+      Used in the series strip. Equal height across cards in a row is
+      achieved by making the grid use align-items: stretch and having
+      .series-deck + .series-card both fill 100% of the cell height.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. CSS CUSTOM PROPERTIES (design tokens)
+   --------------------------------------------------------------------------
+   All colours, fonts, and spacing values are defined here. Every component
+   below references these variables — never hardcoded values — so a full
+   reskin only requires changing this block.
    ========================================================================== */
 
 :root {
-  --bg:              #ffffff;
-  --text:            #111111;
-  --muted:           #555555;
-  --hint:            #999999;
-  --line:            #e8e6e1;
-  --soft:            #f7f5f1;
-  --accent:          #111111;
-  --accent-warm:     #1a6b4a;
-  --font-body:       "Amiri", serif;
-  --font-ui:         "IBM Plex Sans Arabic", sans-serif;
+  /* ── Colour palette ────────────────────────────────────────────────────── */
+  --bg:              #ffffff;   /* page background */
+  --text:            #111111;   /* primary text */
+  --muted:           #555555;   /* secondary text, descriptions */
+  --hint:            #999999;   /* tertiary text, dates, labels */
+  --line:            #e8e6e1;   /* borders and dividers */
+  --soft:            #f7f5f1;   /* subtle fill, card backgrounds */
+  --accent:          #111111;   /* active state, CTA buttons */
+  --accent-warm:     #1a6b4a;   /* primary green — links, hover, series */
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  --font-body:       "Amiri", serif;                    /* article & heading text */
+  --font-ui:         "IBM Plex Sans Arabic", sans-serif; /* UI labels, meta, captions */
   --font-size-base:  18px;
+
+  /* ── Layout ──────────────────────────────────────────────────────────────── */
   --max-width:       900px;
   --spacing-section: 48px;
 }
+
+
+/* ==========================================================================
+   2. RESET & BASE
+   --------------------------------------------------------------------------
+   Minimal reset. Box-sizing on everything prevents padding/border from
+   expanding element dimensions. Direction and font are set globally on
+   body — everything inherits unless explicitly overridden.
+   ========================================================================== */
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -47,7 +90,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  direction: rtl;
+  direction: rtl;           /* Arabic: right-to-left throughout */
   text-align: right;
   font-family: var(--font-body);
   font-size: var(--font-size-base);
@@ -55,15 +98,31 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Default link style: inherit colour, no underline.
+   Underline appears on hover only, keeping the page clean. */
 a { color: var(--text); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+
+/* ==========================================================================
+   3. LAYOUT CONTAINER
+   --------------------------------------------------------------------------
+   Centred column capped at --max-width. Uses min() so it naturally
+   shrinks to viewport width minus padding on small screens.
+   ========================================================================== */
 
 .container {
   width: min(var(--max-width), calc(100% - 32px));
   margin: 0 auto;
 }
 
-/* ─── HEADER ──────────────────────────────────────────── */
+
+/* ==========================================================================
+   4. HEADER & TOPBAR
+   --------------------------------------------------------------------------
+   Sticky header. Contains brand name, search input, and date dropdowns
+   in .topbar-main, and category filter pills in .catbar below it.
+   ========================================================================== */
 
 .site-header {
   border-bottom: 1px solid var(--line);
@@ -73,6 +132,7 @@ a:hover { text-decoration: underline; }
   z-index: 100;
 }
 
+/* Flex row: brand on one side, controls on the other */
 .topbar-main {
   display: flex;
   align-items: center;
@@ -82,6 +142,7 @@ a:hover { text-decoration: underline; }
   flex-wrap: wrap;
 }
 
+/* Site name / logo text */
 .brand {
   font-family: var(--font-body);
   font-size: 26px;
@@ -91,12 +152,18 @@ a:hover { text-decoration: underline; }
   color: var(--text);
 }
 
+/* Wrapper for search + dropdowns */
 .topbar-controls {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
+
+
+/* ==========================================================================
+   5. SEARCH INPUT
+   ========================================================================== */
 
 .search-input {
   font-family: var(--font-ui);
@@ -114,6 +181,11 @@ a:hover { text-decoration: underline; }
 .search-input::placeholder { color: var(--hint); }
 .search-input:focus { border-color: var(--muted); }
 
+
+/* ==========================================================================
+   6. DATE DROPDOWNS
+   ========================================================================== */
+
 .date-select {
   font-family: var(--font-ui);
   font-size: 13px;
@@ -128,6 +200,15 @@ a:hover { text-decoration: underline; }
 }
 .date-select:focus { border-color: var(--muted); }
 
+
+/* ==========================================================================
+   7. CATEGORY BAR (catbar)
+   --------------------------------------------------------------------------
+   Scrollable row of category filter pills. Each pill is a .cat-btn.
+   Active state uses --accent so the selected pill is clearly highlighted.
+   The archive pill (.archive-pill) lives at the far end — see section 8.
+   ========================================================================== */
+
 .catbar {
   display: flex;
   align-items: center;
@@ -136,6 +217,7 @@ a:hover { text-decoration: underline; }
   flex-wrap: wrap;
 }
 
+/* "تصفح بحسب:" label before the pills */
 .catbar-label {
   font-family: var(--font-ui);
   font-size: 11px;
@@ -144,6 +226,8 @@ a:hover { text-decoration: underline; }
   white-space: nowrap;
 }
 
+/* Individual category pill — used as <button> for JS-filtered pages
+   and as <a> for the archive pill. */
 .cat-btn {
   font-family: var(--font-ui);
   font-size: 13px;
@@ -156,21 +240,31 @@ a:hover { text-decoration: underline; }
   transition: background .12s, color .12s, border-color .12s;
 }
 .cat-btn:hover { background: var(--soft); color: var(--text); }
+
+/* Active pill: filled dark to show selected state */
 .cat-btn.active {
   background: var(--accent);
   color: var(--bg);
   border-color: var(--accent);
 }
 
-/* ─── ARCHIVE PILL (catbar) ───────────────────────────── */
-/* The archive link sits at the end of the catbar. It reuses
-   all .cat-btn styles; this rule only handles <a> specifics. */
+
+/* ==========================================================================
+   8. ARCHIVE PILL
+   --------------------------------------------------------------------------
+   The archive link reuses all .cat-btn styles but sits at the far end
+   of the catbar (margin-right: auto pushes it left in RTL flex).
+   It intentionally looks slightly different — muted, not a filter action.
+
+   CRITICAL: Do NOT remove [data-cat] from the JS filter selector. This
+   <a> element has no data-cat attribute, and calling .dataset.cat.trim()
+   on it will crash the filter JS silently.
+   ========================================================================== */
 
 a.archive-pill {
   display: inline-flex;
   align-items: center;
-  margin-right: auto; /* pushes it to the far end of the flex row (RTL: left side) */
-  /* Distinct muted style — overrides .cat-btn defaults */
+  margin-right: auto; /* RTL flex: pushes to far left end of the bar */
   background: var(--soft);
   color: var(--muted);
   border-color: var(--line);
@@ -180,7 +274,8 @@ a.archive-pill:hover {
   color: var(--text);
   text-decoration: none;
 }
-/* Active state when on the archive page itself */
+
+/* Active when currently on /archive/ page */
 a.archive-pill.active {
   background: var(--soft);
   color: var(--text);
@@ -188,8 +283,16 @@ a.archive-pill.active {
   font-weight: 600;
 }
 
-/* ─── ARCHIVE PAGE ────────────────────────────────────── */
 
+/* ==========================================================================
+   9. ARCHIVE PAGE
+   --------------------------------------------------------------------------
+   Full-width single-column list of horizontal cards. Each .archive-card
+   is image-beside-text, similar to .post-list cards but taller and with
+   full description text visible (not truncated).
+   ========================================================================== */
+
+/* Page heading row with post count on the opposite end */
 .archive-header {
   display: flex;
   align-items: baseline;
@@ -200,8 +303,8 @@ a.archive-pill.active {
   border-bottom: 1px solid var(--line);
 }
 
-/* Reuse .section-label appearance without bottom border
-   (the border belongs to .archive-header instead) */
+/* Reuses .section-label appearance but without its own bottom border —
+   the border is on .archive-header instead */
 .archive-header .section-label {
   margin: 0;
   padding: 0;
@@ -215,7 +318,7 @@ a.archive-pill.active {
   margin: 0;
 }
 
-/* Full-width single-column list of horizontal cards */
+/* Vertical stack of horizontal cards */
 .archive-list {
   display: flex;
   flex-direction: column;
@@ -223,8 +326,7 @@ a.archive-pill.active {
   margin-bottom: var(--spacing-section);
 }
 
-/* Each archive card is a horizontal row — image beside text.
-   Reuses the same visual language as .post-list > .post-card. */
+/* Horizontal card: image beside text */
 .archive-card {
   display: flex;
   flex-direction: row;
@@ -243,7 +345,7 @@ a.archive-pill.active {
   transform: translateY(-2px);
 }
 
-/* Thumbnail column — matches .post-list > .post-card .post-thumb exactly */
+/* Fixed-width thumbnail column */
 .archive-card-thumb {
   width: 120px;
   min-width: 120px;
@@ -258,6 +360,8 @@ a.archive-pill.active {
   object-fit: cover;
   display: block;
 }
+
+/* Placeholder shown when no thumbnail is set */
 .archive-card-thumb-default {
   width: 100%;
   height: 100%;
@@ -273,7 +377,7 @@ a.archive-pill.active {
   color: var(--text);
 }
 
-/* Text column */
+/* Text column: meta, title, description */
 .archive-card-body {
   flex: 1;
   min-width: 0;
@@ -283,7 +387,7 @@ a.archive-pill.active {
   justify-content: center;
 }
 
-/* Meta row: date · category · series */
+/* Date · category · series badges in one flex row */
 .archive-card-meta {
   display: flex;
   align-items: center;
@@ -308,6 +412,7 @@ a.archive-pill.active {
   background: var(--soft);
 }
 
+/* Series badge: green accent to distinguish from category */
 .archive-card-series {
   font-family: var(--font-ui);
   font-size: 11px;
@@ -328,10 +433,7 @@ a.archive-pill.active {
   transition: color .12s;
 }
 .archive-card:hover .archive-card-title { color: var(--accent-warm); }
-.archive-card-title a {
-  color: inherit;
-  text-decoration: none;
-}
+.archive-card-title a { color: inherit; text-decoration: none; }
 .archive-card-title a:hover { text-decoration: none; }
 
 .archive-card-desc {
@@ -342,6 +444,7 @@ a.archive-pill.active {
   margin: 0;
 }
 
+/* Shown when no posts exist in the archive (edge case) */
 .archive-empty {
   font-family: var(--font-ui);
   font-size: 14px;
@@ -350,7 +453,18 @@ a.archive-pill.active {
   padding: 48px 0;
 }
 
-/* ─── HERO FEATURED POST ──────────────────────────────── */
+
+/* ==========================================================================
+   10. HERO FEATURED POST
+   --------------------------------------------------------------------------
+   Full-width card at the top of the homepage. Shows the post set in
+   theme.featuredPost (or newest post as fallback).
+
+   The hero renders twice:
+   A) #hero-strip   — full-width layout shown by default.
+   B) #hero-as-card — hidden compact card shown by JS when a filter is
+                      active and the hero post matches.
+   ========================================================================== */
 
 .hero-post {
   display: flex;
@@ -363,6 +477,7 @@ a.archive-pill.active {
 }
 .hero-post:hover { box-shadow: 0 4px 24px rgba(0,0,0,.07); }
 
+/* Image area: fixed height with a bottom-gradient overlay */
 .hero-post-image {
   display: flex;
   align-items: flex-end;
@@ -370,7 +485,7 @@ a.archive-pill.active {
   position: relative;
   height: 300px;
   overflow: hidden;
-  background: #1a3d2a;
+  background: #1a3d2a; /* fallback when no thumbnail */
 }
 .hero-post-image-bg {
   position: absolute;
@@ -380,16 +495,23 @@ a.archive-pill.active {
   object-fit: cover;
   display: block;
 }
+
+/* Green gradient fallback when no thumbnail is set */
 .hero-post-image-default {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, #1a3d2a 0%, #0f6e56 100%);
 }
+
+/* Gradient overlay darkens the bottom of the image to ensure
+   the category pill is readable over any photo */
 .hero-post-image-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 60%);
 }
+
+/* Category pill overlaid on the image */
 .hero-post-cat {
   position: relative;
   z-index: 1;
@@ -402,6 +524,7 @@ a.archive-pill.active {
   border: 1px solid rgba(255,255,255,.3);
 }
 
+/* Text panel below the image */
 .hero-post-content {
   padding: 1.75rem;
   display: flex;
@@ -448,6 +571,7 @@ a.archive-pill.active {
   color: var(--hint);
 }
 
+/* "اقرأ المقالة ←" link: arrow gap animates on hover */
 .hero-read-btn {
   display: inline-flex;
   align-items: center;
@@ -462,7 +586,13 @@ a.archive-pill.active {
 }
 .hero-read-btn:hover { gap: 10px; text-decoration: none; }
 
-/* ─── SECTION LABEL ───────────────────────────────────── */
+
+/* ==========================================================================
+   11. SECTION LABEL
+   --------------------------------------------------------------------------
+   Small uppercase label with a bottom border used as a section divider
+   before each content block (series strip, latest posts, more articles).
+   ========================================================================== */
 
 .section-label {
   font-family: var(--font-ui);
@@ -474,57 +604,86 @@ a.archive-pill.active {
   border-bottom: 1px solid var(--line);
 }
 
-/* ─── SERIES STRIP ────────────────────────────────────── */
 
-/* ── Deck wrapper ──────────────────────────────────────
-   .series-deck is the positioning context for the stacked
-   card effect. The two backing layers sit behind the real
-   .series-card, shifted right and down so they appear the
-   same width as the top card but peek out below it.
-   The spacer div at the bottom of the wrapper reserves
-   the vertical space the peeking layers occupy.
-*/
+/* ==========================================================================
+   12. SERIES STRIP & DECK EFFECT
+   --------------------------------------------------------------------------
+   The series strip is a CSS grid. Each cell contains a .series-deck which
+   stacks three layers: two decorative backing layers + the real .series-card
+   on top. On hover the top card lifts and the layers drop to exaggerate depth.
 
-.series-deck {
-  position: relative;
-  /* Padding-bottom reserves space for the peeking layers below the card */
-  padding-bottom: 18px;
+   EQUAL HEIGHT FIX
+   ----------------
+   Problem: when one card has less text than another, it renders shorter
+   because the default grid alignment is "stretch" on the grid itself but
+   .series-deck and .series-card weren't set to fill their cell height.
+
+   Fix (three rules work together):
+   1. `align-items: stretch` on the grid  → grid cells all match the tallest
+   2. `.series-deck { height: 100% }`     → deck fills its cell
+   3. `.series-card { height: 100% }`     → card fills the deck
+
+   The backing layers use `top: 0 / bottom: 18px` to match the card height
+   automatically — they don't need explicit height: 100%.
+   ========================================================================== */
+
+/* ── Grid container ──────────────────────────────────────────────────────── */
+/* Inline styles on the element in index.html set grid-template-columns and
+   gap. The only property that must live in CSS is align-items, which controls
+   how cells stretch to the tallest item in each row. */
+#series-strip > div {
+  align-items: stretch; /* FIX: all cells in a row share the tallest height */
 }
 
-/* Both backing layers share base styles */
+/* ── Deck wrapper ────────────────────────────────────────────────────────── */
+/* Positioning context for the stacked-card effect. padding-bottom reserves
+   space below the card so the peeking backing layers are not clipped.
+   height: 100% makes it fill its grid cell — required for equal height. */
+.series-deck {
+  position: relative;
+  padding-bottom: 18px; /* reserves space for layers peeking below the card */
+  height: 100%;         /* FIX: fill the grid cell height */
+}
+
+/* ── Backing layers (decorative) ─────────────────────────────────────────── */
+/* Both layers sit behind the real card. They are positioned absolutely so
+   their height matches the card (top: 0, bottom: 18px mirrors the card's
+   inset within the padding-bottom space). pointer-events: none ensures
+   clicks always reach the real .series-card link beneath. */
 .series-deck-layer {
   position: absolute;
-  /* Match the top card exactly: same left/right edges, same top */
   top: 0;
   left: 0;
   right: 0;
-  /* Bottom stops before the spacer padding so height mirrors the card */
-  bottom: 18px;
+  bottom: 18px; /* stops before the padding-bottom space — mirrors card height */
   border-radius: 12px;
   border: 1px solid var(--line);
   background: var(--soft);
-  pointer-events: none; /* layers are decorative — never intercept clicks */
+  pointer-events: none; /* decorative only — never intercept clicks */
 }
 
-/* Layer 2 (middle): slightly down and to the right */
+/* Middle layer: slightly down and offset to the right */
 .series-deck-layer-2 {
   z-index: 1;
   transform: translateY(7px) translateX(10px);
 }
 
-/* Layer 3 (bottom): further down and further right */
+/* Bottom layer: further down and further offset to the right */
 .series-deck-layer-3 {
   z-index: 0;
   transform: translateY(13px) translateX(20px);
 }
 
-/* No longer needed as a separate element — padding-bottom on .series-deck
-   handles the space reservation */
+/* Spacer div is a legacy element — padding-bottom on .series-deck handles
+   the space reservation now. Kept in HTML for backwards compatibility. */
 .series-deck-spacer {
   display: none;
 }
 
-/* The real top card */
+/* ── Real top card ───────────────────────────────────────────────────────── */
+/* z-index: 2 ensures the card sits above both backing layers.
+   height: 100% fills the .series-deck and therefore the grid cell,
+   making all cards in a row share the same height regardless of content. */
 .series-card {
   display: flex;
   flex-direction: row;
@@ -535,24 +694,22 @@ a.archive-pill.active {
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  position: relative; /* sits above the layers */
+  position: relative;
   z-index: 2;
+  height: 100%;         /* FIX: fill .series-deck so all cards match height */
   transition: transform .18s;
 }
 
-/* On hover: top card lifts, layers drop further to
-   exaggerate the deck depth */
-.series-deck:hover .series-card {
-  transform: translateY(-3px);
-  text-decoration: none;
-}
-.series-deck:hover .series-deck-layer-2 {
-  transform: translateY(11px) translateX(10px);
-}
-.series-deck:hover .series-deck-layer-3 {
-  transform: translateY(18px) translateX(20px);
-}
+/* ── Hover animations ────────────────────────────────────────────────────── */
+/* Top card lifts up; backing layers drop further to exaggerate depth */
+.series-deck:hover .series-card         { transform: translateY(-3px); }
+.series-deck:hover .series-deck-layer-2 { transform: translateY(11px) translateX(10px); }
+.series-deck:hover .series-deck-layer-3 { transform: translateY(18px) translateX(20px); }
+.series-deck:hover { text-decoration: none; }
 
+/* ── Card internals ──────────────────────────────────────────────────────── */
+
+/* Cover image column — order: 2 places it on the left in RTL */
 .series-card-image {
   flex-shrink: 0;
   width: 140px;
@@ -572,15 +729,17 @@ a.archive-pill.active {
   background: var(--line);
 }
 
+/* Text column — order: 1 places it on the right in RTL */
 .series-card-body {
   flex: 1;
   padding: 1.25rem;
   order: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; /* badge/name at top, CTA at bottom */
 }
 
+/* Chapter count badge */
 .series-card-badge {
   background: var(--bg);
   border-radius: 6px;
@@ -594,6 +753,7 @@ a.archive-pill.active {
   font-family: var(--font-ui);
 }
 
+/* Series title */
 .series-card-name {
   font-size: 16px;
   font-weight: 500;
@@ -602,8 +762,8 @@ a.archive-pill.active {
   font-family: var(--font-body);
 }
 
+/* Short blurb below the series name — from s.tagline in theme.json */
 .series-card-tagline {
-  /* Short blurb shown below the series name in the strip */
   font-family: var(--font-ui);
   font-size: 12px;
   color: var(--muted);
@@ -611,6 +771,7 @@ a.archive-pill.active {
   margin: 4px 0 0;
 }
 
+/* "اقرأ السلسلة ←" link at the bottom of the card body */
 .series-card-cta {
   font-size: 13px;
   font-weight: 500;
@@ -619,14 +780,15 @@ a.archive-pill.active {
   font-family: var(--font-ui);
 }
 
-/* ─── POST GRID (أحدث المقالات) ───────────────────────── */
-/* Desktop/tablet goal:
-   - Cards remain vertical
-   - Image on top
-   - Text below
-   The selectors below are intentionally very specific and use !important
-   only where needed to defeat any leaked horizontal flex rule.
-*/
+
+/* ==========================================================================
+   13. POST GRID — أحدث المقالات (indexes 0–2)
+   --------------------------------------------------------------------------
+   Three-column vertical cards: image on top, text below.
+   Cards carry both .post-grid-card and .post-card classes, so high
+   specificity + !important is used to lock in the vertical layout and
+   prevent horizontal rules from .post-list leaking in.
+   ========================================================================== */
 
 .post-grid {
   display: grid;
@@ -635,6 +797,7 @@ a.archive-pill.active {
   margin-bottom: 2.5rem;
 }
 
+/* Force vertical layout with high-specificity selector */
 .post-grid > .post-grid-card {
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -653,6 +816,7 @@ a.archive-pill.active {
 }
 .post-grid > .post-grid-card.hidden { display: none !important; }
 
+/* Thumbnail: full width, fixed height, image on top (order: 0) */
 .post-grid > .post-grid-card .grid-card-thumb {
   width: 100% !important;
   min-width: 0 !important;
@@ -671,6 +835,8 @@ a.archive-pill.active {
   object-fit: cover;
   display: block;
 }
+
+/* SVG placeholder for posts without a thumbnail */
 .grid-card-thumb-default {
   width: 100%;
   height: 100%;
@@ -685,6 +851,7 @@ a.archive-pill.active {
   color: var(--text);
 }
 
+/* Text body below the image (order: 1) */
 .post-grid > .post-grid-card .grid-card-body {
   width: 100% !important;
   flex: 0 0 auto !important;
@@ -727,10 +894,17 @@ a.archive-pill.active {
   margin-top: 10px;
 }
 
-/* ─── POST LIST (المزيد من المقالات) ─────────────────── */
-/* Compact 2-column grid: short rows, small thumb, no description.
-   Uses !important to defeat the .post-grid-card column rules that
-   bleed in via the shared .post-card class on homepage cards. */
+
+/* ==========================================================================
+   14. POST LIST — المزيد من المقالات (indexes 3+)
+   --------------------------------------------------------------------------
+   Compact two-column grid of horizontal rows. Each card: 96px square
+   thumb on one side, title + description on the other. Meta (date /
+   category) is hidden to keep the rows tight.
+
+   CRITICAL: Uses !important throughout to defeat grid card column rules
+   that bleed in via the shared .post-card class.
+   ========================================================================== */
 
 .post-list {
   display: grid;
@@ -739,6 +913,7 @@ a.archive-pill.active {
   margin-bottom: 2rem;
 }
 
+/* Compact horizontal row — height locked to 96px */
 .post-list > .post-card {
   display: flex !important;
   flex-direction: row !important;
@@ -751,14 +926,13 @@ a.archive-pill.active {
   min-width: 0;
   height: 96px !important;
 }
-
 .post-list > .post-card:hover {
   box-shadow: 0 3px 12px rgba(0,0,0,.07);
   transform: translateY(-1px);
 }
-
 .post-list > .post-card.hidden { display: none !important; }
 
+/* Square thumbnail: 96×96px, no border radius (card handles it) */
 .post-list > .post-card .post-thumb {
   width: 96px !important;
   min-width: 96px !important;
@@ -769,7 +943,6 @@ a.archive-pill.active {
   background: var(--soft);
   order: 0 !important;
 }
-
 .post-list > .post-card .post-thumb img {
   width: 100%;
   height: 100%;
@@ -777,6 +950,7 @@ a.archive-pill.active {
   display: block;
 }
 
+/* SVG placeholder for posts without a thumbnail */
 .post-list > .post-card .post-thumb-default {
   width: 100%;
   height: 100%;
@@ -785,7 +959,6 @@ a.archive-pill.active {
   align-items: center;
   justify-content: center;
 }
-
 .post-list > .post-card .post-thumb-default svg {
   width: 16px;
   height: 16px;
@@ -793,6 +966,7 @@ a.archive-pill.active {
   color: var(--text);
 }
 
+/* Text body beside the thumbnail */
 .post-list > .post-card .post-body {
   flex: 1 !important;
   min-width: 0;
@@ -804,12 +978,12 @@ a.archive-pill.active {
   overflow: hidden;
 }
 
-/* Hide meta row (date/category) — keep title + description only */
+/* Hide meta row (date / category) — keep only title + description */
 .post-list > .post-card .post-body .post-meta {
   display: none !important;
 }
 
-/* Title — slightly larger, 1 line max with ellipsis */
+/* Title: single line with ellipsis — no wrapping in tight rows */
 .post-body h3 {
   font-family: var(--font-body);
   font-size: 17px;
@@ -823,7 +997,7 @@ a.archive-pill.active {
   text-overflow: ellipsis;
 }
 
-/* Description — smaller, 1 line max with ellipsis */
+/* Description: one line, smaller, muted */
 .post-list > .post-card .post-body p {
   display: block !important;
   font-family: var(--font-ui);
@@ -837,11 +1011,12 @@ a.archive-pill.active {
 }
 
 .post-list > .post-card:hover .post-body h3 { color: var(--accent-warm); }
-
 .post-body h3 a { color: inherit; }
 .post-body h3 a:hover { text-decoration: none; }
 
-/* These are still needed globally for hero-as-card and filtered views */
+/* ── Shared meta styles ──────────────────────────────────────────────────── */
+/* Used globally by hero-as-card and filtered views that show meta inline */
+
 .post-meta {
   display: flex;
   align-items: center;
@@ -866,6 +1041,7 @@ a.archive-pill.active {
   background: var(--soft);
 }
 
+/* "لا توجد تدوينات تطابق بحثك." — shown by JS when all cards are hidden */
 .no-results {
   display: none;
   padding: 32px 0;
@@ -875,10 +1051,15 @@ a.archive-pill.active {
   text-align: center;
 }
 
-/* ─── ABOUT STRIP ─────────────────────────────────────── */
-/* Full-width editorial band outside the main container.
-   Keeps the section visually distinct, but makes the text
-   feel more intentional, premium, and readable. */
+
+/* ==========================================================================
+   15. ABOUT STRIP
+   --------------------------------------------------------------------------
+   Full-width editorial band outside .container. Sits below the main
+   article grid. Text is wider than the main column (max-width + 80px)
+   for a distinct feel. white-space: pre-line preserves line breaks
+   entered in the CMS about_text field.
+   ========================================================================== */
 
 .about-strip {
   background: var(--soft);
@@ -887,6 +1068,7 @@ a.archive-pill.active {
   padding: calc(var(--spacing-section) * 1.15) 0;
 }
 
+/* Slightly wider than .container for visual distinction */
 .about-strip-inner {
   width: min(calc(var(--max-width) + 80px), calc(100% - 32px));
   margin: 0 auto;
@@ -903,6 +1085,7 @@ a.archive-pill.active {
   border-bottom: 1px solid var(--line);
 }
 
+/* pre-line preserves intentional line breaks from CMS text area */
 .about-strip-text {
   color: var(--text);
   font-size: 17px;
@@ -910,39 +1093,27 @@ a.archive-pill.active {
   line-height: 2.05;
   margin: 0;
   max-width: 72ch;
-  white-space: pre-line; /* preserves line breaks from about_text */
+  white-space: pre-line;
 }
 
-/* Mobile refinement */
-@media (max-width: 640px) {
-  .about-strip {
-    padding: 32px 0;
-  }
 
-  .about-strip-inner {
-    width: calc(100% - 24px);
-  }
-
-  .about-strip-label {
-    margin-bottom: 14px;
-  }
-
-  .about-strip-text {
-    font-size: 15px;
-    line-height: 1.95;
-  }
-}
-
-/* ─── ARTICLE PAGE ────────────────────────────────────── */
+/* ==========================================================================
+   16. ARTICLE PAGE
+   --------------------------------------------------------------------------
+   Single post layout. All content styles are scoped to .article to avoid
+   leaking into card elements that share tag names (h2, h3, ul, etc.).
+   ========================================================================== */
 
 .article { padding: var(--spacing-section) 0 calc(var(--spacing-section) * 1.5); }
 
+/* Post header: title, kicker, meta above the article body */
 .article-header {
   border-bottom: 1px solid var(--line);
   padding-bottom: 16px;
   margin-bottom: 28px;
 }
 
+/* Category / series label above the title */
 .kicker {
   font-family: var(--font-ui);
   font-size: 12px;
@@ -951,6 +1122,7 @@ a.archive-pill.active {
   margin: 0 0 10px;
 }
 
+/* Article headline */
 .article h1 {
   font-family: var(--font-body);
   font-size: clamp(26px, 3.2vw, 40px);
@@ -960,6 +1132,7 @@ a.archive-pill.active {
   color: var(--text);
 }
 
+/* Hero thumbnail spanning full column width */
 .article-thumb {
   width: 100%;
   max-height: 380px;
@@ -969,88 +1142,113 @@ a.archive-pill.active {
   display: block;
 }
 
+/* Thin horizontal rule used between article header and body */
 hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
 
-/* ─── RESPONSIVE ──────────────────────────────────────── */
+/* ── Article body ────────────────────────────────────────────────────────── */
 
-@media (max-width: 900px) {
-  .hero-post-image { height: 200px; }
-
-  /* أحدث المقالات: 2 columns on tablet */
-  .post-grid { grid-template-columns: 1fr 1fr; }
-
-  /* المزيد من المقالات: stays 2 columns on tablet */
-  .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-  /* Related posts on article pages: 2 columns */
-  .related-posts-grid { grid-template-columns: 1fr 1fr; }
+/* All inline images: constrained to column width, centred */
+.article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  margin: 1.5rem auto;
 }
 
-@media (max-width: 560px) {
-  /* المزيد من المقالات: 1 card per row on small screens */
-  .post-list {
-    grid-template-columns: 1fr;
-  }
-
-  .post-list > .post-card .post-thumb {
-    width: 64px;
-    min-width: 64px;
-  }
-
-  /* Related posts on article pages: 1 column */
-  .related-posts-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .related-post-thumb {
-    width: 100px;
-    min-width: 100px;
-  }
+/* Responsive YouTube embed wrapper inserted by {% youtube "ID" %} shortcode.
+   16:9 aspect ratio via padding-bottom trick; iframe fills it absolutely. */
+.youtube-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 2rem 0;
+  background: var(--soft);
+}
+.youtube-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
-@media (max-width: 480px) {
-  .brand { font-size: 22px; }
-  .topbar-controls { gap: 6px; }
-  .search-input { width: 140px; }
-  body { font-size: 17px; }
+/* Blockquote: green right border, soft background, italic text.
+   RTL: border is on the right; left border would be ignored. */
+.article blockquote {
+  border-right: 3px solid var(--accent-warm);
+  border-left: none;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.25rem;
+  background: var(--soft);
+  border-radius: 0 8px 8px 0;
+  color: var(--muted);
+  font-style: italic;
+}
+.article blockquote p { margin: 0; }
 
-  /* Archive cards: narrower thumb on small screens — matches post-list */
-  .archive-card-thumb {
-    width: 100px;
-    min-width: 100px;
-  }
-
-  /* On very small screens only, أحدث المقالات becomes horizontal */
-  .post-grid { grid-template-columns: 1fr; gap: 1rem; }
-
-  .post-grid > .post-grid-card {
-    flex-direction: row !important;
-    align-items: stretch !important;
-  }
-
-  .post-grid > .post-grid-card .grid-card-thumb {
-    width: 100px !important;
-    min-width: 100px !important;
-    height: auto !important;
-    flex-shrink: 0;
-    order: 2 !important;
-  }
-
-  .post-grid > .post-grid-card .grid-card-body {
-    flex: 1 1 auto !important;
-    order: 1 !important;
-  }
-
-  /* Series card: slightly smaller image on mobile */
-  .series-card-image { width: 100px; }
-  /* Deck layers: reduce offsets on mobile so they don't clip */
-  .series-deck-layer-2 { transform: translateY(6px) translateX(8px); }
-  .series-deck-layer-3 { transform: translateY(11px) translateX(15px); }
-  .series-deck:hover .series-deck-layer-2 { transform: translateY(9px) translateX(8px); }
-  .series-deck:hover .series-deck-layer-3 { transform: translateY(15px) translateX(15px); }
+/* Section headings inside article body */
+.article h2 {
+  font-family: var(--font-body);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 700;
+  margin: 2rem 0 0.75rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.article h3 {
+  font-family: var(--font-body);
+  font-size: clamp(17px, 2vw, 21px);
+  font-weight: 700;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--text);
+  line-height: 1.4;
 }
 
-/* ─── RELATED POSTS (article page only) ───────────────── */
+/* Lists: RTL padding on the right, IBM Plex Sans Arabic for readability */
+.article ul,
+.article ol {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-base);
+  line-height: 1.9;
+  color: var(--text);
+  padding-right: 1.5rem;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+.article ul li,
+.article ol li { margin-bottom: 0.4rem; }
+
+/* Horizontal rule inside article body */
+.article hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 2.5rem 0;
+}
+
+/* Inline code */
+.article code {
+  font-family: monospace;
+  font-size: 0.88em;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: var(--text);
+}
+
+
+/* ==========================================================================
+   17. RELATED POSTS (article page only)
+   --------------------------------------------------------------------------
+   Three-column grid of compact horizontal cards shown below the article
+   body. Same category as the current post. Falls back to 2 columns on
+   tablet and 1 column on mobile.
+   ========================================================================== */
 
 .related-posts {
   margin-top: calc(var(--spacing-section) * 1.2);
@@ -1074,6 +1272,7 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   gap: 1rem;
 }
 
+/* Horizontal card: thumbnail beside text */
 .related-post-card {
   display: flex;
   flex-direction: row;
@@ -1151,114 +1350,100 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
   color: var(--hint);
   margin: 0;
 }
-/* ─── ARTICLE CONTENT — IMAGE & VIDEO SIZING ──────────────────────────────
-   Add this block anywhere after the ".article" section in style.css.
 
-   Problem: images inserted via the CMS markdown editor render at their
-   native size, which often exceeds the text column width.
 
-   Fix: constrain all media inside the article body to the column width,
-   and make YouTube iframes (inserted via the {% youtube %} shortcode)
-   fully responsive.
-   ─────────────────────────────────────────────────────────────────────── */
+/* ==========================================================================
+   18. RESPONSIVE BREAKPOINTS
+   --------------------------------------------------------------------------
+   Breakpoints in descending order. Each block only overrides what must
+   change at that viewport width — everything else inherits from above.
+   ========================================================================== */
 
-/* All inline images in article body */
-.article img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-  margin: 1.5rem auto;
+/* ── Tablet: ≤ 900px ─────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Hero image: shorter on tablet */
+  .hero-post-image { height: 200px; }
+
+  /* أحدث المقالات: 2 columns instead of 3 */
+  .post-grid { grid-template-columns: 1fr 1fr; }
+
+  /* المزيد من المقالات: stays 2 columns on tablet */
+  .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Related posts: 2 columns */
+  .related-posts-grid { grid-template-columns: 1fr 1fr; }
+
+  /* About strip: tighter padding */
+  .about-strip { padding: 32px 0; }
+  .about-strip-inner { width: calc(100% - 24px); }
+  .about-strip-label { margin-bottom: 14px; }
+  .about-strip-text { font-size: 15px; line-height: 1.95; }
 }
 
-/* Responsive YouTube embed wrapper
-   The shortcode wraps the iframe in .youtube-embed */
-.youtube-embed {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* 16:9 ratio */
-  height: 0;
-  overflow: hidden;
-  border-radius: 10px;
-  margin: 2rem 0;
-  background: var(--soft);
+/* ── Small mobile: ≤ 560px ───────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  /* المزيد من المقالات: 1 card per row */
+  .post-list { grid-template-columns: 1fr; }
+
+  /* Narrower thumbnail on single-column list */
+  .post-list > .post-card .post-thumb {
+    width: 64px;
+    min-width: 64px;
+  }
+
+  /* Related posts: 1 column */
+  .related-posts-grid { grid-template-columns: 1fr; }
+
+  /* Related post thumb: slightly narrower */
+  .related-post-thumb {
+    width: 100px;
+    min-width: 100px;
+  }
 }
 
-.youtube-embed iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
+/* ── Extra small: ≤ 480px ────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Smaller brand name to fit beside controls */
+  .brand { font-size: 22px; }
+  .topbar-controls { gap: 6px; }
+  .search-input { width: 140px; }
+  body { font-size: 17px; }
 
-/* Blockquote styling — for the new editor toolbar option */
-.article blockquote {
-  border-right: 3px solid var(--accent-warm);
-  border-left: none;
-  margin: 1.5rem 0;
-  padding: 0.75rem 1.25rem;
-  background: var(--soft);
-  border-radius: 0 8px 8px 0;
-  color: var(--muted);
-  font-style: italic;
-}
+  /* Archive card: narrower thumb to match post-list */
+  .archive-card-thumb {
+    width: 100px;
+    min-width: 100px;
+  }
 
-.article blockquote p {
-  margin: 0;
-}
+  /* أحدث المقالات: switch to single column and go horizontal
+     (stacked vertical cards are too tall on very narrow screens) */
+  .post-grid { grid-template-columns: 1fr; gap: 1rem; }
 
-/* Headings inside article body */
-.article h2 {
-  font-family: var(--font-body);
-  font-size: clamp(20px, 2.4vw, 26px);
-  font-weight: 700;
-  margin: 2rem 0 0.75rem;
-  color: var(--text);
-  line-height: 1.4;
-}
+  .post-grid > .post-grid-card {
+    flex-direction: row !important;
+    align-items: stretch !important;
+  }
 
-.article h3 {
-  font-family: var(--font-body);
-  font-size: clamp(17px, 2vw, 21px);
-  font-weight: 700;
-  margin: 1.5rem 0 0.5rem;
-  color: var(--text);
-  line-height: 1.4;
-}
+  /* Thumbnail: fixed width on the side, height auto */
+  .post-grid > .post-grid-card .grid-card-thumb {
+    width: 100px !important;
+    min-width: 100px !important;
+    height: auto !important;
+    flex-shrink: 0;
+    order: 2 !important; /* image on the left in RTL */
+  }
 
-/* Lists inside article body */
-.article ul,
-.article ol {
-  font-family: var(--font-ui);
-  font-size: var(--font-size-base);
-  line-height: 1.9;
-  color: var(--text);
-  padding-right: 1.5rem;
-  padding-left: 0;
-  margin: 1rem 0;
-}
+  .post-grid > .post-grid-card .grid-card-body {
+    flex: 1 1 auto !important;
+    order: 1 !important;
+  }
 
-.article ul li,
-.article ol li {
-  margin-bottom: 0.4rem;
-}
+  /* Series cards: smaller image on mobile */
+  .series-card-image { width: 100px; }
 
-/* Horizontal rule */
-.article hr {
-  border: none;
-  border-top: 1px solid var(--line);
-  margin: 2.5rem 0;
-}
-
-/* Inline code */
-.article code {
-  font-family: monospace;
-  font-size: 0.88em;
-  background: var(--soft);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  padding: 2px 6px;
-  color: var(--text);
+  /* Series deck layers: reduce offsets so they don't clip on narrow screens */
+  .series-deck-layer-2 { transform: translateY(6px) translateX(8px); }
+  .series-deck-layer-3 { transform: translateY(11px) translateX(15px); }
+  .series-deck:hover .series-deck-layer-2 { transform: translateY(9px) translateX(8px); }
+  .series-deck:hover .series-deck-layer-3 { transform: translateY(15px) translateX(15px); }
 }
