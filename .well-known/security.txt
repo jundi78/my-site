@@ -1,0 +1,4 @@
+Contact: https://github.com/jundi78/my-site/issues
+Expires: 2027-04-12T00:00:00Z
+Preferred-Languages: ar, en
+Canonical: https://aljundi.org/.well-known/security.txt
