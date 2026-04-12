@@ -1,0 +1,50 @@
+<h1>aljundi.org</h1>
+<p>Personal Arabic blog and static website for aljundi.org, built with Eleventy and published through GitHub Pages.</p>
+<h2>What This Repository Contains</h2>
+<ul>
+<li>Eleventy site templates, content, and configuration.</li>
+<li>Blog posts in <code>posts/</code>.</li>
+<li>Site-wide data in <code>_data/theme.json</code>.</li>
+<li>Layout templates in <code>_includes/</code>.</li>
+<li>Public images in <code>images/uploads/</code>.</li>
+<li>Sveltia CMS admin entry point in <code>admin/</code>.</li>
+<li>GitHub Pages deployment workflow in <code>.github/workflows/build.yml</code>.</li>
+</ul>
+<h2>Tech Stack</h2>
+<ul>
+<li>Eleventy (<code>@11ty/eleventy</code>)</li>
+<li>Nunjucks/HTML templates</li>
+<li>Markdown posts with front matter</li>
+<li>GitHub Pages deployment</li>
+<li>Sveltia CMS for browser-based content editing</li>
+</ul>
+<h2>Local Development</h2>
+<p>Install dependencies:</p>
+<pre><code class="language-bash">npm install
+</code></pre>
+<p>Build the site:</p>
+<pre><code class="language-bash">npm run build
+</code></pre>
+<p>The generated site is written to <code>_site/</code>.</p>
+<h2>Deployment</h2>
+<p>Changes merged to <code>main</code> trigger the GitHub Actions workflow in <code>.github/workflows/build.yml</code>.</p>
+<p>The workflow:</p>
+<ol>
+<li>Checks out the repository.</li>
+<li>Installs Node.js 18.</li>
+<li>Runs <code>npm install</code>.</li>
+<li>Runs <code>npm run build</code>.</li>
+<li>Publishes <code>_site/</code> to GitHub Pages.</li>
+</ol>
+<p>The custom domain is configured in <code>CNAME</code> as <code>aljundi.org</code>.</p>
+<h2>Content Editing</h2>
+<p>The <code>/admin/</code> page loads Sveltia CMS. The CMS configuration is generated at <code>/admin/config.yml</code> from <code>admin/config.yml.njk</code>.</p>
+<p>Authentication is handled by the separate <code>sveltia-cms-auth</code> Cloudflare Worker project. Do not commit OAuth client secrets, personal access tokens, or Cloudflare credentials to this repository.</p>
+<h2>Security Notes</h2>
+<ul>
+<li>Do not store passwords, API keys, OAuth client secrets, tokens, or private credentials in this repo.</li>
+<li>Public security contact metadata is published at <code>.well-known/security.txt</code>.</li>
+<li>The Sveltia CMS script is pinned to a specific package version in <code>admin/index.html</code> to avoid unexpectedly loading a newer version.</li>
+</ul>
+<h2>Rollback Practice</h2>
+<p>Before making larger changes, create a backup branch from the current <code>main</code> commit and work on a separate <code>codex/</code> branch. Prefer pull requests and small commits so changes can be reviewed and reverted cleanly.</p>
