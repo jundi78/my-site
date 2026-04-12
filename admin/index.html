@@ -23,7 +23,7 @@
          so these rules apply normally after the app mounts.
          ───────────────────────────────────────────────────────── */
 
-      /* 1 ── GLOBAL FONT & BASE ──────────────────────────────── */
+      /* 1 ── GLOBAL FONT & BASE ─────────────────────────────── */
       * { box-sizing: border-box; }
 
       body {
@@ -32,7 +32,7 @@
         direction: rtl;
       }
 
-      /* 2 ── SVELTIA CSS VARIABLE OVERRIDES ─────────────────────
+      /* 2 ── SVELTIA CSS VARIABLE OVERRIDES ────────────────────
          Sveltia uses --accent / --accent-vivid for its blue.
          We replace them with our green. */
       :root {
@@ -43,7 +43,7 @@
         --font-family:      'IBM Plex Sans Arabic', sans-serif !important;
       }
 
-      /* 3 ── SIDEBAR ─────────────────────────────────────────────
+      /* 3 ── SIDEBAR ────────────────────────────────────────────
          Target Sveltia's left/right nav panel.
          Sveltia uses [role="navigation"] and .sidebar class. */
       [class*="sidebar"],
@@ -257,6 +257,6 @@
   </head>
 
   <body>
-    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+    <script src="https://unpkg.com/@sveltia/cms@0.152.5/dist/sveltia-cms.js"></script>
   </body>
 </html>
